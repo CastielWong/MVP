@@ -26,5 +26,6 @@ setuptools.setup(
     extra_requirement={"develop": "virtualenv", "format": ["pre-commit"]},
     url=None,
     packages=setuptools.find_packages(),
+    include_package_data=True,
     python_required=">=3.6",
 )
