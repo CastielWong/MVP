@@ -5,6 +5,7 @@
     - [Remote](#remote)
         - [Upload](#upload)
         - [Download](#download)
+- [Demo](#demo)
 - [Reference](#reference)
 
 ## Installation
@@ -25,15 +26,6 @@ Note that previous generated distribution would exist, so manual removal may be 
 
 To quickly test whether the configuration of "setup.py" is correct, simply run `pip install .` under this root
 project directory.
-
-Run codes below to invoke the module function:
-```py
-from caller import entry
-
-entry.main()
-entry.load_data()
-```
-
 
 ### Remote
 
@@ -99,6 +91,21 @@ want the configuration file to take effect.
 As long as the package is uploaded and the downloading configuration is properly set, then simply run
 `pip install {package}` would do the work. Otherwise, run `pip install --index-url {repo} {package}` to
 ensure the repo is correct.
+
+
+## Demo
+
+Run codes below for demo to see if the package is function:
+
+```py
+import caller as demo
+from caller import Fruit
+
+demo.entry.main()
+
+fruit = Fruit()
+fruit.printing()
+```
 
 
 ## Reference
