@@ -24,8 +24,11 @@ Note that previous generated distribution would exist, so manual removal may be 
 
 ### Local
 
-To quickly test whether the configuration of "setup.py" is correct, simply run `pip install .` under this root
+To quickly test whether the configuration of "setup.py" is correct, simply run `pip install -e .` under this root
 project directory.
+
+To install extra needed packages specified, run `pip install ".[extra]"` (double quote is recommended in case some
+other shells like zsh fail to recognize).
 
 ### Remote
 
@@ -89,7 +92,7 @@ So be aware of there is no environment variables like `PIP_INDEX_URL` or `PIP_EX
 want the configuration file to take effect.
 
 As long as the package is uploaded and the downloading configuration is properly set, then simply run
-`pip install {package}` would do the work. Otherwise, run `pip install --index-url {repo} {package}` to
+`pip install "{package[extra]}"` would do the work. Otherwise, run `pip install --index-url {repo} {package}` to
 ensure the repo is correct.
 
 
@@ -114,3 +117,6 @@ fruit.printing()
 - Including Data Files: https://setuptools.readthedocs.io/en/latest/userguide/quickstart.html#including-data-files
 - The .pypirc file: https://packaging.python.org/specifications/pypirc/
 - PIP Config Precedence: https://pip.pypa.io/en/stable/user_guide/#config-precedence
+- Keywords in setuptools: https://setuptools.readthedocs.io/en/latest/references/keywords.html
+- Metadata for Python Software Packages: https://www.python.org/dev/peps/pep-0314
+- Specifying package versions: https://pip.pypa.io/en/stable/user_guide/#understanding-your-error-message

@@ -16,16 +16,20 @@ with open("requirements.txt", "r") as fr:
         required_packages.append(line)
 
 setuptools.setup(
-    name="packaging-xxx",  # it can be the same as the module
+    name="packagingxxx",  # it can be the same as the module
     version="0.0.1",
     author="Anonymous",
     description="It's a MVP of Python packaging",
     long_description_content_type="text/markdown",
     long_description=long_description,
-    install_required=required_packages,
-    extra_requirement={"develop": "virtualenv", "format": ["pre-commit"]},
+    keywords="demo testing laboratory",
     url=None,
+    install_requires=required_packages,
+    extras_require={
+        "format": "pre-commit==2.8.0",
+        "develop": ["virtualenv>=20.1.0", "urllib3~=1.26.0"],
+    },
     packages=setuptools.find_packages(),
-    include_package_data=True,
+    include_package_data=True,  # it's necessary for MANIFEST.in to take effect
     python_required=">=3.6",
 )
