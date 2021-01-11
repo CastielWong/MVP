@@ -13,8 +13,7 @@ logging.basicConfig(
 )
 
 
-def log_from_root():
-    message = "from application"
+def log_from_root(message: str):
     logging.debug(f"DEBUG - {message}")
     logging.info(f"INFO - {message}")
     logging.warning(f"WARNING - {message}")
