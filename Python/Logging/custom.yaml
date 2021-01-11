@@ -1,0 +1,40 @@
+---
+version: 1
+formatters:
+  standard:
+    format: "%(asctime)s - %(name)s - %(levelname)-8s - (%(module)-15s, %(lineno)d): %(message)s"
+  routine:
+    format: "{levelname:8s} - ({module:15s}, {lineno}): {message}"
+    style: "{"
+    datefmt: "%H:%M:%S"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: WARNING
+    formatter: routine
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler
+    level: INFO
+    formatter: standard
+    filename: logs/checking.log
+    mode: "a"
+  file_test:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: standard
+    filename: logs/testing.log
+loggers:
+  LogDemo:
+    level: DEBUG
+    handlers: [console, file]
+    propagate: no
+  LogTest:
+    level: DEBUG
+    handlers: [console, file_test]
+    propagate: no
+## config for the root logging
+## `logging.basicConfig` would be suppressed if set
+#root:
+#  level: DEBUG
+#  handlers: [console]
