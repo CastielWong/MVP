@@ -1,4 +1,15 @@
 
+This documentation is to suggest/recommend the good coding style in Python.
+
+- [General](#general)
+- [Naming Convention](#naming-convention)
+- [Header](#header)
+- [Importing](#importing)
+- [Type Hinting](#type-hinting)
+- [Docstring](#docstring)
+- [Reference](#reference)
+
+
 ## General
 
 | Item | Detail |
@@ -17,12 +28,22 @@
 | Package | Snake Case | package_a |
 | Module | Snake Case | module_a |
 | Class | Pascal Case | DemoClass |
-| Function | Snake Case | demo_function |
+| Function | Snake Case | demo_function() |
 | Constant | Macro Case | GLOBAL_CONSTANT |
 | Variable | Snake Case | class_var |
 | Parameter | Snake Case | function_param |
 
 Note that even though Python doesn't support private element like normal OOP language like JAVA, it's highly recommended to add a leading "_" to any private element (function/variable) for clarification.
+
+
+## Header
+
+It's a good practice to put clarified header at the top of each python file. For instance:
+
+```py
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+```
 
 
 ## Importing
@@ -48,14 +69,39 @@ from {package} import {module}
 Import statements under the same style are ordered alphabetically for sure.
 
 
-## Docstring
+## Type Hinting
 
-Apply triple quotes for Docstring.
+It improves readability to have function annotation clarified as [PEP 484](https://www.python.org/dev/peps/pep-0484/) indicated. Below is examples for common use cases:
 
 ```py
-def demo_function(arg1: str) -> None:
+def demo_main() -> None:
+    pass
+
+def demo_func_a(arg1: str, arg2: dict) -> list:
+    pass
+
+def demo_func_b(arg: [list, dict]) -> int:
+    pass
+```
+
+
+## Docstring
+
+Use triple quotes and apply [Google Style](https://google.github.io/styleguide/pyguide.html) for Docstring.
+
+```py
+def demo_function(arg1: int, arg2: float) -> [str, int]:
     """
+    This is a demo function.
+
+    Args:
+        arg1: argument 1
+        arg2: argument 2
+
+    Returns:
+        An answer in string or interger
     """
+    pass
 ```
 
 
