@@ -1,0 +1,54 @@
+FROM centos:7
+
+# setup to use systemd
+ENV container docker
+
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+CMD ["/usr/sbin/init"]
+
+
+# customization
+ENV PYTHON_3_VERSION_MAJOR=3.8
+
+ARG PYTHON_3_VERSION_FULL=3.8.6
+
+
+# install common tools
+RUN yum install -y \
+    make wget \
+    vim
+
+# install python3
+RUN yum install -y \
+    tar gcc openssl-devel bzip2-devel libffi-devel
+RUN wget https://www.python.org/ftp/python/${PYTHON_3_VERSION_FULL}/Python-${PYTHON_3_VERSION_FULL}.tgz
+RUN tar -xzf Python-${PYTHON_3_VERSION_FULL}.tgz
+RUN rm Python-${PYTHON_3_VERSION_FULL}.tgz
+
+WORKDIR /Python-${PYTHON_3_VERSION_FULL}
+RUN ./configure --enable-optimizations
+RUN make altinstall
+
+# update pip and make alias for Python3
+RUN echo $'\n# customization' >> /root/.bashrc
+RUN echo 'alias python3=python${PYTHON_3_VERSION_MAJOR}' >> /root/.bashrc
+RUN echo 'alias pip="python3 -m pip"' >> /root/.bashrc
+
+RUN python${PYTHON_3_VERSION_MAJOR} -m pip install --upgrade \
+    pip setuptools wheel
+
+# curtomize the bash prompt
+RUN echo 'export PS1="[\t \u@\h \w]\$ "'  >> /root/.bashrc
+
+WORKDIR /root

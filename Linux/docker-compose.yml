@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  centos:
+    container_name: airflow
+    image: lab-centos
+    build:
+      context: $PWD
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dir_working:/root/volume
