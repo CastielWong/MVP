@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:8
 
 # setup to use systemd
 ENV container docker
@@ -30,8 +30,10 @@ RUN yum install -y \
     vim
 
 # install python3
+# "sqlite-devel" is used to fix "No module named '_sqlite3'" issue
 RUN yum install -y \
-    tar gcc openssl-devel bzip2-devel libffi-devel
+    tar gcc openssl-devel bzip2-devel libffi-devel \
+    sqlite-devel
 RUN wget https://www.python.org/ftp/python/${PYTHON_3_VERSION_FULL}/Python-${PYTHON_3_VERSION_FULL}.tgz
 RUN tar -xzf Python-${PYTHON_3_VERSION_FULL}.tgz
 RUN rm Python-${PYTHON_3_VERSION_FULL}.tgz

@@ -1,10 +1,10 @@
 
 - [Installation](#installation)
-    - [Distribution](#distribution)
-    - [Local](#local)
-    - [Remote](#remote)
-        - [Upload](#upload)
-        - [Download](#download)
+  - [Distribution](#distribution)
+  - [Local](#local)
+  - [Remote](#remote)
+    - [Upload](#upload)
+    - [Download](#download)
 - [Demo](#demo)
 - [Reference](#reference)
 
@@ -95,6 +95,11 @@ As long as the package is uploaded and the downloading configuration is properly
 `pip install "{package[extra]}"` would do the work. Otherwise, run `pip install --index-url {repo} {package}` to
 ensure the repo is correct.
 
+For information:
+- there can only one index url
+- extra index url can be multiple
+
+
 
 ## Demo
 
@@ -120,3 +125,5 @@ fruit.printing()
 - Keywords in setuptools: https://setuptools.readthedocs.io/en/latest/references/keywords.html
 - Metadata for Python Software Packages: https://www.python.org/dev/peps/pep-0314
 - Specifying package versions: https://pip.pypa.io/en/stable/user_guide/#understanding-your-error-message
+- The Definitive Guide to Python import Statements: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
+- Modules and Packages: Live and Let Die: http://www.dabeaz.com/modulepackage/index.html
