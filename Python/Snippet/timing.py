@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
+
+
+def print_cutting_line():
+    print("-" * 80)
+
 
 # ---------------------------------------------------------
 # Time conversion
@@ -25,11 +31,13 @@ epoch = 1_601_234_567_123  # epoch in milliseconds (13 bits)
 print(datetime.utcfromtimestamp(epoch / 1000))  # 2020-09-27 19:22:47.123000
 
 # check all available timezones
-print(pytz.all_timezones)
+# print(pytz.all_timezones)
+
 # retrieve time of the specified timezone
 timezone = pytz.timezone("Australia/South")
 print(datetime.now(timezone))
 
+print_cutting_line()
 # ---------------------------------------------------------
 # Timer for a command
 import timeit

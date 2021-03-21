@@ -7,6 +7,7 @@ This documentation is to suggest/recommend the good coding style in Python.
 - [Importing](#importing)
 - [Type Hinting](#type-hinting)
 - [Docstring](#docstring)
+- [Docker](#docker)
 - [Reference](#reference)
 
 
@@ -102,6 +103,49 @@ def demo_function(arg1: int, arg2: float) -> [str, int]:
         An answer in string or interger
     """
     pass
+```
+
+## Docker
+
+For docker-compose, the configuration order structure is suggested to be:
+- config related to container
+- config for network
+- config for volume
+- config about orchestration
+
+For instance,
+```yaml
+version: 3.5
+
+volumes:
+  vol_check_var:
+    name: lab_xxx
+
+services:
+  xxx:
+    restart: always
+    container_name: ...
+    image: ...
+    environments:
+      - ...=...
+    command:
+      - ...
+    networks:
+      - lab_xxx
+    ports:
+      - ...:...
+    volumes:
+      - vol_check_var:/opt/xxx/var
+    depends_on:
+      - ...
+
+networks:
+  lab_xxx:
+    name: ...
+    driver: bridge
+    ipam:
+      cofing:
+        - subnet: a.b.c.d/..
 ```
 
 
