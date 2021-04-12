@@ -20,6 +20,7 @@ This documentation is to suggest/recommend the good coding style in Python.
 | Blank Lines | 1 between method defintions |
 | Blank Lines | 1 when it improves code readability |
 | Type Hinting | Apply Type Hinting whenever defining a new function |
+| Purely Functional | In case unexpected side effect, a function with return value(s) should not update any data structure inside |
 
 
 ## Naming Convention
@@ -154,3 +155,4 @@ networks:
 - Code Review Developer Guide: https://google.github.io/eng-practices/review/
 - Naming Convetion: https://en.wikipedia.org/wiki/Naming_convention_(programming)
 - The Meaning of Underscores: https://dbader.org/blog/meaning-of-underscores-in-python
+- Functional Programming HOWTO: https://docs.python.org/3/howto/functional.html#introduction

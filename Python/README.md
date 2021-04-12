@@ -1,12 +1,15 @@
 
 
+- [Development](#development)
 - [Installation](#installation)
 - [Reference](#reference)
 
 This section is to save all MVPs and cached knowledge related to Python.
 
+## Development
+Run `source init.sh` to initialize environment for development.
 
-# Installation
+## Installation
 
 Install Python in Linux is a bit trivial, commands below is more than enough to install Python successfully.
  
