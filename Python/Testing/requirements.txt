@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+--index-url https://pypi.org/simple
+pytest~=6.2
+pytest-mock~=3.6
+pyyaml~=5.4
+requests~=2.25
