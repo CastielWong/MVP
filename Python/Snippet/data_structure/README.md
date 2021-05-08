@@ -1,4 +1,12 @@
 
+- [Dictionary](#dictionary)
+- [Customized Heap](#customized-heap)
+
+## Dictionary
+Normally, the types of key in dictionary are integer or string, but it's acceptable to have either float/double or tuple type as the key.
+
+Note that list or dictionary can not be the key for a dictionary, for the reason that key must be hashable, which also can be considered as immutable (a value can't be hashed if it's volatile).
+
 
 ## Customized Heap
 

@@ -40,6 +40,12 @@ a = ["a", "b"]
 b = ["a", "b"]
 print(a is b)  # False
 
+# walrus operator (Assignment Expressions)
+with open(__file__, "r") as fr:
+    # output content of current file
+    while text := fr.readline():
+        print(text.strip("\n"))
+
 print_cutting_line()
 # ---------------------------------------------------------
 # String Manipulation
@@ -109,3 +115,46 @@ a[1] = 5  # a: [1, 5, 3], b: [1, 2, 3]
 
 print(f"{a = }\n{b = }")
 print_cutting_line()
+
+print_cutting_line()
+# ---------------------------------------------------------
+# Try-Catch
+checking = [
+    "red:14.2",
+    "yellow.band",
+    "23",
+    "purple:-3",
+    "blue:0",
+    "green: band",
+]
+
+valid = 0
+value_error = 0
+index_error = 0
+pass_else = 0
+processed = 0
+
+for item in checking:
+    try:
+        l = item.split(":")
+        value = 1 / int(l[1])
+        valid += 1
+    except ValueError:
+        value_error += 1
+    except IndexError:
+        index_error += 1
+    except Exception as ex:
+        # catch ZeroDivisionError
+        print(f"Other exception: {ex}")
+        processed -= 1
+    else:
+        pass_else += 1
+    finally:
+        processed += 1
+
+# valid = 1, value_error = 2, index_error = 2, pass_else = 1, processed = 5
+print(
+    f"{valid = }\n"
+    f"{value_error = }, {index_error = }, {pass_else = }\n"
+    f"{processed = }"
+)

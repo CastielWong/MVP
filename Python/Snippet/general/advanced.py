@@ -113,3 +113,10 @@ package_list = sorted([f"{p.key}=={p.version}" for p in pkg_resources.working_se
 print(package_list)
 
 print_cutting_line()
+# ---------------------------------------------------------
+# Module reload
+from importlib import reload
+
+reload({module})
+
+print_cutting_line()

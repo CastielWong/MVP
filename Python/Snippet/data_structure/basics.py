@@ -19,6 +19,8 @@ a_list.append(5)  # [1, 3, 2, 3, 1, 3, 3, 5]
 a_list.remove(3)  # [1, 2, 3, 1, 3, 3, 5]
 # remove the element in index 3
 a_list.pop(3)  # [1, 2, 3, 3, 3, 5]
+# insert element at index 3
+a_list.insert(3, 8)  # [1, 2, 3, 8, 3, 3, 5]
 
 # ---------------------------------------------------------
 set_a = {3, 5}
@@ -66,3 +68,10 @@ heappush(heap, 2)  # [2]
 heappush(heap, 1)  # [1, 2]
 print(heap[0])  # 1, the one which would be popped
 heappop(heap)  # [2]
+
+# ---------------------------------------------------------
+from collections import defaultdict
+
+counter = defaultdict(int)
+for w in ["a", "b", "a"]:
+    counter[w] += 1

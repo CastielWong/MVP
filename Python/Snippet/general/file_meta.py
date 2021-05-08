@@ -118,3 +118,14 @@ print(os.path.getsize("{file}"))
 
 stats = os.stat("{file}")
 print(stats.st_size)
+
+# ---------------------------------------------------------
+# Append logs
+# 1st way to append
+fh = open("{log}", "a")
+fh.write("checking\n")
+
+# 2nd way to append
+fh = open("{log}", "r+")
+fh.seek(0, os.SEEK_END)
+fh.write("checking\n")

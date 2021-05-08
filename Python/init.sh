@@ -6,9 +6,12 @@ if ! command -v pyenv &> /dev/null; then
   echo "pyenv not found. Start downloading..."
 
   # disable SSL verification if issue "SSL certificate problem" is encountered
-  git config --global http.sslVerify false
-
+#   git config --global http.sslVerify false
+  default_git_ssl_value=${GIT_SSL_NO_VERIFY}
+  export GIT_SSL_NO_VERIFY=true
   curl -k -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+  # reset the environment variable back
+  export GIT_SSL_NO_VERIFY=${default_git_ssl_value}
 
   echo -e "\n\n# setup for pyenv" >> ~/.bashrc
   echo -e "export PATH=\"${HOME}/.pyenv/bin:${PATH}\"" >> ~/.bashrc
@@ -21,9 +24,8 @@ if ! command -v pyenv &> /dev/null; then
   yum install -y \
   @development zlib-devel bzip2 bzip2-devel readline-devel sqlite \
   sqlite-devel openssl-devel xz xz-devel libffi-devel findutils
-else
-  echo "pyenv has been installed"
 fi
+echo "pyenv has been installed"
 
 # check if the specified venv exists
 pyenv versions | grep ${PYENV_VENV}
@@ -33,10 +35,6 @@ is_venv_existed=$?
 if [ ${is_venv_existed} != 0 ]; then
   pyenv install -v ${PYTHON_VERSION}
   pyenv virtualenv ${PYTHON_VERSION} ${PYENV_VENV}
-  pyenv activate ${PYENV_VENV}
 fi
-
-# set up pre-commit
-pip install --upgrade pip
-pip install -r requirements.txt
-pre-commit install
+pyenv activate ${PYENV_VENV}
+echo "venv \"${PYENV_VENV}\" is activated"
