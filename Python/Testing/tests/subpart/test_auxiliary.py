@@ -33,7 +33,7 @@ def test_get_url_mock(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
         return response
 
     mocker.patch("requests.Session.get", mock_session_get)
-    res = auxiliary.get_url(url=mock_config_conn["remote"])
+    res = auxiliary.get_url(url=mock_config_conn["remote"]["host"])
 
     assert res.status_code == 200
     assert res.url == expected_url
@@ -43,9 +43,7 @@ def test_get_url_mock(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
 
 
 @pytest.mark.parametrize("param_status", ["success", "failure"])
-def test_get_url_actual(
-    mocker: MockerFixture, mock_config_conn: Dict[str, Dict], param_status: str
-):
+def test_get_url_actual(mock_config_conn: Dict[str, Dict], param_status: str):
     res = auxiliary.get_url(url=_MOCKING_CONTENT[param_status]["url"])
 
     assert res.status_code == _MOCKING_CONTENT[param_status]["code"]
