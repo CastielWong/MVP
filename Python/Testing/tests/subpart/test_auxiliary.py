@@ -3,6 +3,7 @@
 import sys
 from typing import Dict
 
+import pytest
 from pytest_mock import MockerFixture
 from requests import Response
 
@@ -14,17 +15,20 @@ from core.subpart import auxiliary  # noqa: E402
 
 
 _MOCKING_CONTENT = {
-    200: "The page can be accessed normally",
-    404: "There is no such page",
+    "success": {"url": "https://httpbin.org/anything", "code": 200},
+    "failure": {"url": "https://httpbin.org/nothing", "code": 404},
 }
 
 
-def test_get_url(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
+def test_get_url_mock(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
+    expected_url = "https://mocking_test"
+    expected_content = "It's mocking content"
+
     def mock_session_get(self, url: str) -> Response:
         response = Response()
         response.status_code = 200
-        response.utl = "https://mocking_test"
-        response._content = _MOCKING_CONTENT[200]
+        response.url = expected_url
+        response._content = expected_content
 
         return response
 
@@ -32,7 +36,19 @@ def test_get_url(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
     res = auxiliary.get_url(url=mock_config_conn["remote"])
 
     assert res.status_code == 200
-    assert res.utl == "https://mocking_test"
-    assert res.content == _MOCKING_CONTENT[200]
+    assert res.url == expected_url
+    assert res.content == expected_content
+
+    return
+
+
+@pytest.mark.parametrize("param_status", ["success", "failure"])
+def test_get_url_actual(
+    mocker: MockerFixture, mock_config_conn: Dict[str, Dict], param_status: str
+):
+    res = auxiliary.get_url(url=_MOCKING_CONTENT[param_status]["url"])
+
+    assert res.status_code == _MOCKING_CONTENT[param_status]["code"]
+    assert res.url == _MOCKING_CONTENT[param_status]["url"]
 
     return
