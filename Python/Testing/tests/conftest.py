@@ -24,6 +24,7 @@ def disable_network_calls(monkeypatch: MonkeyPatch):
         raise RuntimeError("Network access not allowed during testing!")
 
     monkeypatch.setattr(requests, "get", lambda *args, **kwargs: stunted_get())
+    return
 
 
 @pytest.fixture(scope="package")

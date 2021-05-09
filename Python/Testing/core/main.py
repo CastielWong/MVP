@@ -10,4 +10,5 @@ if __name__ == "__main__":
 
     res = auxiliary.get_url("https://httpbin.org/image")
     print(res)
+    print(res.url)
     print(res.headers)
