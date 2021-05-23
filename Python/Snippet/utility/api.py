@@ -45,7 +45,31 @@ def wrap_up_api(url: str, username: str, password: str) -> None:
     with Session as s:
         response = s.send(prepped)
 
+    print(response.status_code)
     print(response.text)
-    print(response.content)
 
     return
+
+
+def retrieve_oauth_link(redirect_url: str, client_id: str) -> str:
+    """Retrieve the OAuth link.
+    Reference: https://realpython.com/python-api/
+
+    Args:
+        redirect_url: the Authorization callback URL
+        client_id: client ID of the URL
+
+    Returns:
+        The URL used for OAuth
+    """
+    params = {
+        "client_id": client_id,
+        "redirect_uri": redirect_url,
+        "scope": "user",
+        "response_type": "code",
+    }
+
+    endpoint = "https://github.com/login/oauth/authorize"
+    response = requests.get(endpoint, params=params)
+    url = response.url
+    return url
