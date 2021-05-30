@@ -3,6 +3,7 @@
 import sys
 from typing import TypeVar
 
+# from boto3.resources.factory import s3
 from moto import mock_s3
 from pandas import DataFrame
 from pytest_mock import MockerFixture
@@ -26,19 +27,23 @@ def test_upload_df_to_s3(mocker: MockerFixture, mock_s3_resource: ResourceS3):
     }
 
     conn_s3 = aws_s3.Connection(
-        endpoint_url="", access_key="mock-access-key", secret_key="mock-secret-key"
+        endpoint_url="https://mock.com",
+        access_key="mock-access-key",
+        secret_key="mock-secret-key",
     )
 
     # mock function `put_object` to simulate the uploading process
-    def mock_s3_put_object(Bucket: str, Key: str, Body: str) -> None:
+    def mock_s3_put_object(Bucket: str, Key: str, Body: str):
         mock_s3_resource.create_bucket(Bucket=Bucket)
         object_ = mock_s3_resource.Object(bucket_name=Bucket, key=Key)
         object_.put(Body=Body)
-        return
+        return object_
 
     mocker.patch.object(conn_s3.client, "put_object", mock_s3_put_object)
 
-    conn_s3.upload_dataframe(**param)
+    s3_object = conn_s3.upload_dataframe(**param)
 
-    assert 1 == 1
+    assert s3_object.bucket_name == param["bucket_name"]
+    assert s3_object.key == param["object_key"]
+
     return

@@ -42,8 +42,8 @@ class Connection:
         csv_buffer = StringIO()
         df.to_csv(path_or_buf=csv_buffer, index=False)
 
-        result = self.client.put_object(
+        ressponse = self.client.put_object(
             Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue()
         )
 
-        return result
+        return ressponse
