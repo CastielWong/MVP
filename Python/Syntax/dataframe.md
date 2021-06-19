@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
+
+```py
 import pandas as pd
 from pandas import DataFrame
 
@@ -19,5 +19,8 @@ print(len(df.shape[0]))
 # though slowest, it avoids counting NaN values at first column
 print(df[df.columns[0]].count())
 
-# reference to add:
-# - https://towardsdatascience.com/400x-time-faster-pandas-data-frame-iteration-16fb47871a0a
+```
+
+
+## Reference
+- 400x times faster Pandas Data Frame Iteration: https://towardsdatascience.com/400x-time-faster-pandas-data-frame-iteration-16fb47871a0a

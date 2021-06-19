@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
-
-# -----------------------------------------------
+```py
 # render from string
 from jinja2 import Template
 
@@ -27,3 +23,4 @@ template = env.get_template("{template}.json")
 params = {...}
 # either dict or keyword pairs works
 rendered = template.render(**params)
+```

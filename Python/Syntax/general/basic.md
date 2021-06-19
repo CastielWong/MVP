@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
 
-def print_cutting_line():
-    print("-" * 80)
-
-
+```py
 # ---------------------------------------------------------
 # Operator
 a = 3 / 2  # 1.5
@@ -46,7 +40,6 @@ with open(__file__, "r") as fr:
     while text := fr.readline():
         print(text.strip("\n"))
 
-print_cutting_line()
 # ---------------------------------------------------------
 # String Manipulation
 s = "\tabc\nd\n"
@@ -76,7 +69,6 @@ s.isalpha()  # false
 s.isdigit()  # true
 s.isalnum()  # true
 
-print_cutting_line()
 # ---------------------------------------------------------
 # Loop
 a_list = [i for i in range(3, 0, -1)]  # [3, 2, 1]
@@ -89,7 +81,6 @@ for i in range(len(a_list) - 1, -1, -1):
 for index, number in enumerate(a_list):
     print(index, number)
 
-print_cutting_line()
 # ---------------------------------------------------------
 # Sorting
 a = [1, 5, 3, 2]
@@ -105,7 +96,6 @@ a.sort()  # None
 print(a)  # [1, 2, 3, 5]
 print(b)  # [5, 3, 2, 1]
 
-print_cutting_line()
 # ---------------------------------------------------------
 # Copy
 # note that string and tuple have no copy() method
@@ -114,9 +104,6 @@ b = a.copy()  # [1, 2, 3]
 a[1] = 5  # a: [1, 5, 3], b: [1, 2, 3]
 
 print(f"{a = }\n{b = }")
-print_cutting_line()
-
-print_cutting_line()
 # ---------------------------------------------------------
 # Try-Catch
 checking = [
@@ -158,3 +145,4 @@ print(
     f"{value_error = }, {index_error = }, {pass_else = }\n"
     f"{processed = }"
 )
+```

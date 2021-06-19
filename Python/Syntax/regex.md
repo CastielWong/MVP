@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
+```py
 import re
 
 # check if pattern exists
@@ -29,3 +27,4 @@ text = "guru-00@gmail.com, career.guru12@hotmail.com, demo@yahoo.com"
 # retrieve all item matched the text
 emails = re.findall(r"[\w\.-]+@[\w\.]+", text)
 print(emails)
+```

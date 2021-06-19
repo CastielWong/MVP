@@ -1,13 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
-
-def print_cutting_line():
-    print("-" * 80)
-
-
-# ---------------------------------------------------------
+```py
 # Time conversion
 import time
 from datetime import datetime, timezone
@@ -41,8 +33,6 @@ print(datetime.fromtimestamp(epoch, tz=timezone.utc))
 # retrieve time of the specified timezone
 timezone = pytz.timezone("Australia/South")
 print(datetime.now(timezone))
-
-print_cutting_line()
 # ---------------------------------------------------------
 # Timer for a command
 import timeit
@@ -50,3 +40,4 @@ import timeit
 command = "'-'.join(str(n) for n in range(100))"
 # time elapsed to run the command for 10,000 time
 print(timeit.timeit(command, number=10000))
+```

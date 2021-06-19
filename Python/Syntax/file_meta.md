@@ -1,12 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
-
-def print_cutting_line():
-    print("-" * 80)
-
-
+```py
 # ---------------------------------------------------------
 # I/O
 import sys
@@ -133,3 +126,4 @@ fh.write("checking\n")
 fh = open("{log}", "r+")
 fh.seek(0, os.SEEK_END)
 fh.write("checking\n")
+```

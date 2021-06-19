@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
+```py
 from collections import namedtuple
 
 Row = namedtuple("Row", ["a", "b", "c"])
@@ -14,3 +14,4 @@ print(results)
 
 for r in results:
     print(r)
+```

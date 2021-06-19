@@ -1,13 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
-
-def print_cutting_line():
-    print("-" * 80)
-
-
-# ---------------------------------------------------------
+```py
 a_tuple = (1,)
 # a_tuple = 1,
 a_tuple = (1, 2)
@@ -31,7 +23,6 @@ print(set_a.intersection(set_b))  # {3}
 set_a.add(1)  # {1, 3, 5}
 set_a.remove(3)  # {1, 5}
 
-print_cutting_line()
 # ---------------------------------------------------------
 a_map = {"a": 1, "c": 3}
 a_map["b"] = 2  # {'a': 1, 'c': 3, 'b': 2}
@@ -75,3 +66,4 @@ from collections import defaultdict
 counter = defaultdict(int)
 for w in ["a", "b", "a"]:
     counter[w] += 1
+```
