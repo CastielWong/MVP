@@ -1,4 +1,10 @@
 
+- [Concatenation](#concatenation)
+- [Sorting](#sorting)
+- [Miscellaneous](#miscellaneous)
+
+
+## Concatenation
 ```py
 a = ["a", "b"]
 b = [1, 2]
@@ -14,8 +20,12 @@ alphabet = ["alpha", "beta", "gamma"]
 lists = [a, b, alphabet]
 for element_tuple in itertools.product(*lists):
     print(element_tuple)  # ("a", 1, "alpha"), ..., ('b', 2, 'gamma')
-# ---------------------------------------------------------
-# Sort by value in Dictionary
+```
+
+
+## Sorting
+Sort by value in Dictionary:
+```py
 mapping = {"a": 3, "b": 5, "c": 5, "d": 2}
 print(mapping)
 
@@ -28,7 +38,11 @@ print(sorted_items)  # [('d', 2), ('a', 3), ('c', 5), ('b', 5)]
 # convert the array back to dictionary
 mapping_sorted = {k: v for k, v in sorted_items}  # {'d': 2, 'a': 3, 'c': 5, 'b': 5}
 print(mapping_sorted)
-# ---------------------------------------------------------
+```
+
+
+## Miscellaneous
+```py
 # Conversion between chr and int
 print(ord("A"))  # 65
 print(ord("a"))  # 97
@@ -71,7 +85,6 @@ def demo(x=[]):
     print(id(x))
     x.append("a")
     return x
-
 
 x = []
 print(id(x))  # xxxxxx1
