@@ -1,7 +1,13 @@
 
+- [IO](#io)
+- [JSON](#json)
+- [Copy](#copy)
+- [Directory](#directory)
+- [File Size](#file-size)
+
+## IO
+
 ```py
-# ---------------------------------------------------------
-# I/O
 import sys
 
 # read input from standard input (command line)
@@ -21,9 +27,11 @@ with open("{file}.csv", mode="r") as file_reader:
         print(arguments)
 
         line = file_reader.readline()
+```
 
-# ---------------------------------------------------------
-# JSON
+
+## JSON
+```py
 import json
 
 # convert str to dict
@@ -43,16 +51,21 @@ with open("{file}", "r") as file_reader:
 # write data to file
 with open("{file}", "w") as file_writer:
     json.dump(data_dict, file_writer)
+```
 
-# ---------------------------------------------------------
-# Copy
+
+## Copy
+```py
 import shutil
 
 shutil.copyfile({file_source}, {file_target})
 shutil.copytree({dir_source}, {dir_target}, dirs_exist_ok=True)
 
-# ---------------------------------------------------------
-# Directory
+```
+
+
+## Directory
+```py
 import os
 from os.path import realpath, dirname, basename
 from pathlib import Path
@@ -107,8 +120,11 @@ import shutil
 
 shutil.rmtree({directory})
 
-# ---------------------------------------------------------
-# Size
+```
+
+
+## File Size
+```py
 import os
 
 print(os.path.getsize("{file}"))

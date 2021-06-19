@@ -1,4 +1,7 @@
 
+- [Named Tuple](#named-tuple)
+
+## Named Tuple
 ```py
 from collections import namedtuple
 

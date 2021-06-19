@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# flake8: noqa
 import subprocess
 
 
@@ -19,6 +18,8 @@ def access_link_in_chrome_incognito(url: str) -> None:
 
     subprocess.run(commands)
 
-    # out, err = subprocess.Popen(commands.split(), stdout=subprocess.PIPE).communicate()
+    # out, err = subprocess.Popen(
+    #     commands.split(), stdout=subprocess.PIPE
+    # ).communicate()
 
     return

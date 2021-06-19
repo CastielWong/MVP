@@ -1,28 +1,25 @@
 
-
-
+## General
+The general way to customize a heap is by placing the sorting elements in front, then put all needed elements into the tuple behind.
 ```py
-def print_cutting_line():
-    print("-" * 80)
-
-
-# ---------------------------------------------------------
 from heapq import heappush, heappop
 
 heap = []
-heappush(heap, (5, ("b", 5)))  # [(5, ('b', 5))]
-heappush(heap, (3, ("c", 3)))  # [(3, ('c', 3)), (5, ('b', 5))]
-heappush(heap, (4, ("a", 4)))  # [(3, ('c', 3)), (5, ('b', 5)), (4, ('a', 4))]
-heappush(
-    heap, (4, ("d", 4))
-)  # [(3, ('c', 3)), (4, ('d', 4)), (4, ('a', 4)), (5, ('b', 5))]
+heappush(heap, (5, ("b", 5)))   # [(5, ('b', 5))]
+heappush(heap, (3, ("c", 3)))   # [(3, ('c', 3)), (5, ('b', 5))]
+heappush(heap, (4, ("a", 4)))   # [(3, ('c', 3)), (5, ('b', 5)), (4, ('a', 4))]
+heappush(heap, (4, ("d", 4)))   # [(3, ('c', 3)), (4, ('d', 4)), (4, ('a', 4)), (5, ('b', 5))]
 
 # "c", "a", "d", "b"
 while heap:
     print(heappop(heap)[1][0])
+```
 
-print_cutting_line()
 
+## Comparator
+Other than the general way, encapsulate elements into a class, then applying the comparator like `__lt__` and `__gt__` is another good approach.
+```py
+from heapq import heappush, heappop
 
 class Item:
     def __init__(self, word, number):

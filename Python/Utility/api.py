@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# flake8: noqa
-import requests
 from requests import Request, Session
+import requests
 
 
 def get_result_via_json(

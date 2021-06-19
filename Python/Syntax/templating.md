@@ -1,6 +1,10 @@
 
+- [General](#general)
+- [File](#file)
+
+## General
+Render from string:
 ```py
-# render from string
 from jinja2 import Template
 
 demo = """
@@ -10,9 +14,11 @@ demo = """
 params = {"string": "displaying", "number": 123}
 template = Template(demo)
 rendered = template.render(params)
+```
 
-# -----------------------------------------------
-# render file under directory
+## File
+Render from file loading under directory:
+```py
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
