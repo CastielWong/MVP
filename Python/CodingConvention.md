@@ -5,6 +5,7 @@ This documentation is to suggest/recommend the good coding style in Python.
 - [Naming Convention](#naming-convention)
 - [Header](#header)
 - [Importing](#importing)
+- [Main Function](#main-function)
 - [Type Hinting](#type-hinting)
 - [Docstring](#docstring)
 - [Docker](#docker)
@@ -69,6 +70,14 @@ from {package} import {module}
 ```
 
 Import statements under the same style are ordered alphabetically for sure.
+
+
+## Main Function
+There are four key best practices about `main()` in Python:
+1. Put code that takes a long time to run or has other effects on the computer in a function or class, so you can control exactly when that code is executed
+2. Use the different values of `__name__` to determine the context and change the behavior of your code with a conditional statement
+3. Even though Python does not assign any special significance to a function named main(), it's highly recommended to name the entry point function `main()`
+4. Define the logic in functions outside `main()` and call those functions within `main()`, which helps to improve the code reusability
 
 
 ## Type Hinting
@@ -151,8 +160,9 @@ networks:
 
 
 ## Reference
-
 - Code Review Developer Guide: https://google.github.io/eng-practices/review/
 - Naming Convetion: https://en.wikipedia.org/wiki/Naming_convention_(programming)
 - The Meaning of Underscores: https://dbader.org/blog/meaning-of-underscores-in-python
 - Functional Programming HOWTO: https://docs.python.org/3/howto/functional.html#introduction
+- Defining Main Functions in Python: https://realpython.com/python-main-function/#summary-of-python-main-function-best-practices
+- Why good commit messages matter: https://chris.beams.io/posts/git-commit/

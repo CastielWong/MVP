@@ -94,6 +94,10 @@ except FileExistsError as error:
 
 # list elements in current directory
 curr_path = Path.cwd()
+
+# check if path is existed
+print(curr_path.exists())
+
 for f in os.listdir(curr_path):
     full_path = os.path.join(curr_path, f)
     if os.path.isfile(full_path):

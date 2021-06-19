@@ -127,3 +127,5 @@ fruit.printing()
 - Specifying package versions: https://pip.pypa.io/en/stable/user_guide/#understanding-your-error-message
 - The Definitive Guide to Python import Statements: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 - Modules and Packages: Live and Let Die: http://www.dabeaz.com/modulepackage/index.html
+- Packaging a python library: https://blog.ionelmc.ro/2014/05/25/python-packaging/
+- Package Initialization: https://realpython.com/python-modules-packages/#package-initialization
