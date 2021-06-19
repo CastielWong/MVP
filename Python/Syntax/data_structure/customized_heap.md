@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# flake8: noqa
 
 
+
+```py
 def print_cutting_line():
     print("-" * 80)
 
@@ -45,3 +44,4 @@ heappush(heap, Item("d", 4))
 
 while heap:
     print(heappop(heap).word)
+```
