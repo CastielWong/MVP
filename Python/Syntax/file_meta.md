@@ -119,7 +119,6 @@ for f in os.listdir(curr_path):
 import shutil
 
 shutil.rmtree({directory})
-
 ```
 
 

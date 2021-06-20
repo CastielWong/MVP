@@ -20,15 +20,12 @@ df = DataFrame(data)
 
 
 ## Display Setting
-
 ```py
 pd.set_option("display.float_format", lambda x: "%.5f" % x)
-
 ```
 
 
 ## Meta
-
 ```py
 # several ways to get the row count
 print(len(df.index))

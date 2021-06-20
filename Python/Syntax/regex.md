@@ -1,4 +1,9 @@
 
+- [Match](#match)
+- [Search](#search)
+- [Find](#find)
+
+
 ## Match
 Check if pattern exists:
 ```py

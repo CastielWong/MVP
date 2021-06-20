@@ -1,4 +1,8 @@
 
+- [General](#general)
+- [Comparator](#comparator)
+
+
 ## General
 The general way to customize a heap is by placing the sorting elements in front, then put all needed elements into the tuple behind.
 ```py
