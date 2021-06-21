@@ -1,9 +1,9 @@
 
-- [General](#general)
+- [String](#string)
 - [File](#file)
 - [Reference](#reference)
 
-## General
+## String
 Render from string:
 ```py
 from jinja2 import Template

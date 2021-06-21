@@ -1,6 +1,6 @@
 
 - [Initialization](#initialization)
-- [Metadata](#metadata)
+- [Meta](#meta)
 - [Basic](#basic)
 - [Formatting](#formatting)
 - [Function](#function)
@@ -23,7 +23,7 @@ df.show(5)
 ```
 
 
-## Metadata
+## Meta
 ```py
 from pyspark.sql.types import StructField, StringType, IntegerType, StructType
 

@@ -1,19 +1,50 @@
 
+- [Meta](#meta)
 - [IO](#io)
-- [JSON](#json)
+  - [Standard](#standard)
+  - [CSV](#csv)
+  - [JSON](#json)
+  - [YAML](#yaml)
 - [Copy](#copy)
 - [Directory](#directory)
-- [File Size](#file-size)
+
+
+## Meta
+```py
+import os
+
+print(os.path.getsize("{file}"))
+
+stats = os.stat("{file}")
+print(stats.st_size)
+```
+
 
 ## IO
 
+### Standard
 ```py
+import os
 import sys
 
 # read input from standard input (command line)
 line = sys.stdin.readline()
 print(line)
 
+# file appending
+# use "append" mode
+with open("{file}", "a") as file_handler:
+    file_handler.write("checking\n")
+
+# apply seek to append
+with open("{file}", "r+") as file_handler:
+    file_handler.seek(0, os.SEEK_END)
+    file_handler.write("checking\n")
+```
+
+### CSV
+```py
+# read input from file
 with open("{file}.csv", mode="r") as file_reader:
     # note that it's `readline()` but not `read()`
     line = file_reader.readline()
@@ -21,6 +52,7 @@ with open("{file}.csv", mode="r") as file_reader:
     while line:
         # skip an empty line
         if not line.strip():
+            line = file_reader.readline()
             continue
 
         arguments = line.strip().split(",")
@@ -29,8 +61,7 @@ with open("{file}.csv", mode="r") as file_reader:
         line = file_reader.readline()
 ```
 
-
-## JSON
+### JSON
 ```py
 import json
 
@@ -45,12 +76,20 @@ data = json.dumps(data_dict)
 print(type(data), data)
 
 # load data from file to dict
-with open("{file}", "r") as file_reader:
+with open("{file}.json", "r") as file_reader:
     data = json.load(file_reader)
 
 # write data to file
-with open("{file}", "w") as file_writer:
+with open("{file}.json", "w") as file_writer:
     json.dump(data_dict, file_writer)
+```
+
+### YAML
+```py
+import yaml
+
+with open("{file}.yaml", "r") as file_reader:
+    output = yaml.load(file_reader, Loader=yaml.FullLoader)
 ```
 
 
@@ -60,24 +99,25 @@ import shutil
 
 shutil.copyfile({file_source}, {file_target})
 shutil.copytree({dir_source}, {dir_target}, dirs_exist_ok=True)
-
 ```
 
 
 ## Directory
 ```py
-import os
 from os.path import realpath, dirname, basename
 from pathlib import Path
+import os
+import shutil
 
 # check current file name
 print(__file__)
 print(realpath(__file__))
 
 # check current working directory
+curr_path = Path.cwd()
+print(curr_path)
 print(os.getcwd())
 print(dirname(__file__))
-print(Path.cwd())
 
 # check home of current user
 print(Path.home())
@@ -98,12 +138,10 @@ try:
 except FileExistsError as error:
     print(error)
 
-# list elements in current directory
-curr_path = Path.cwd()
-
 # check if path is existed
 print(curr_path.exists())
 
+# list elements in current directory
 for f in os.listdir(curr_path):
     full_path = os.path.join(curr_path, f)
     if os.path.isfile(full_path):
@@ -116,29 +154,5 @@ for f in os.listdir(curr_path):
         print(f"other - {f}")
 
 # delete a direcotory
-import shutil
-
 shutil.rmtree({directory})
-```
-
-
-## File Size
-```py
-import os
-
-print(os.path.getsize("{file}"))
-
-stats = os.stat("{file}")
-print(stats.st_size)
-
-# ---------------------------------------------------------
-# Append logs
-# 1st way to append
-fh = open("{log}", "a")
-fh.write("checking\n")
-
-# 2nd way to append
-fh = open("{log}", "r+")
-fh.seek(0, os.SEEK_END)
-fh.write("checking\n")
 ```
