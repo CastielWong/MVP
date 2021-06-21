@@ -1,4 +1,8 @@
 
+- [Literals](#literals)
+  - [f-string](#f-string)
+  - [r-string](#r-string)
+  - [b-string](#b-string)
 - [Operator](#operator)
   - [Basics](#basics)
   - [Logical](#logical)
@@ -8,8 +12,111 @@
   - [Walrus Operator](#walrus-operator)
   - [Loop](#loop)
   - [Sorting](#sorting)
+- [Function](#function)
+  - [Higher Order](#higher-order)
+  - [Type Hinting](#type-hinting)
+- [Argument](#argument)
+  - [Variadic](#variadic)
+  - [Dynamic](#dynamic)
 - [Copy](#copy)
 - [Try-Catch](#try-catch)
+- [Reference](#reference)
+
+
+## Literals
+Literals are notations for constant values of some built-in types.
+
+There are different types of string literals in Python:
+- f-string: formatted
+- r-string: raw
+- b-string: byte
+- u-string: unicode, a legacy literal
+
+The u-string would normally used in Python2, whose strings are ASCII by default. Using u-string would allow non-ASCII characters for the string in Python.
+
+Note that it's possible to combine different string literals together, like 'rf', 'rb' etc. However, the 'f' may be combined with 'r', but not with 'b' or 'u', therefore raw formatted strings are possible, but formatted bytes literals are not.
+
+### f-string
+There are multiple ways to use f-string:
+- starts with "f" for the string
+- use `format()` function built for string type
+- apply `format_map()` function to map the string explicitly
+
+```py
+text = "texting"
+
+# format the output of actual text via f-strings
+print(f"Here comes the text: {text}")
+# format the output of actual text in format
+print("Here comes the text: {}".format(text))
+
+dictionary = {"a": 1, "b": 2, "c": 3}
+# format dictionary variable: "a = 1, c = 3"
+print("a = {a}, c = {c}".format_map(dictionary))
+# output value with the key in dict
+print("b = %(b)s" % dictionary) # "b = 2"
+
+# format decimal numbers in string
+a = 1.256
+b = 2345
+# format in f-string with rounding precision: "1.3"
+print(f"{a:.2}")
+# format in f-string with rounding precision in decimal: "1.26"
+print(f"{a:.2f}")
+# format in f-string with separator: "2,345"
+print(f"{b:,}")
+# format in f-string in string formatted with fixed size: "1.256    2345"
+print(f"{str(a):8s} {str(b):2s}")
+# format in f-strings with "=": "a = 1.256, b = 2345"
+print(f"{a = }, {b = }")
+
+# left/right alignment
+# format way
+print("{str_1:<20} {str_2:>20}".format(str_1="left aligned", str_2="right aligned"))
+# f-string way
+print(f"{str_1:<20} {str_2:>20}")
+
+
+# have string in representation mode
+msg = "message"
+
+print("`repr()` shows quotes: {!r}".format(msg))    # `repr()` shows quotes: 'message'
+print("while `str()` doesn't: {!s}".format(msg))    # while `str()` doesn't: message
+```
+
+### r-string
+```py
+text = "\ttexting\n"
+
+# output the raw text literally (with "\t", "\n" other than a new line)
+print("%r" % text)  # "\ttexting\n"
+
+print("\\a\nb")     # "\a" (new line) "b"
+print(r"\a\nb")     # "\a\nb"
+```
+
+### b-string
+```py
+print("a" == "a")   # True
+print("a" == b"a")  # false
+
+byte_string = b"\x00\x10"   # 00000000 00010000
+print(int.from_bytes(byte_string, byteorder="big"))     # 16    (00000000 00010000)
+print(int.from_bytes(byte_string, byteorder="little"))  # 4096  (00010000 00000000)
+
+# convert bytes type
+a = b"a \tString"
+print(a.decode("ascii"))    # a String
+print(a.decode("utf-8"))    # a String
+
+checking = b'\x00\x00\x01l\x05-\xcfA\x00\x00\x09key_09812\x00\x10value_123456789a'
+print(int.from_bytes(checking[:8], byteorder="big"))    # 1563454984001
+print(int.from_bytes(checking[8:9], byteorder="big"))   # 0
+print(int.from_bytes(checking[9:11], byteorder="big"))  # 9
+print(checking[11:11+9].decode("utf-8"))                # "key_09812"
+print(int.from_bytes(checking[20:22], byteorder="big")) # 16
+print(checking[22:22+16].decode("utf-8"))               # "value_123456789a"
+```
 
 
 ## Operator
@@ -121,6 +228,152 @@ print(list(s.strip())[::-1])
 ```
 
 
+## Function
+
+### Higher Order
+A function is called __Higher Order Function__ if it contains other functions as a parameter or returns a function as an output.
+
+```py
+import functools
+
+def decorator_func(func):
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        print("Before the function is called")
+        # unpacking both element and dictionary when pass to the function
+        func(*args, **kwargs)
+        print("After the function is called")
+
+    return inner
+
+def print_demo_normal(*args, **kwargs):
+    print("------------------------------------------")
+    print("This is the function to decorate in normal")
+    print(f"The elements are: {args}")
+    print(f"The dictionary are: {kwargs}")
+    print("------------------------------------------")
+
+# apply decorator to decorate the function
+@decorator_func
+def print_demo_with_decorator():
+    print("------------------------------------------")
+    print("This is the function to decorate with decorator annotation")
+    print("------------------------------------------")
+
+# "Before ...\n" ... "This ... normal\n" ... "After ...\n"
+demo = decorator_func(print_demo_normal)
+demo(1, 2, 3, a="apple", b="banana")
+print("========================================================")
+# "Before ...\n" "This ... annotation\n" "After ...\n"
+print_demo_with_decorator()
+print(print_demo_with_decorator.__name__)
+```
+
+### Type Hinting
+```py
+from typing import List, Tuple
+
+def convert_tuple_to_list(a_tuple: Tuple) -> List:
+    return list(a_tuple)
+
+class Book:
+    def __init__(self, weight: int):
+        self.weight = weight
+
+    @classmethod
+    def hardcover(cls, weight: int) -> "Book":
+        return cls(weight + 10)
+
+book1 = Book(10)
+book2 = Book.hardcover(10)
+print(book1.weight)
+print(book2.weight)
+```
+
+
+## Argument
+Ingest arguments from the command via `sys`:
+```py
+import sys
+
+# {file}.py {arg1} {arg2}
+print(sys.argv)
+```
+
+### Variadic
+There are two different types of arguments in variadic functions: Positinal and Keyword.
+- `*`
+    - usually set as `args` for conventional
+    - it's used to pack elements if it's in the function signature
+    - it's used for unpacking if it's inside the function
+    - it must come after the required positional arguments
+- `**`
+    - usually set as `kwargs` for conventional
+    - it's used to pack keyword pairs if it's in the function signature
+    - it's used for unpacking dictionary if it's inside the function
+    - it must come after positional and other keyword arguments if any
+
+```py
+# destruct elements and collect
+head, *middle, tail = [1, 2, 3, 4, 5]
+print(middle)   # [2, 3, 4]
+
+# Variadic Positional Arguments: *args
+def var_pos_arg(a, b, c, *args):
+    # `args` is a tuple of all trailing argument values, naming as `args` is just conventional
+    print(f"{a}, {b}, {c}, {args}")
+
+# 1, 2, 3, (4, 5, 6)
+var_pos_arg(1, 2, 3, 4, 5, 6)
+
+# Variadic Keyword Arguments: **kwargs
+def var_kw_arg(a, *args, b=8, **kwargs):
+    # `kwargs` is a dict of all trailing keyword arguments and values, naming as `kwargs` is just conventional
+    print(f"{a}, {args}, {b}, {kwargs}")
+
+# 1, (2, 3), 6, {"key1": "a", "key2": "c"}
+var_kw_arg(1, 2, 3, b=6, key1="a", key2="c")
+```
+
+### Dynamic
+Extract arguments out from a function in dynamic ways:
+```py
+import inspect
+
+def demo_method(arg0, arg1=1, arg2=2):
+    # inside the function: both of arguments and values can be retrieved
+
+    # via locals()
+    # default: {"arg1": 1, "arg2": 2}
+    print(locals())
+
+    # via inspect
+    frame = inspect.currentframe()
+    args, _, _, local = inspect.getargvalues(frame)
+    # default: {"arg1": 1, "arg2": 2}
+    print({key: local[key] for key in args})
+
+    pass
+
+demo_method(3, 4)       # {"arg0": 3, "arg1": 4, "arg2": 2}
+print("------------------")
+
+# outside the function: only arguments are available
+
+# via inspect
+# (arg0, arg1=1, arg2=2), note that values are default only
+print(inspect.signature(demo_method))
+# ["arg0", "arg1", "arg2"]
+print(inspect.getfullargspec(demo_method).args)
+
+# via bulitin __code__
+code_obj = demo_method.__code__
+# ("arg0", "arg1", "arg2")
+print(code_obj.co_varnames[:code_obj.co_argcount])
+```
+
+
+
 ## Copy
 ```py
 # note that string and tuple have no copy() method
@@ -174,3 +427,8 @@ print(
     f"{processed = }"
 )
 ```
+
+
+## Reference
+- String and Bytes literals: https://docs.python.org/3.6/reference/lexical_analysis.html#string-and-bytes-literals
+- Format Specification Mini-Language: https://docs.python.org/3/library/string.html#format-specification-mini-language

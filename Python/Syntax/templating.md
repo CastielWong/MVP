@@ -1,6 +1,7 @@
 
 - [General](#general)
 - [File](#file)
+- [Reference](#reference)
 
 ## General
 Render from string:
@@ -30,3 +31,7 @@ params = {...}
 # either dict or keyword pairs works
 rendered = template.render(**params)
 ```
+
+
+## Reference
+- Python Jinja tutorial: http://zetcode.com/python/jinja/
