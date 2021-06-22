@@ -2,6 +2,7 @@
 - [Current](#current)
 - [Epoch](#epoch)
 - [Timer](#timer)
+- [File](#file)
 
 ## Current
 ```py
@@ -50,4 +51,15 @@ import timeit
 command = "'-'.join(str(n) for n in range(100))"
 # time elapsed to run the command for 10,000 time
 print(timeit.timeit(command, number=10_000))
+```
+
+
+## File
+```py
+import on
+import time
+
+path_file = "demo.txt"
+print(f"Created time is:    {time.ctime(os.path.getctime(path_file)):>30}")
+print(f"Modified time is:   {time.ctime(os.path.getmtime(path_file)):>30}")
 ```
