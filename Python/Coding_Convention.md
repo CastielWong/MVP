@@ -13,7 +13,6 @@ This documentation is to suggest/recommend the good coding style in Python.
 
 
 ## General
-
 | Item | Detail |
 | --- | --- |
 | Indentation | 4 spaces, no tab |
@@ -25,7 +24,6 @@ This documentation is to suggest/recommend the good coding style in Python.
 
 
 ## Naming Convention
-
 | Type | Pattern | Example |
 | --- | --- | --- |
 | Package | Snake Case | package_a |
@@ -40,7 +38,6 @@ Note that even though Python doesn't support private element like normal OOP lan
 
 
 ## Header
-
 It's a good practice to put clarified header at the top of each python file. For instance:
 
 ```py
@@ -50,7 +47,6 @@ It's a good practice to put clarified header at the top of each python file. For
 
 
 ## Importing
-
 There are three levels imports: in-built, third-party, customized. For better readability, it's suggested to have the import statements to follow order as the example:
 
 ```py
@@ -81,7 +77,6 @@ There are four key best practices about `main()` in Python:
 
 
 ## Type Hinting
-
 It improves readability to have function annotation clarified as [PEP 484](https://www.python.org/dev/peps/pep-0484/) indicated. Below is examples for common use cases:
 
 ```py
@@ -97,7 +92,6 @@ def demo_func_b(arg: [list, dict]) -> int:
 
 
 ## Docstring
-
 Use triple quotes and apply [Google Style](https://google.github.io/styleguide/pyguide.html) for Docstring.
 
 ```py
@@ -115,8 +109,8 @@ def demo_function(arg1: int, arg2: float) -> [str, int]:
     pass
 ```
 
-## Docker
 
+## Docker
 For docker-compose, the configuration order structure is suggested to be:
 - config related to container
 - config for network
@@ -165,4 +159,5 @@ networks:
 - The Meaning of Underscores: https://dbader.org/blog/meaning-of-underscores-in-python
 - Functional Programming HOWTO: https://docs.python.org/3/howto/functional.html#introduction
 - Defining Main Functions in Python: https://realpython.com/python-main-function/#summary-of-python-main-function-best-practices
-- Why good commit messages matter: https://chris.beams.io/posts/git-commit/
+- How to Write a Git Commit Message: https://chris.beams.io/posts/git-commit/
+- Google Python Style Guide: https://google.github.io/styleguide/pyguide.html

@@ -318,21 +318,31 @@ There are two different types of arguments in variadic functions: Positinal and 
 head, *middle, tail = [1, 2, 3, 4, 5]
 print(middle)   # [2, 3, 4]
 
+list_1 = [1, 2, 3]
+list_2 = [4, 5]
+merged_list = [*list_1, *list_2]
+print(merged_list)  # [1, 2, 3, 4, 5]
+
+dict_1 = {"a": 1, "b": 2, "c": 3}
+dict_2 = {"d": 4, "e": 5}
+merged_dic = {**dict_1, **dict_2}
+print(merged_dic)
+
 # Variadic Positional Arguments: *args
-def var_pos_arg(a, b, c, *args):
+def var_arg_pos(a, b, c, *args):
     # `args` is a tuple of all trailing argument values, naming as `args` is just conventional
     print(f"{a}, {b}, {c}, {args}")
 
 # 1, 2, 3, (4, 5, 6)
-var_pos_arg(1, 2, 3, 4, 5, 6)
+var_arg_pos(1, 2, 3, 4, 5, 6)
 
 # Variadic Keyword Arguments: **kwargs
-def var_kw_arg(a, *args, b=8, **kwargs):
+def var_arg_kw(a, *args, b=8, **kwargs):
     # `kwargs` is a dict of all trailing keyword arguments and values, naming as `kwargs` is just conventional
     print(f"{a}, {args}, {b}, {kwargs}")
 
 # 1, (2, 3), 6, {"key1": "a", "key2": "c"}
-var_kw_arg(1, 2, 3, b=6, key1="a", key2="c")
+var_arg_kw(1, 2, 3, b=6, key1="a", key2="c")
 ```
 
 ### Dynamic
