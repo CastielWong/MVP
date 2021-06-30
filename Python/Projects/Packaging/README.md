@@ -1,4 +1,6 @@
 
+- [Development](#development)
+  - [Initialization](#initialization)
 - [Installation](#installation)
   - [Distribution](#distribution)
   - [Local](#local)
@@ -7,6 +9,31 @@
     - [Download](#download)
 - [Demo](#demo)
 - [Reference](#reference)
+
+
+## Development
+
+### Initialization
+To mark a directory as a project or module, `__init__.py` needs to be created. The folder structure may look like:
+```
+caller/
+  __init__.py
+  a.py
+  b.py
+  c.py
+```
+
+Keep `__int__.py` blank if "caller" is only considered as a project. However, if we want "caller" to be a callable module, importing statement(s) is(are) needed. For instance:
+```py
+from . import a
+from . import c
+```
+So that others can utilize "caller" like `caller.a.xxx()` or `caller.c.xxx()`.
+
+Note that `caller.b.xxx()` won't work since submoudle b wasn't included in `__init__.py`. However, submodule b can still be accessed via `from caller import b` to make `b.main()` functioning.
+
+A better approach is to exert `__all__`. To achieve the same effect as above, simply add `__all__ = ["a", "c"]` inside `__init__.py` is enough.
+
 
 ## Installation
 
@@ -125,7 +152,6 @@ fruit.printing()
 - Keywords in setuptools: https://setuptools.readthedocs.io/en/latest/references/keywords.html
 - Metadata for Python Software Packages: https://www.python.org/dev/peps/pep-0314
 - Specifying package versions: https://pip.pypa.io/en/stable/user_guide/#understanding-your-error-message
-- The Definitive Guide to Python import Statements: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 - Modules and Packages: Live and Let Die: http://www.dabeaz.com/modulepackage/index.html
 - Packaging a python library: https://blog.ionelmc.ro/2014/05/25/python-packaging/
 - Package Initialization: https://realpython.com/python-modules-packages/#package-initialization
