@@ -239,13 +239,13 @@ It turns out that some of the attributes would be corrupted. So Python introduce
 ```py
 class Employee:
     def __init__(self, first, last, age=-1):
-        self.first = first
-        self.last = last
-        self.age = age
+        self._first = first
+        self._last = last
+        self._age = age
 
     @property
     def email(self):
-        return f"{self.first}.{self.last}@email.com"
+        return f"{self._first}.{self._last}@email.com"
 
     @property
     def age(self):
@@ -257,20 +257,20 @@ class Employee:
 
     @property
     def fullname(self):
-        return f"{self.first} {self.last}"
+        return f"{self._first} {self._last}"
 
     @fullname.setter
     def fullname(self, name):
         first, last = name.split(" ")
-        self.first = first
-        self.last = last
+        self._first = first
+        self._last = last
 
     @fullname.deleter
     def fullname(self):
         print("DELETING...")
-        self.first = None
-        self.last = None
-        self.age = -1
+        self._first = None
+        self._last = None
+        self._age = -1
 
 emp = Employee("John", "Doe", 30)
 emp.first = "Jane"

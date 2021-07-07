@@ -4,17 +4,18 @@
 ## Named Tuple
 ```py
 from collections import namedtuple
+from typing import NamedTuple
 
 Row = namedtuple("Row", ["a", "b", "c"])
 rows = []
-rows.append(Row(20210101, 1, 100))
-rows.append(Row(20210102, 2, 20))
-rows.append(Row(20210103, 3, 33))
+rows.append(Row("apple", 1, 1.95))
+rows.append(Row("banana", 2, 2.85))
+rows.append(Row("Cherry", 3, 5.99))
+print(rows)
+print("-" * 80)
 
-Result = namedtuple("Result", ["date", "id", "size"])
+Result = NamedTuple("Result", [("name", str), ("id", int), ("price", float)])
 results = map(Result._make, rows)
-print(results)
-
 for r in results:
     print(r)
 ```
