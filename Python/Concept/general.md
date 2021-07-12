@@ -9,6 +9,7 @@
 ## Module vs Package
 - A module is a single `.py` file with Python code
 - A package is a hierarchically structured collection of related modules, which is a directory that can contains multiple modules
+- A package is just a module with two defined attributes (`__package` and `__path__`)
 - An interactive Python shell considers itself as the _main module_
 
 Run `python -m site` to find all location for Python site-packages.
