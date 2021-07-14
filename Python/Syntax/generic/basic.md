@@ -70,6 +70,14 @@ print(f"{str(a):8s} {str(b):2s}")
 # format in f-strings with "=": "a = 1.256, b = 2345"
 print(f"{a = }, {b = }")
 
+# format number in different bases
+binary_num = 0b_0101_1010_1111
+print(f"{a}")       # default is in decimal: 1455
+print(f"{a:_b}")     # binary: 101_1010_111
+print(f"{a:_o}")     # octal: 2657
+print(f"{a:_d}")     # decimal: 1_455
+print(f"{a:_x}")     # hexadecimal: 5af
+
 # left/right alignment
 # format way
 print("{str_1:<20} {str_2:>20}".format(str_1="left aligned", str_2="right aligned"))

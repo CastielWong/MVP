@@ -8,6 +8,7 @@
 - [Object-Oriented Programming](#object-oriented-programming)
   - [Constructor](#constructor)
   - [Property](#property)
+  - [Lineage](#lineage)
 - [Miscellaneous](#miscellaneous)
 - [Reference](#reference)
 
@@ -287,6 +288,9 @@ print(emp.fullname)     # Charlie Smith
 del emp.fullname        # DELETING...
 ```
 
+### Lineage
+To check the lineage of a class, access its Method Resolution Order via `{class}.__mro__`.
+
 
 ## Miscellaneous
 ```py
@@ -359,3 +363,4 @@ reload({module})
 ## Reference
 - How to Use Generators and yield in Python: https://realpython.com/introduction-to-python-generators/
 - Usage of slots: https://stackoverflow.com/questions/472000/usage-of-slots
+- Implementing an Interface in Python: https://realpython.com/python-interface/

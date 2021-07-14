@@ -14,7 +14,7 @@
 ## Development
 
 ### Initialization
-To mark a directory as a project or module, `__init__.py` needs to be created. The folder structure may look like:
+To mark a directory as a package, `__init__.py` needs to be created. Any directory with an `__init__.py` file is considered a Python package. The folder structure may look like:
 ```
 caller/
   __init__.py
@@ -23,7 +23,7 @@ caller/
   c.py
 ```
 
-Keep `__int__.py` blank if "caller" is only considered as a project. However, if we want "caller" to be a callable module, importing statement(s) is(are) needed. For instance:
+If we want modules inside "caller" to be callable, importing statement(s) is(are) needed. For instance:
 ```py
 from . import a
 from . import c
@@ -31,8 +31,6 @@ from . import c
 So that others can utilize "caller" like `caller.a.xxx()` or `caller.c.xxx()`.
 
 Note that `caller.b.xxx()` won't work since submoudle b wasn't included in `__init__.py`. However, submodule b can still be accessed via `from caller import b` to make `b.main()` functioning.
-
-A better approach is to exert `__all__`. To achieve the same effect as above, simply add `__all__ = ["a", "c"]` inside `__init__.py` is enough.
 
 
 ## Installation
@@ -134,9 +132,13 @@ Run codes below for demo to see if the package is function:
 
 ```py
 import caller as demo
+from caller import Animal
 from caller import Fruit
 
 demo.entry.main()
+
+animal = Animal()
+animal.printing()
 
 fruit = Fruit()
 fruit.printing()
@@ -144,7 +146,6 @@ fruit.printing()
 
 
 ## Reference
-
 - Packaging Python Projects: https://packaging.python.org/tutorials/packaging-projects/
 - Including Data Files: https://setuptools.readthedocs.io/en/latest/userguide/quickstart.html#including-data-files
 - The .pypirc file: https://packaging.python.org/specifications/pypirc/
@@ -152,6 +153,7 @@ fruit.printing()
 - Keywords in setuptools: https://setuptools.readthedocs.io/en/latest/references/keywords.html
 - Metadata for Python Software Packages: https://www.python.org/dev/peps/pep-0314
 - Specifying package versions: https://pip.pypa.io/en/stable/user_guide/#understanding-your-error-message
-- Modules and Packages: Live and Let Die: http://www.dabeaz.com/modulepackage/index.html
+- Modules and Packages: Live and Let Die: https://www.dabeaz.com/modulepackage/index.html
 - Packaging a python library: https://blog.ionelmc.ro/2014/05/25/python-packaging/
 - Package Initialization: https://realpython.com/python-modules-packages/#package-initialization
+- Structuring Your Project: https://docs.python-guide.org/writing/structure/

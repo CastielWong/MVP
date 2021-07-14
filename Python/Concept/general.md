@@ -6,6 +6,8 @@
 - [Reference](#reference)
 
 
+> Because Python applications are typically distributed as source code, the role of the Python runtime is to convert the Python source code and execute it in one step. Internally, the CPython runtime does compile your code. A popular misconception is that Python is an interpreted language. It is actually compiled.
+
 ## Module vs Package
 - A module is a single `.py` file with Python code
 - A package is a hierarchically structured collection of related modules, which is a directory that can contains multiple modules
@@ -58,5 +60,6 @@ Demo.static_method()
 
 
 ## Reference
+- Guide to the CPython Source Code: https://realpython.com/cpython-source-code-guide/
 - The Meaning of Underscores: https://dbader.org/blog/meaning-of-underscores-in-python
 - Python import, sys.path, and PYTHONPATH Tutorial: https://www.devdungeon.com/content/python-import-syspath-and-pythonpath-tutorial

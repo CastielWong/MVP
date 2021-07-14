@@ -5,11 +5,14 @@
   - [Cache](#cache)
   - [Anatomy](#anatomy)
   - [Lazy Assembly](#lazy-assembly)
+  - [Reload](#reload)
 - [Import](#import)
   - [Type](#type)
   - [Execution Order](#execution-order)
   - [Implementation](#implementation)
   - [Tracking](#tracking)
+  - [Module Spec](#module-spec)
+  - [Lazy Import](#lazy-import)
 - [Package](#package)
   - [Initialization](#initialization)
     - [Export Decorator](#export-decorator)
@@ -23,6 +26,11 @@
   - [Package Upgrade](#package-upgrade)
   - [Path Extend](#path-extend)
   - [User-Customized Plugin Directory](#user-customized-plugin-directory)
+  - [Instance Reload](#instance-reload)
+  - [Module Repalce](#module-repalce)
+  - [Impoort Watch](#impoort-watch)
+  - [Auto Installer](#auto-installer)
+  - [URL Import](#url-import)
 - [Reference](#reference)
 
 
@@ -157,8 +165,27 @@ sys.modules[__name__] = new_module
 ```
 
 
+### Reload
+An existing module can be reloaded via `importlib.reload({mod})`, which would simply re-execute the source code in the already existing module dictionary. However, zombie modules could be spawned since it doesn't even bother to clean up its `__dict__` to reload any other modules related.
+
+In another case, assuming "mod_a" and "mod_b" both import "mod_c" for usage. Though "mod_a" has reload "mod_c" after "mod_c" is updated, "mod_b" would still use old "mod_c", in which case the old "mod_c" becomes a zombie module.
+
+Same situation would happen when it's related to instance. Any instance created before `importlib.reload()` would still refer to the class of the old module, in which case the type of both instances would be difference even though they are looked like created from the "same" class.
+
+Since it's a bad idea to reload a module and spawning zombie modules, it's good for the module to detect and prevent reloading beforehand. To do so:
+```py
+if "foo" in globals():
+  raise ImportError("Reload is not allowed!!!")
+
+def foo():
+  pass
+```
+
+
+
 
 ## Import
+Importing a package essentially imports the package's `__init__.py` file as a module. `__init__.py` would import classes and methods from the package as a whole, instead of needing users to know the internal module structure beforehand.
 
 ### Type
 There are three types of import when in a package:
@@ -247,6 +274,70 @@ import builtins
 builtins.__import__ = track_imports
 
 import {mod}
+```
+
+
+### Module Spec
+`sys.path` is the most visible configuration of the module/package system to users. However, it's just a small part of the bigger picture.
+
+Import is actually controlled by `sys.meta_path`, which includes a list of "importers". Modules would be consulted in order from those importers, which are used to find `ModuleSpec`.
+
+`ModuleSpec` merely has information about the module location and loading info:
+- `spec.name`: full module name
+- `spec.parent`: enclosing packages
+- `spec.submodule_search_locations`: package `__path__`
+- `spec.has_location`: has external location
+- `spec.origin`: source file location
+- `spec.cached`: cached location
+- `spec.loader`: loader object
+
+
+### Lazy Import
+For the performance benefits, like reducing the startup time, it'd be good to have a module that only executes when it gets accessed.
+
+At module level:
+```py
+import types
+
+class _Module(types.ModuleType):
+  pass
+
+class _LazyModule(_Module):
+  def _-init__(self, spec):
+    super().__init__(spec.name)
+    self.__file__ = spec.origin
+    self.__package__ = spec.parent
+    self.__loader__ = spec.loader
+    self.__path__ = spec.submodule_search_locations
+    self.__spec__ = spec
+
+  def __getattr__(self, name):
+    self.__class__ = _Module
+    # execute module on its first access
+    self.__spec__.loader.exec_module(self)
+    assert sys.modules[self.__name__] == self
+    return getattr(self, name)
+```
+
+At function level:
+```py
+import importlib
+import sys
+
+def lazy_import(name):
+  # return directly if already loaded
+  if name in sys.modules:
+    return sys.modules[name]
+
+  spec = importlib.util.find_spec(name)
+  if not spec:
+    raise ImportError(f"No module '{name}'")
+
+  if not hasattr(spec.loader, "exec_module"):
+    raise ImportError("Not supported")
+
+  module = sys.modules[name] = _LazyModule(spec)
+  return module
 ```
 
 
@@ -339,7 +430,7 @@ Almost every tricky problem concerning modlues/packages is related to `sys.path`
 The environment variable __PYTHONHOME__ overrides the path configuration in `sys`. ”Fatal Python error“ with the list of path configuration would be returned if __PYTHONHOME__ is invalid and `python` is run.
 
 ### Deconstruction
-Run `python -S` to skip "site.py" initialization, which `sys.site` would show the location of standard library. Be aware of that `exit()` is a function came from module `_sitebuiltins`, which means `exit()` wouldn't work and "Ctrl + D" is needed to shut down the Python interpreter.
+Run `python -S` to skip "site.py" initialization, which `site` would show the location of standard library. Be aware of that `exit()` is a function came from module `_sitebuiltins`, which means `exit()` wouldn't work and "Ctrl + D" is needed to shut down the Python interpreter.
 
 `sys.prefix` specifies base location of Python installation `sys.exec_prefix` is location of compiled binaries by C.
 
@@ -392,6 +483,11 @@ The first path component in `sys.path` is the same directory as the running scri
 When it comes to import, Python has quite "flexible" ways to work around.
 
 Though hacking ways below are all possible and feasible, it's highly suggested to avoid them. As the Python expert David Beazley's adviced: "Stay away. Far away."
+
+Follow instructions below when try to hack something:
+- Keep it as simple as possible
+- It's good to understand what's possible
+- In case a developer has to debug it
 
 
 ### Package Upgrade
@@ -463,6 +559,170 @@ if os.path.exists(user_plugins):
 ```
 
 
+### Instance Reload
+When a module is reloaded, any instance of the class inside that module may need to be reloaded. Below is the sample hacking way:
+```py
+import weakref
+
+class Spam(object):
+  if "Spam" in globals():
+    _instances = Spam._instances
+  else:
+    _instances = weakref.WeakSet()
+
+  def __init__(self):
+    Spam._instanecs.add(self)
+
+for instance in Spam._instances:
+  instance.__class__ = Spam
+```
+
+Even though it's possible to reload a package/module, it's still suggested to avoid such hacking. The only safe/sane way to reload is to restart. Time will be better spent in devising a sane shutdown/restart process to bring in code changes.
+
+
+### Module Repalce
+Even though not encouraged, an alternative module can be useful sometimes when the needed module is unavailable. For instance:
+```py
+try:
+  import foo
+except ImportError:
+  import simplefoo as foo
+```
+
+However, since it wouldn't throw any error when the expected module is not available, such hacking would be flaky when developer dig deeper:
+```py
+import os
+
+import spam.foo
+
+print(spam.foo)   # <module 'simplefoo‘ from 'simplefoo.py'>
+print(os.path.exists("foo.py"))   # True
+```
+
+A preferred way is:
+```py
+import importlib
+
+if importlib.util.find_spec("foo"):
+  import foo
+else:
+  import simplefoo
+```
+For which would point at the problem directly.
+
+
+### Impoort Watch
+To watch how to import works:
+```py
+import sys
+
+class Watcher(object):
+  @classmethod
+  def find_spec(cls, name, path, target=None):
+    print(f"Importing {name} {path} {target}")
+
+sys.meta_path.insert(0, Watcher)
+```
+
+Then run any import in the same session, logs for imports would be shown.
+
+
+### Auto Installer
+It's a horrible ide, do not do it under any circumstance when it's in production! Implementation below is just for reference:
+```py
+import importlib
+import subprocess
+import sys
+
+class AutoInstaller(object):
+  _loaded = set()
+
+  @classmethod
+  def find_spec(cls, name, path, target=None):
+    if path is not None or name in cls._loaded:
+      return None
+
+    # install the package when it's unavailable
+    cls._loaded.add(name)
+
+    print(f"Installing package '{name}'")
+    try:
+      out = subprocess.check_output(
+        [sys.executable, "-m", "pip", "install", name]
+      )
+      return importlib.util.find_spec(name)
+    except Exception as e:
+      print("Failed")
+
+    return None
+
+sys.meta_path.append(AutoInstaller)
+```
+
+
+### URL Import
+It's possible to import modules from URLs via `sys.path_hooks`.
+
+Firstly, write a URL loader:
+```py
+class UrlLoader(object):
+  def create_module(self, target):
+    return None
+
+  def exec_module(self, module):
+    u = urllib.request.urlopen(module.__spec__.origin)
+    code = u.read()
+    compile(code, module.__spec__.origin, "exec")
+    exec(code, module.__dict__)
+    return
+```
+
+Secondly, write a URL finder to check for moduels:
+```py
+import importlib
+
+class UrlFinder(object):
+  def __init__(self, base_uri, mod_names):
+    self.base_uri = base_uri
+    self.mod_names = mod_names
+
+  def find_spec(self, mod_name, target=None):
+    if mod_name not in self.mod_names:
+      return None
+
+    origin = f"{self.base_uri}/{mod_name}.py"
+    loader = UrlLoader()
+
+    return importlib.util.spec_from_loader(
+      modname, loader, origin=origin
+    )
+
+```
+
+Lastly, write a hook to recognize URL paths:
+```py
+import re
+import urllib
+
+def url_hook(name):
+  if not name.startswith(("http:", "https:")):
+    raise ImportError()
+
+  data = urllib.request.urlopen(name).read().decode("utf-8")
+  file_names = re.findall("[a-zA-Z_][a-zA-Z0-9_]*\.py", data)
+  mod_names = {
+    name[:-3] for name in file_names
+  }
+
+  return UrlFinder(name, mod_names)
+
+import sys
+sys.path_hooks.append(url_hook)
+```
+
+Then activate the URL by applying `sys.path.append("{url}")`. Package or module would be searched from the URL when applicable.
+
 
 ## Reference
 - Modules and Packages: Live and Let Die: https://www.dabeaz.com/modulepackage/index.html
+- Absolute vs Relative Imports in Python: https://realpython.com/absolute-vs-relative-python-imports/
