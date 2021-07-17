@@ -135,8 +135,14 @@ a = 3 / 2       # 1.5
 a = 3 // 2      # 1
 a = 3 ** 2      # 9
 a = 3 << 1      # 6
-a = 2.99e8      # 299,000,000.0
 a = 100_000     # 100,000
+a = 2.99e8      # 299,000,000.0
+a = 4.2e-4      # 0.00042
+a = 1.79e308    # approximate maximum float value
+a = 5e-324      # approximate minimum float value
+a = 1.8e308     # inf
+a = 1e-325      # 0.0
+a = 2 + 3j      # complex number
 
 a = abs(1 - 3)  # 2
 a = float("inf")    # infinite number
@@ -177,8 +183,9 @@ with open(__file__, "r") as fr:
 ### Basics
 ```py
 s = "\tabc\nd\n"
-print(s.strip())  # abc\nd
-print(repr(s))  # "\tabc\nd\n"
+print(s.strip())    # abc\nd
+print(repr(s))      # "\tabc\nd\n"
+print("\u2192 \N{rightwards arrow}")    # → → (unicode)
 
 s = """this is a string
     This can

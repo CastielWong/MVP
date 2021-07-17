@@ -6,9 +6,14 @@
 - [Concatenation](#concatenation)
 - [Sorting](#sorting)
 - [Object-Oriented Programming](#object-oriented-programming)
+  - [Anatomy](#anatomy)
   - [Constructor](#constructor)
   - [Property](#property)
-  - [Lineage](#lineage)
+  - [Interface](#interface)
+    - [Informal](#informal)
+      - [Metaclass](#metaclass)
+      - [Virtual Base](#virtual-base)
+    - [Formal](#formal)
 - [Miscellaneous](#miscellaneous)
 - [Reference](#reference)
 
@@ -144,10 +149,8 @@ print(mapping_sorted)
 
 
 ## Object-Oriented Programming
-
+### Anatomy
 ```py
-# ---------------------------------------------------------
-# Object anatomy
 class Demo:
     # # specify attributes needed to for memory saving
     # # if it's enabled, then `__slots__` will be accessible instead of `__dict__`
@@ -167,7 +170,7 @@ class Demo:
     # it would be called via print() if there is no __str__()
     # or it would be called if the object is inside the list to print
     def __repr__(self):
-        return f"<Demo(\"{self.a}\", \"{self.b}\")>"
+        return f"<Demo(\"{self.a}\", {self.b})>"
 
 
 demo = Demo()
@@ -181,6 +184,9 @@ print(dir(demo))        # [..., 'add_c']
 
 # class anatomy
 print(dir(Demo))        # [..., 'a', 'add_c', 'b', 'c']
+
+# class lineage --- Method Resolution Order
+print(Demo.__mro__)     # (<class 'Demo'>, <class 'object'>)
 ```
 
 ### Constructor
@@ -288,8 +294,181 @@ print(emp.fullname)     # Charlie Smith
 del emp.fullname        # DELETING...
 ```
 
-### Lineage
-To check the lineage of a class, access its Method Resolution Order via `{class}.__mro__`.
+### Interface
+There are two types of Interface implementation Python provides. One is Formal Interface, while the other is Informal Interface.
+
+The Informal Interface can be quite confusing, it's suggested to implement Formal Interface whenever possible.
+
+#### Informal
+Informal Interface doesn't guarantee the implementation of each method inside the interface.
+
+For the example code below, though both `Achiever` and `Partaker` both inherit(implement) `InfromalInterface`, `Partker` doesn't implement all methods required. For that reason, we don't expect `Partaker` is a subclass of `InformalInterface` theoretically.
+```py
+class InformalInterface:
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+class Achiever(InformalInterface):
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+class Partaker(InformalInterface):
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text_from_email(self, full_file_name: str) -> dict:
+        pass
+
+print(issubclass(Achiever, InformalInterface))  # True
+print(issubclass(Partaker, InformalInterface))  # True
+
+print(Achiever.__mro__) # Achiever, InformalInterface, object
+print(Partaker.__mro__) # Partaker, InformalInterface, object
+
+print(Achiever())       # an Achiever object
+print(Partaker())       # an Partaker object
+```
+
+##### Metaclass
+Metaclass can solve problem mentioned beofre, yet it introduces two other inconsistency problems:
+- method parameter is neglected as long as function name is matched
+- there is no explict inheritance defined in Method Resolution Order
+
+```py
+class CustomMeta(type):
+    def __instancecheck__(cls, instance):
+        return cls.__subclasscheck__(type(instance))
+
+    def __subclasscheck__(cls, subclass):
+        return (
+            hasattr(subclass, "load_data_source")
+            and callable(subclass.load_data_source)
+            and hasattr(subclass, "extract_text")
+            and callable(subclass.extract_text)
+        )
+
+class Interface(metaclass=CustomMeta):
+    pass
+
+class Achiever:
+    def load_data_source(self, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+class Partaker:
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text_from_email(self, full_file_name: str) -> dict:
+        pass
+
+print(issubclass(Achiever, Interface))  # True
+print(issubclass(Partaker, Interface))  # False
+
+print(Achiever.__mro__) # Achiever, object
+print(Partaker.__mro__) # Partaker, object
+```
+
+##### Virtual Base
+The virutal base class is to provide the interface hierarchy for clarity. However, it makes the hierarchy more complicated to understand.
+```py
+class CustomMeta(type):
+    def __instancecheck__(cls, instance):
+        return cls.__subclasscheck__(type(instance))
+
+    def __subclasscheck__(cls, subclass):
+        return (
+            hasattr(subclass, "load_data_source")
+            and callable(subclass.load_data_source)
+            and hasattr(subclass, "extract_text")
+            and callable(subclass.extract_text)
+        )
+
+class Interface(metaclass=CustomMeta):
+    pass
+
+class InterfaceSuper:
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+class Achiever(InterfaceSuper):
+    pass
+
+class Partaker:
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+print(issubclass(Achiever, Interface))  # True
+print(issubclass(Partaker, Interface))  # True
+
+print(Achiever.__mro__) # Achiever, InterfaceSuper, object
+print(Partaker.__mro__) # Partaker, object
+```
+
+
+#### Formal
+In order to create a formal Python interface, a few more tools from Python’s `abc` module are needed.
+```py
+import abc
+
+class FormalInterface(metaclass=abc.ABCMeta):
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return (
+            hasattr(subclass, "load_data_source")
+            and callable(subclass.load_data_source)
+            and hasattr(subclass, "extract_text")
+            and callable(subclass.extract_text)
+        )
+
+    @abc.abstractmethod
+    def load_data_source(self, path: str, file_name: str):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def extract_text(self, full_file_path: str):
+        raise NotImplementedError
+
+class Achiever(FormalInterface):
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text(self, full_file_name: str) -> dict:
+        pass
+
+class Partaker(FormalInterface):
+    def load_data_source(self, path: str, file_name: str) -> str:
+        pass
+
+    def extract_text_from_email(self, full_file_name: str) -> dict:
+        pass
+
+print(issubclass(Achiever, FormalInterface))  # True
+print(issubclass(Partaker, FormalInterface))  # True
+
+print(Achiever.__mro__) # Achiever, FormalInterface, object
+print(Partaker.__mro__) # Partaker, FormalInterface, object
+
+print(Achiever())       # an Achiever object
+print(Partaker())       # TypeError thrown
+```
+
+Even though there is no compiled error when defining `Partker`, error will be thrown when it's about to instantiated.
+
 
 
 ## Miscellaneous
