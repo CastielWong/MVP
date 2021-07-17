@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
+import unittest
 
 from .context import sample
-
-import unittest
 
 
 class BasicTestSuite(unittest.TestCase):
@@ -12,5 +13,5 @@ class BasicTestSuite(unittest.TestCase):
         assert True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

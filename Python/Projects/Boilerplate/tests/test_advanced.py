@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from .context import sample
 
 import unittest
@@ -12,5 +12,5 @@ class AdvancedTestSuite(unittest.TestCase):
         self.assertIsNone(sample.hmm())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
