@@ -19,7 +19,7 @@ class Demo:
     # # if it's enabled, then `__slots__` will be accessible instead of `__dict__`
     # __slots__ = ["a", "b", "c"]
 
-    def __init__(self):
+    def __init__(self, a: str, b: int):
         self.a = "1"
         self.b = 2
         self.add_c()
@@ -33,13 +33,13 @@ class Demo:
     # it would be called via print() if there is no __str__()
     # or it would be called if the object is inside the list to print
     def __repr__(self):
-        return f"<Demo(\"{self.a}\", {self.b})>"
+        return f"<{self.__class__.__name__}(\"{self.a}\", {self.b})>"
 
 
 demo = Demo()
-print(demo.__str__())   # This is demo
-print(demo.__repr__())  # <Demo("1", 2)>
-print(demo)             # This is demo
+print(str(demo))    # This is demo
+print(repr(demo))   # <Demo("1", 2)>
+print(demo)         # This is demo
 
 print(vars(demo))       # {'a': '1', 'b': 2, 'c': 3}
 # object anatomy

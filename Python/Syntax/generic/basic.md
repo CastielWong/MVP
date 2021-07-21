@@ -49,6 +49,8 @@ text = "texting"
 print(f"Here comes the text: {text}")
 # format the output of actual text in format
 print("Here comes the text: {}".format(text))
+# format the output centrally
+print(f" {text} ".center(30, "-"))
 
 dictionary = {"a": 1, "b": 2, "c": 3}
 # format dictionary variable: "a = 1, c = 3"
@@ -249,9 +251,10 @@ print(list(s.strip())[::-1])
 A function is called __Higher Order Function__ if it contains other functions as a parameter or returns a function as an output.
 
 ```py
+from typing import Callable, Dict
 import functools
 
-def decorator_func(func):
+def decorator_func(func: Callable[[], None]):
     @functools.wraps(func)
     def inner(*args, **kwargs):
         print("Before the function is called")
@@ -261,7 +264,7 @@ def decorator_func(func):
 
     return inner
 
-def print_demo_normal(*args, **kwargs):
+def print_demo_normal(*args: str, **kwargs: Dict[str, str]):
     print("------------------------------------------")
     print("This is the function to decorate in normal")
     print(f"The elements are: {args}")
@@ -285,6 +288,8 @@ print(print_demo_with_decorator.__name__)
 ```
 
 ### Type Hinting
+Other than ordinary Type Hinting, annotation can be applied to check the types of a function.
+
 ```py
 from typing import List, Tuple
 
@@ -303,6 +308,8 @@ book1 = Book(10)
 book2 = Book.hardcover(10)
 print(book1.weight)
 print(book2.weight)
+
+print(Book.hardcover.__annotations__)
 ```
 
 
@@ -457,3 +464,4 @@ print(
 ## Reference
 - String and Bytes literals: https://docs.python.org/3.6/reference/lexical_analysis.html#string-and-bytes-literals
 - Format Specification Mini-Language: https://docs.python.org/3/library/string.html#format-specification-mini-language
+- Python Type Checking: https://realpython.com/python-type-checking/#annotations
