@@ -1,0 +1,21 @@
+
+%YAML 1.1
+---
+Technique:
+  - title: REST security Basics
+    url: https://medium.com/@yellow/rest-security-basics-f59013850c4e
+  - title: Evolutionary Decision Trees
+    url: https://towardsdatascience.com/evolutionary-decision-trees-when-machine-learning-draws-its-inspiration-from-biology-7d427fa7554b
+  - title: Not Push Unencrypted Secrets into Git
+    url: https://medium.com/faun/foolproof-method-to-not-push-unencrypted-secrets-into-git-34309d2c3a3b
+  - title: This Is How I Hacked My Neighbors Computer
+    url: https://medium.com/bugbountywriteup/this-is-how-i-hacked-my-neighbors-computer-a823e2054d15
+  - title: Persistent Python Backdoor
+    url: https://medium.com/python-in-plain-english/persistent-python-backdoor-447814ed6b93
+  - title: Build Your Own VPN Using GCP
+    url: https://betterprogramming.pub/build-your-own-vpn-using-google-cloud-platform-2e22b0a7d489
+  - title: How to Make a Cloud-Free Security Camera for $3
+    url: https://debugger.medium.com/how-to-make-a-cloud-free-security-camera-for-3-a2f2b467bfa5
+Life:
+  - title: 9 micro habits
+    url: https://medium.com/live-your-life-on-purpose/9-micro-habits-that-will-completely-change-your-life-in-a-year-6bd291aee5c1
