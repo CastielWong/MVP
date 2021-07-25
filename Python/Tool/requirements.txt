@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
 --index-url https://pypi.org/simple
 PyPDF2~=1.26
+reportlab~=3.5
