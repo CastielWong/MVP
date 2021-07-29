@@ -2,6 +2,9 @@
 max-line-length = 88
 format = %(path)s - %(row)d:%(col)-6d  [%(code)s] %(text)s
 
+# enable and config McCabe complexity checker
+max-complexity = 10
+
 # check https://pycodestyle.pycqa.org/en/latest/intro.html for error code list
 # it's not a bug that we aren't using all of hacking, ignore:
 # E121: continuation line under-indented for hanging indent

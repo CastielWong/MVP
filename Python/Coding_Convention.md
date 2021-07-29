@@ -161,3 +161,5 @@ networks:
 - Defining Main Functions in Python: https://realpython.com/python-main-function/#summary-of-python-main-function-best-practices
 - How to Write a Git Commit Message: https://chris.beams.io/posts/git-commit/
 - Google Python Style Guide: https://google.github.io/styleguide/pyguide.html
+- Python Code Quality - Tools & Best Practices: https://realpython.com/python-code-quality/
+- The Big Ol' List of Rules: https://www.flake8rules.com/
