@@ -20,6 +20,17 @@ repos:
   hooks:
     - id: black
       language_version: python3.8
+- repo: https://github.com/pycqa/isort
+  rev: 5.9.0
+  hooks:
+    - id: isort
+      args:
+        - -m=VERTICAL_HANGING_INDENT
+        # specify the directory for --from-first is mandatory
+        - --from-first=.
+        - --only-sections
+        # need the trailing comma to avoid the conflict with black's auto-formatting
+        - --trailing-comma
 - repo: https://gitlab.com/pycqa/flake8
   rev: 3.9.2
   hooks:
@@ -28,3 +39,21 @@ repos:
   rev: v0.910
   hooks:
     - id: mypy
+- repo: https://github.com/pre-commit/mirrors-pylint
+  rev: v3.0.0a3
+  hooks:
+    - id: pylint
+      args:
+        - --disable=C0301 # (line-too-long)
+        - --disable=E0401 # (import-error)
+- repo: https://github.com/PyCQA/pydocstyle
+  rev: 6.1.1
+  hooks:
+    - id: pydocstyle
+      language_version: python3.8
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.7.0
+  hooks:
+    - id: bandit
+      args:
+        - -c=dev/bandit.yaml
