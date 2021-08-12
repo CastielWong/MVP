@@ -1,11 +1,13 @@
 
 - [Memory](#memory)
+- [Comprehension](#comprehension)
 - [Generator](#generator)
 - [Import](#import)
 - [Log](#log)
 - [Concatenation](#concatenation)
 - [Sorting](#sorting)
 - [Miscellaneous](#miscellaneous)
+- [Profiling](#profiling)
 - [Reference](#reference)
 
 
@@ -26,6 +28,32 @@ process = psutil.Process(os.getpid())
 print(process.memory_info())
 ```
 
+
+## Comprehension
+There are three kinds of comprehensions available: List, Set and Dictionary.
+
+Take List Comprehension for example, which is quite similar to Set and Dictionary, below is the syntax of List Comprehension:
+- `new_list = [expression for member in iterable (if condition)]`
+- `new_list = [expression (if condition) for member in iterable]`
+
+
+```py
+numbers = [1, -9, 10, 3, -5, 3, 10]
+
+nums_1 = [i for i in numbers if i > 0]
+nums_2 = [i if i > 0 else 0 for i in numbers]
+
+comp_set = {i for i in numbers if i > 0}
+comp_dict = {i: i * i for i in numbers}
+
+print(nums_1)       # [1, 10, 3, 3, 10]
+print(nums_2)       # [1, 0, 10, 3, 0, 3, 10]
+print(comp_set)     # {1, 10, 3}
+print(comp_dict)    # {1: 1, -9: 81, 10: 100, 3: 9, -5: 25}
+```
+
+Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗,m∗,φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
+Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗, m∗, φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
 
 ## Generator
 Generator functions are a special kind of function that return a laze iterator. For instance, when open a file, a generator would loop through each line then yields each row, other than read all lines and return as a whole.
@@ -208,6 +236,39 @@ reload({module})
 ```
 
 
+## Profiling
+Below is a sample to profile different approaches to check out the performance difference:
+```py
+import random
+import timeit
+
+TAX_RATE = .7
+txns = [random.randrange(100) for _ in range(100_000)]
+
+def get_price(txn):
+    return txn * (1 + TAX_RATE)
+
+def get_prices_with_map():
+    return list(map(get_price, txns))
+
+def get_prices_with_comprehension():
+    return [get_price(txn) for txn in txns]
+
+def get_prices_with_loop():
+    prices = []
+    for txn in txns:
+        prices.append(get_price(txn
+                                ))
+    return prices
+
+# time cost: map < ccomprehension < loop
+print(timeit.timeit(get_prices_with_map, number=100))
+print(timeit.timeit(get_prices_with_comprehension, number=100))
+print(timeit.timeit(get_prices_with_loop, number=100))
+```
+
+
 ## Reference
+- When to Use a List Comprehension in Python: https://realpython.com/list-comprehension-python/
 - How to Use Generators and yield in Python: https://realpython.com/introduction-to-python-generators/
 - Usage of slots: https://stackoverflow.com/questions/472000/usage-of-slots

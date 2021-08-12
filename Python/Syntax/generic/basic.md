@@ -9,9 +9,9 @@
   - [Walrus](#walrus)
 - [String Manipulation](#string-manipulation)
   - [Basics](#basics-1)
-  - [Walrus Operator](#walrus-operator)
   - [Loop](#loop)
   - [Sorting](#sorting)
+  - [Assignment Expression](#assignment-expression)
 - [Function](#function)
   - [Higher Order](#higher-order)
   - [Type Hinting](#type-hinting)
@@ -172,7 +172,7 @@ print(a is b)       # False
 ```
 
 ### Walrus
-Walrus operator is used for _Assignment Expressions_.
+Walrus operator is used for _Assignment Expression_.
 ```py
 with open(__file__, "r") as fr:
     # output content of current file
@@ -206,23 +206,28 @@ s.isdigit()  # true
 s.isalnum()  # true
 ```
 
-### Walrus Operator
-```py
-if (n := len(s)) > 10:
-    print(f"The string is too long ({n} elements, expected <= 10)")
-```
-
 ### Loop
 ```py
 a_list = [i for i in range(3, 0, -1)]  # [3, 2, 1]
 
-# 1 -> 2 -> 3
-for i in range(len(a_list) - 1, -1, -1):
-    print(a_list[i])
-
 # (0, 3) -> (1, 2) -> (2, 1)
 for index, number in enumerate(a_list):
     print(index, number)
+
+# 1\n 2\n 3\n all done
+for i in range(len(a_list) - 1, -1, -1):
+    print(a_list[i])
+else:   # won't print if the loop is broken
+    print("all done")
+
+n = 3
+# 2\n 1\n 0\n loop exhausted
+while n > 0:
+    n -= 1
+    print(n)
+else:   # won't print if the loop is broken
+    print("loop exhausted")
+
 ```
 
 ### Sorting
@@ -243,6 +248,13 @@ print(b)  # [5, 3, 2, 1]
 # convert string to an array in reversed order
 print(list(s.strip())[::-1])
 ```
+
+### Assignment Expression
+```py
+if (n := len(s)) > 10:
+    print(f"The string is too long ({n} elements, expected <= 10)")
+```
+
 
 
 ## Function

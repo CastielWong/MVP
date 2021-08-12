@@ -7,6 +7,7 @@
   - [YAML](#yaml)
 - [Copy](#copy)
 - [Directory](#directory)
+- [Reference](#reference)
 
 
 ## Meta
@@ -65,6 +66,7 @@ with open("{file}.csv", mode="r") as file_reader:
 ```py
 import json
 
+file_name = "demo"
 # convert str to dict
 data_str = '{"a": 1, "b": 2}'
 data = json.loads(data_str)
@@ -75,14 +77,62 @@ data_dict = {"a": 1, "b": 2}
 data = json.dumps(data_dict)
 print(type(data), data)
 
+# write data to file
+with open(f"{file_name}.json", "w") as file_writer:
+    json.dump(data_dict, file_writer)
+
 # load data from file to dict
-with open("{file}.json", "r") as file_reader:
+with open(f"{file_name}.json", "r") as file_reader:
     data = json.load(file_reader)
 
-# write data to file
-with open("{file}.json", "w") as file_writer:
-    json.dump(data_dict, file_writer)
+# -----------------------------------------------------------------------------
+# serialization
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, z):
+        if isinstance(z, complex):
+            return (z.real, z.imag)
+        return super().default(z)
+
+def encode_complex(z):
+    if isinstance(z, complex):
+        return (z.real, z.imag)
+
+    type_name = z.__class__.__name__
+    raise TypeError(f"Object of type '{type_name}' is not JSON serializable")
+
+x = 1 + 2j
+y = complex(2, 3)
+complex_json_1 = json.dumps(x, cls=ComplexEncoder)      # [1.0, 2.0] <class 'str'>
+complex_json_2 = json.dumps(y, default=encode_complex)  # [2.0, 3.0] <class 'str'>
+
+comp_encoder = ComplexEncoder()
+comp_encoder.encode(x)      # [1.0, 2.0]
+
+# deserialization
+def decode_complex(encoded: dict):
+    if "__complex__" in encoded:
+        return complex(encoded["real"], encoded["imag"])
+    return encoded
+
+check = json.loads(complex_json_1)  #  [1.0, 2.0] <class 'list'>
+raw_string = """
+[
+    {
+        "__complex__": true,
+        "real": 10,
+        "imag": 13
+    },
+    {
+        "__complex__": true,
+        "real": 32,
+        "imag": 8
+    }
+]
+"""
+# [(10+13j), (32+8j)] <class 'list'>
+numbers = json.loads(raw_string, object_hook=decode_complex)
 ```
+
 
 ### YAML
 ```py
@@ -156,3 +206,7 @@ for f in os.listdir(curr_path):
 # delete a direcotory
 shutil.rmtree({directory})
 ```
+
+
+## Reference
+- Working With JSON Data in Python: https://realpython.com/python-json/#encoding-and-decoding-custom-python-objects
