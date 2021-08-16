@@ -79,6 +79,7 @@ print(f"{a:_b}")     # binary: 101_1010_111
 print(f"{a:_o}")     # octal: 2657
 print(f"{a:_d}")     # decimal: 1_455
 print(f"{a:_x}")     # hexadecimal: 5af
+print(f"{a:#x}")     # hexadecimal: 0x5af
 
 # left/right alignment
 # format way

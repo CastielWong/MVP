@@ -22,7 +22,9 @@ print(sys.getsizeof(x))
 
 Use a third-party library:
 ```py
-import os, psutil
+import os
+
+import psutil
 
 process = psutil.Process(os.getpid())
 print(process.memory_info())
@@ -233,6 +235,15 @@ print(package_list)
 from importlib import reload
 
 reload({module})
+# ---------------------------------------------------------
+# Create a class which can be sliced
+class SliceMaker(object):
+    def __getitem__(self, item):
+        return item
+
+s = SliceMaker()
+print(s[2])
+print(s[1:5])
 ```
 
 
@@ -261,7 +272,7 @@ def get_prices_with_loop():
                                 ))
     return prices
 
-# time cost: map < ccomprehension < loop
+# time cost: map < comprehension < loop
 print(timeit.timeit(get_prices_with_map, number=100))
 print(timeit.timeit(get_prices_with_comprehension, number=100))
 print(timeit.timeit(get_prices_with_loop, number=100))
