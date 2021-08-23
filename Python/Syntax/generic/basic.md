@@ -19,7 +19,7 @@
   - [Variadic](#variadic)
   - [Dynamic](#dynamic)
 - [Copy](#copy)
-- [Try-Catch](#try-catch)
+- [Exception](#exception)
 - [Reference](#reference)
 
 
@@ -430,7 +430,20 @@ print(f"{a = }\n{b = }")
 ```
 
 
-## Try-Catch
+## Exception
+The syntax for Python's exception handling is shown below:
+```py
+try:
+    # run the code
+except:
+    # execute when such exception happens
+else:
+    # execute when there is no exception
+finally:
+    # run always no matter what happens
+```
+
+Here comes an example illustrates the logic:
 ```py
 checking = [
     "red:14.2",

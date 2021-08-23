@@ -39,6 +39,11 @@ repos:
   rev: v0.910
   hooks:
     - id: mypy
+      # args:
+      #   - --no-strict-optional
+      #   - --ignore-missing-imports
+      #   - --namespace-packages
+      #   - --explicit-package-bases
 - repo: https://github.com/pre-commit/mirrors-pylint
   rev: v3.0.0a3
   hooks:
@@ -46,6 +51,10 @@ repos:
       args:
         - --disable=C0301 # (line-too-long)
         - --disable=E0401 # (import-error)
+        # note that the pattern below is not feasible:
+        # "(?:(?P<custom>)|(?P<snake>([^\\W\\dA-Z][^\\WA-Z]{2,}|_[^\\WA-Z]*|__[^\\WA-Z\\d_][^\\WA-Z]+__)))$"
+        - --variable-rgx=(?:(?P<custom>(df|[^\W\dA-Z][^\WA-Z]{2,}|_[^\WA-Z]*|__[^\WA-Z\d_][^\WA-Z]+__)))$
+        - --include-naming-hint=y
 - repo: https://github.com/PyCQA/pydocstyle
   rev: 6.1.1
   hooks:
