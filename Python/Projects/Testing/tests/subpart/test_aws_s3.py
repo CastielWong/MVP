@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
 from typing import TypeVar
+import sys
 
 # from boto3.resources.factory import s3
 from moto import mock_s3
 from pandas import DataFrame
 from pytest_mock import MockerFixture
-
 from conftest import _PATH_PACKAGE
 
 # in case path not located
 sys.path.append(_PATH_PACKAGE)
 from core.subpart import aws_s3  # noqa: E402
-
 
 ResourceS3 = TypeVar("ResourceS3")
 

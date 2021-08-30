@@ -3,8 +3,8 @@
 from io import StringIO
 from typing import Dict, TypeVar
 
-import boto3
 from pandas import DataFrame
+import boto3
 
 S3 = TypeVar("S3")
 

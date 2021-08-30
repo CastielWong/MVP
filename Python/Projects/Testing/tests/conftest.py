@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 from typing import Dict
+import os
 
+from pytest import MonkeyPatch
 import pytest
 import requests
 import yaml
-from pytest import MonkeyPatch
 
 _CWD = os.path.dirname(__file__)
 

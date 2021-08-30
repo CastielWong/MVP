@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .context import sample
-
 import unittest
+
+from .context import sample
 
 
 class AdvancedTestSuite(unittest.TestCase):

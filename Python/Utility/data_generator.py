@@ -6,7 +6,6 @@ import string
 import numpy as np
 import pandas as pd
 
-
 _CHARACTER_LIST = list(string.ascii_letters)
 _DT_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 _SIZE = 1_000

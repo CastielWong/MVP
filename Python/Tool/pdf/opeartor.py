@@ -4,13 +4,10 @@ from pathlib import Path
 from typing import List
 import copy
 
-from PyPDF2 import PdfFileReader
-from PyPDF2 import PdfFileWriter
+from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.pdf import DocumentInformation
-from reportlab.lib import colors
-from reportlab.lib import units
+from reportlab.lib import colors, units
 from reportlab.pdfgen.canvas import Canvas
-
 
 _CWD = Path(__file__).parent.absolute()
 _DIR_OUTPUT = "output"

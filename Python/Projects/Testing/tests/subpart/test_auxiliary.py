@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
 from typing import Dict, TypeVar
+import sys
 
-import pytest
 from pytest_mock import MockerFixture
 from requests import Response
-
 from conftest import _PATH_PACKAGE
+import pytest
 
 # in case path not located
 sys.path.append(_PATH_PACKAGE)

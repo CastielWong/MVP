@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+
 import setuptools
 
 DIR_ROOT = os.path.dirname(__file__)

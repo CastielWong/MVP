@@ -1,11 +1,10 @@
 #!/usr/bin/env/ python
 # -*- coding: utf-8 -*-
+from logging import Logger
 import os
 import logging.config
-from logging import Logger
 
 import yaml
-
 
 # retrieve current working directory
 CWD = os.path.dirname(__file__)

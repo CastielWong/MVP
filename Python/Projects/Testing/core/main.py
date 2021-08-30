@@ -3,7 +3,6 @@
 
 from subpart import auxiliary
 
-
 if __name__ == "__main__":
     liner = "-" * 10
     print(f"{liner}Main Entry{liner}")
