@@ -51,9 +51,11 @@ repos:
       args:
         - --disable=C0301 # (line-too-long)
         - --disable=E0401 # (import-error)
+        - --disable=R0801 # (duplicate-code)
+        - --disable=R1711 # (useless-return)
         # note that the pattern below is not feasible:
         # "(?:(?P<custom>)|(?P<snake>([^\\W\\dA-Z][^\\WA-Z]{2,}|_[^\\WA-Z]*|__[^\\WA-Z\\d_][^\\WA-Z]+__)))$"
-        - --variable-rgx=(?:(?P<custom>(df|[^\W\dA-Z][^\WA-Z]{2,}|_[^\WA-Z]*|__[^\WA-Z\d_][^\WA-Z]+__)))$
+        - --variable-rgx=(?:(?P<custom>([^\W\dA-Z][^\WA-Z]{1,}|_[^\WA-Z]*|__[^\WA-Z\d_][^\WA-Z]+__)))$
         - --include-naming-hint=y
 - repo: https://github.com/PyCQA/pydocstyle
   rev: 6.1.1

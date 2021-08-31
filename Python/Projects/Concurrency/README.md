@@ -1,8 +1,9 @@
 
 - [asyncio](#asyncio)
+  - [Anatomy](#anatomy)
 - [Reference](#reference)
 
-This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.7 or above.
+This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
 
 ![overview](overview.png)
 
@@ -33,6 +34,33 @@ Python has a memory management feature called __the GIL__, or __Global Interpret
 
 ## asyncio
 Cooperative Concurrency or Parallelism
+
+### Anatomy
+Async method:
+- Begin by making method `async`
+- `await` all async methods called
+
+```py
+async def process_data(num: int, data: asyncio.Queue):
+  processed = 0
+
+  while processed < num:
+    item = await data.get()
+    # work with item when acquired
+```
+
+Async web request:
+- Use an `async with` block to start the request
+- `await` the network read operation
+
+```py
+async def get_html(url: str):
+  async with aiohttp.ClientSession() as session:
+    async with session.get(url) as resp:
+      resp.raise_for_status()
+
+      return await resp.text()
+```
 
 
 
