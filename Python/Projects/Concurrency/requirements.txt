@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+--index-url https://pypi.org/simple
+colorama>=0.4.4     # for color printing
+glances>=3.2.3      # for memory monitoring
