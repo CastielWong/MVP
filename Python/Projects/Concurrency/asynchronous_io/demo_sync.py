@@ -71,8 +71,10 @@ def main() -> None:
 
     dt = datetime.now() - t0
     print(
-        f"{colorama.Fore.WHITE}"
-        f"App exiting, total time: {dt.total_seconds():,.2f} sec.",
+        (
+            f"{colorama.Fore.WHITE}"
+            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
+        ),
         flush=True,
     )
 
