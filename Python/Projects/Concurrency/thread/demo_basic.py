@@ -1,32 +1,57 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Demo the basic usage of threading."""
 import time
 import threading
 
+from colorama.ansi import AnsiFore
+import colorama
 
-def greeter(name: str, times: int):
-    for n in range(0, times):
-        print("{}. Hello there {}".format(n, name))
+
+def greeter(fruit: str, number: int, color: AnsiFore) -> None:
+    """Print the amount of fruit.
+
+    Args:
+        fruit: fruit name
+        number: the amount of iteration time
+        color: printing color
+    """
+    for i in range(0, number):
+        print(f"{color}Amount of {fruit}: \t{i}")
         time.sleep(1)
+    return
 
 
-def main():
+def main() -> None:
+    """Execute the main workflow."""
     threads = [
-        threading.Thread(target=greeter, args=("Michael", 10), daemon=True),
-        threading.Thread(target=greeter, args=("Sarah", 5), daemon=True),
-        threading.Thread(target=greeter, args=("Zoe", 2), daemon=True),
-        threading.Thread(target=greeter, args=("Mark", 11), daemon=True),
+        threading.Thread(
+            target=greeter, args=("Apple", 10, colorama.Fore.GREEN), daemon=True
+        ),
+        threading.Thread(
+            target=greeter, args=("Berry", 5, colorama.Fore.BLUE), daemon=True
+        ),
+        threading.Thread(
+            target=greeter, args=("Coconut", 2, colorama.Fore.WHITE), daemon=True
+        ),
+        threading.Thread(
+            target=greeter, args=("Date", 11, colorama.Fore.RED), daemon=True
+        ),
     ]
 
-    [t.start() for t in threads]
+    for job in threads:
+        job.start()
 
-    print("This is other work.")
-    print(2 * 2)
+    print(f"{colorama.Fore.YELLOW}This is the main thread.")
 
-    [t.join(timeout=1) for t in threads]
+    for job in threads:
+        job.join(timeout=2)
 
-    print("Done.")
+    print(f"{colorama.Fore.YELLOW}Main thread continues.")
+    print(f"{colorama.Fore.YELLOW}Done.")
+
+    return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

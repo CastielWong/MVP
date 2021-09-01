@@ -1,52 +1,88 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import datetime
-import colorama
+"""Demo how interruption works with threading."""
+from datetime import datetime
 import random
 import time
 import threading
 
+import colorama
 
-def check_cancel():
+
+def check_cancel() -> None:
+    """Check if there is cancel."""
     print(colorama.Fore.RED + "Press enter to cancel...", flush=True)
     input()
 
+    return
 
-def generate_data(num: int, data: list):
+
+def generate_data(num: int, data: list) -> None:
+    """Generate data at asynchronous [0.5, 1.5] seconds.
+
+    Args:
+        num: number of times to generate data
+        data: list of data generated
+    """
     for idx in range(1, num + 1):
         item = idx * idx
-        data.append((item, datetime.datetime.now()))
+        curr_time = datetime.now()
 
-        print(colorama.Fore.YELLOW + f" -- generated item {idx}", flush=True)
-        time.sleep(random.random() + .5)
+        data.append((item, curr_time))
+
+        print(
+            (f"{colorama.Fore.YELLOW}" f"--- generated record ({idx:-3}, {curr_time})"),
+            flush=True,
+        )
+        time.sleep(random.random() + 0.5)  # nosec
+
+    return
 
 
-def process_data(num: int, data: list):
+def process_data(num: int, data: list) -> None:
+    """Process data when there is.
+
+    Args:
+        num: number of times to process
+        data: list of data have been generated
+    """
     processed = 0
+
     while processed < num:
-        item = None
+        record = None
 
         if data:
-            item = data.pop(0)
-        if not item:
-            time.sleep(.01)
+            record = data.pop(0)
+
+        if not record:
+            time.sleep(0.01)
             continue
 
         processed += 1
-        value = item[0]
-        t = item[1]
-        dt = datetime.datetime.now() - t
 
-        print(colorama.Fore.CYAN +
-              " +++ Processed value {} after {:,.2f} sec.".format(value, dt.total_seconds()), flush=True)
-        time.sleep(.5)
+        item, moment = record
+
+        dt = datetime.now() - moment
+
+        print(
+            (
+                f"{colorama.Fore.CYAN}"
+                f"+++ Processed record ({item:-3}, {moment}) "
+                f"after {dt.total_seconds():,.2f} seconds."
+            ),
+            flush=True,
+        )
+        time.sleep(0.5)
+
+    return
 
 
-def main():
-    t0 = datetime.datetime.now()
-    print(colorama.Fore.WHITE + "App started.", flush=True)
+def main() -> None:
+    """Execute the main workflow."""
+    t0 = datetime.now()
+    print(f"{colorama.Fore.WHITE}App started.", flush=True)
 
-    data = []
+    data: list = []
 
     threads = [
         threading.Thread(target=generate_data, args=(20, data), daemon=True),
@@ -56,17 +92,28 @@ def main():
     abort_thread = threading.Thread(target=check_cancel, daemon=True)
     abort_thread.start()
 
-    [t.start() for t in threads]
+    for job in threads:
+        job.start()
 
-    while any([t.is_alive() for t in threads]):
-        [t.join(.001) for t in threads]
+    while any((job.is_alive() for job in threads)):
+        for job in threads:
+            job.join(0.001)
+
         if not abort_thread.is_alive():
             print("Cancelling on your request!", flush=True)
             break
 
-    dt = datetime.datetime.now() - t0
-    print(colorama.Fore.WHITE + "App exiting, total time: {:,.2f} sec.".format(dt.total_seconds()), flush=True)
+    dt = datetime.now() - t0
+    print(
+        (
+            f"{colorama.Fore.WHITE}"
+            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
+        ),
+        flush=True,
+    )
+
+    return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
