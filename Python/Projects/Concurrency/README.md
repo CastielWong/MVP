@@ -1,6 +1,9 @@
 
-- [asyncio](#asyncio)
+- [AsyncIO](#asyncio)
   - [Anatomy](#anatomy)
+- [Thread](#thread)
+  - [Anatomy](#anatomy-1)
+- [Thread vs AsyncIO](#thread-vs-asyncio)
 - [Reference](#reference)
 
 This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
@@ -32,7 +35,7 @@ Python has a memory management feature called __the GIL__, or __Global Interpret
   - unsync
 
 
-## asyncio
+## AsyncIO
 Cooperative Concurrency or Parallelism
 
 ### Anatomy
@@ -63,14 +66,44 @@ async def get_html(url: str):
 ```
 
 
-
 > Asynchrony,  in computer programming, refers to the occurrence of events independent of the main program flow and ways to deal with such events.
 > These may be "outside" events such as the arrival of signals, or actions instigated by a program that take place concurrently with program execution, without the program blocking to wait for results.
 
 
-- thread
-- process
-- asyncio
+## Thread
+
+### Anatomy
+
+```py
+def generate_data(num: int, inputs: list):
+  ...
+
+# create the thread, set thread executing at background by setting daemon to True
+work = threading.Thread(target=generate_data, args=(20,[]), daemon=True)
+
+# start the thread
+work.start()
+
+...
+
+# ask the thread to join into current main thread, so that main thread will wait until the tread is finished
+work.join()
+
+# anything else will only continue after thread above is done
+...
+
+```
+
+
+## Thread vs AsyncIO
+Thread and AsyncIO are both for "do more at once" while waiting on other things to be finished.
+
+AsyncIO programming model is actually nicer and cleaner, which is basically the synchronous regular programming model with just understanding restartable coroutines.
+
+Threaded programming, though old school, is still needed since no all libraries and systems is fittable with `async` and `await`. When speaking about the GIL, it means threads are no good for concurrency when trying to leverage CPU bound operations, since GIL will only allow the code to execute one operation at a time. One of the important caveats around that is Python will let go of GIL while it's waiting on IO operations like go over the network or talk to the file system.
+
+All in all, AsyncIO when you can, Thread when you must.
+
 
 
 ## Reference

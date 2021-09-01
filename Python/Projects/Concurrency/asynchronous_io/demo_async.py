@@ -52,7 +52,7 @@ async def process_data(num: int, data: Queue):
             (
                 f"{colorama.Fore.CYAN}"
                 f"+++ Processed record ({item:-3}, {moment}) "
-                f"after {dt.total_seconds():,.2f}s."
+                f"after {dt.total_seconds():,.2f} seconds."
             ),
             flush=True,
         )
@@ -85,6 +85,8 @@ def main() -> None:
         ),
         flush=True,
     )
+
+    return
 
 
 if __name__ == "__main__":

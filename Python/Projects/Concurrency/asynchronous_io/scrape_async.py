@@ -77,7 +77,7 @@ async def get_title_range_with_loop():
         print(f"{Fore.WHITE}Title found: {title}", flush=True)
 
 
-def main():
+def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
 
@@ -87,6 +87,7 @@ def main():
     dt = datetime.now() - t0
     print(f"Done in {dt.total_seconds():.2f} sec.")
 
+    return
 
 if __name__ == "__main__":
     main()

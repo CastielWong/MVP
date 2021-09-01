@@ -58,7 +58,7 @@ def get_title_range() -> None:
     return
 
 
-def main():
+def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
 
@@ -67,6 +67,7 @@ def main():
 
     print(f"Done in {dt.total_seconds():.2f} seconds.")
 
+    return
 
 if __name__ == "__main__":
     main()

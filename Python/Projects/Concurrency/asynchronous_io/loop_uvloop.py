@@ -50,7 +50,7 @@ async def process_data(num: int, data: asyncio.Queue):
     return
 
 
-def main():
+def main() -> None:
     """Execute the main workflow."""
     lim = 150_000
 
@@ -75,6 +75,8 @@ def main():
         ),
         flush=True,
     )
+
+    return
 
 
 if __name__ == "__main__":

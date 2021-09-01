@@ -78,6 +78,8 @@ def main() -> None:
         flush=True,
     )
 
+    return
+
 
 if __name__ == "__main__":
     main()
