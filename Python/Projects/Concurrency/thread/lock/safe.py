@@ -1,100 +1,165 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import datetime
+"""Sample code for the appropriate way to apply lock."""
+from threading import Thread, RLock
+from typing import List, Tuple
+from datetime import datetime
 import random
 import time
-from threading import Thread, RLock
-from typing import List
 
-
-class Account:
-    def __init__(self, balance=0):
-        self.balance = balance
-        self.lock = RLock()
-
-
-def do_bank_stuff(accounts, total):
-    for _ in range(1, 10_000):
-        a1, a2 = get_two_accounts(accounts)
-        amount = random.randint(1, 100)
-        do_transfer(a1, a2, amount)
-        validate_bank(accounts, total, quiet=True)
-
-
-def create_accounts() -> List[Account]:
-    return [
-        Account(balance=5000),
-        Account(balance=10000),
-        Account(balance=7500),
-        Account(balance=7000),
-        Account(balance=6000),
-        Account(balance=9000),
-    ]
-
-
-def do_transfer(from_account: Account, to_account: Account, amount: int):
-    if from_account.balance < amount:
-        return
-
-    lock1, lock2 = (
-        (from_account.lock, to_account.lock)
-        if id(from_account) < id(to_account)
-        else (to_account.lock, from_account.lock)
-    )
-
-    with lock1:
-        with lock2:
-            from_account.balance -= amount
-            time.sleep(.000)
-            to_account.balance += amount
-
+import colorama
 
 transfer_lock = RLock()
 
 
+# pylint: disable=R0903 (too-few-public-methods)
+class Account:
+    """Account class."""
+
+    def __init__(self, balance=0):
+        """Initialize Account.
+
+        Args:
+            balance: account balance
+        """
+        self.balance = balance
+        self.lock = RLock()
+
+
+def do_bank_stuff(accounts: List[Account], total: int) -> None:
+    """Perform bank transaction.
+
+    Args:
+        accounts: list of two accounts
+        total: the total balance for all existing accounts
+    """
+    for _ in range(1, 10_000):
+        a1, a2 = get_two_accounts(accounts)
+        amount = random.randint(1, 100)  # nosec
+        do_transfer(a1, a2, amount)
+        validate_bank(accounts, total, quiet=True)
+
+    return
+
+
+def do_transfer(from_account: Account, to_account: Account, amount: int) -> None:
+    """Transfer money between accounts.
+
+    Args:
+        from_account: whose balance is to decrease
+        to_account: whose balance is to increase
+        amount: amount to transfer
+    """
+    if from_account.balance < amount:
+        return
+
+    if id(from_account) < id(to_account):
+        lock1, lock2 = (from_account.lock, to_account.lock)
+    else:
+        lock1, lock2 = (to_account.lock, from_account.lock)
+
+    with lock1:
+        with lock2:
+            from_account.balance -= amount
+            time.sleep(0.000)
+            to_account.balance += amount
+
+    return
+
+
 def do_transfer_global_style(
-        from_account: Account, to_account: Account, amount: int):
+    from_account: Account, to_account: Account, amount: int
+) -> None:
+    """Transfer money between accounts.
+
+    Args:
+        from_account: whose balance is to decrease
+        to_account: whose balance is to increase
+        amount: amount to transfer
+    """
     if from_account.balance < amount:
         return
 
     with transfer_lock:
         from_account.balance -= amount
-        time.sleep(.000)
+        time.sleep(0.000)
         to_account.balance += amount
 
+    return
 
-def validate_bank(accounts: List[Account], total: int, quiet=False):
+
+def validate_bank(accounts: List[Account], total: int, quiet=False) -> None:
+    """Validate if the total balance is still consistent in the bank.
+
+    Args:
+        accounts: all existing accounts
+        total: total balance expected
+        quiet: whether to print if balance is consistent
+    """
     # with transfer_lock:
     #     current = sum(a.balance for a in accounts)
 
-    [a.lock.acquire() for a in accounts]
+    for acct in accounts:
+        acct.lock.acquire()
     current = sum(a.balance for a in accounts)
-    [a.lock.release() for a in accounts]
+    for acct in accounts:
+        acct.lock.release()
 
     if current != total:
-        print("ERROR: Inconsistent account balance: ${:,} vs ${:,}".format(
-            current, total
-        ), flush=True)
-    elif not quiet:
-        print("All good: Consistent account balance: ${:,}".format(
-            total), flush=True)
+        print(
+            (
+                f"{colorama.Fore.RED}ERROR: "
+                f"Inconsistent account balance: ${current:,} vs ${total:,}"
+            ),
+            flush=True,
+        )
+        return
+
+    if not quiet:
+        print(
+            f"{colorama.Fore.YELLOW}All good: Consistent account balance: ${total:,}",
+            flush=True,
+        )
+
+    return
 
 
-def get_two_accounts(accounts):
-    a1 = random.choice(accounts)
+def get_two_accounts(accounts) -> Tuple[Account, Account]:
+    """Pick up two accounts from the list randomly.
+
+    Args:
+        accounts: list of accounts to pick up
+
+    Returns:
+        Two accounts picked
+    """
+    a1 = random.choice(accounts)  # nosec
+
     a2 = a1
     while a2 == a1:
-        a2 = random.choice(accounts)
+        a2 = random.choice(accounts)  # nosec
 
     return a1, a2
 
 
 def main():
-    accounts = create_accounts()
-    total = sum(a.balance for a in accounts)
+    """Execute the main workflow."""
+    accounts = [
+        Account(balance=5_000),
+        Account(balance=10_000),
+        Account(balance=7_500),
+        Account(balance=7_000),
+        Account(balance=6_000),
+        Account(balance=9_000),
+    ]
+
+    total = 0
+    for acct in accounts:
+        total += acct.balance
 
     validate_bank(accounts, total)
-    print("Starting transfers...")
+
+    print(f"{colorama.Fore.RESET}Starting transfers...")
 
     jobs = [
         Thread(target=do_bank_stuff, args=(accounts, total)),
@@ -104,16 +169,22 @@ def main():
         Thread(target=do_bank_stuff, args=(accounts, total)),
     ]
 
-    t0 = datetime.datetime.now()
+    t0 = datetime.now()
 
-    [j.start() for j in jobs]
-    [j.join() for j in jobs]
+    for job in jobs:
+        job.start()
 
-    dt = datetime.datetime.now() - t0
+    for job in jobs:
+        job.join()
 
-    print("Transfers complete ({:,.2f}) sec".format(dt.total_seconds()))
+    dt = datetime.now() - t0
+
+    print(
+        f"{colorama.Fore.RESET}Transfers complete ({dt.total_seconds():,.2f}) seconds."
+    )
+
     validate_bank(accounts, total)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
