@@ -5,6 +5,7 @@
   - [Anatomy](#anatomy-1)
   - [Lock](#lock)
 - [Thread vs AsyncIO](#thread-vs-asyncio)
+- [Multiprocessing](#multiprocessing)
 - [Reference](#reference)
 
 This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
@@ -113,6 +114,22 @@ Threaded programming, though old school, is still needed since no all libraries 
 
 All in all, AsyncIO when you can, Thread when you must.
 
+
+## Multiprocessing
+
+```py
+# create a new Pool instance
+pool = Pool(processes=3)
+
+# start the work with `apply_async`
+pool.apply_async(func=do_math, args(0, 100))
+pool.apply_async(func=do_math, args(101, 200))
+pool.apply_async(func=do_math, args(201, 200))
+
+# must call `close` then `join`
+pool.close()
+pool.join()
+```
 
 
 ## Reference
