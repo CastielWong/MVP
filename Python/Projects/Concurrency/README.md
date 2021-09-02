@@ -3,6 +3,7 @@
   - [Anatomy](#anatomy)
 - [Thread](#thread)
   - [Anatomy](#anatomy-1)
+  - [Lock](#lock)
 - [Thread vs AsyncIO](#thread-vs-asyncio)
 - [Reference](#reference)
 
@@ -93,6 +94,14 @@ work.join()
 ...
 
 ```
+
+### Lock
+There are multiple cases that would cause unexpected situations:
+- no lock: data inconsistency
+- multiple thread share two locks:
+  - when one thread gets one and the other gets another, starvation would occur
+  - when locks doesn't have an order to acquire, starvation would occur
+
 
 
 ## Thread vs AsyncIO
