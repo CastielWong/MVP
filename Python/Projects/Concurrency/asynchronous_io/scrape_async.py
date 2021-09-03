@@ -22,7 +22,7 @@ async def get_html(episode_number: int) -> str:
     Returns:
         Text in HTML
     """
-    print(f"{Fore.YELLOW }Getting HTML for episode {episode_number}", flush=True)
+    print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}", flush=True)
 
     url = f"https://talkpython.fm/{episode_number}"
 

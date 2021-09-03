@@ -51,7 +51,7 @@ def process_data(num: int, data: list) -> None:
             (
                 f"{colorama.Fore.CYAN}"
                 f"+++ Processed record ({item:-3}, {moment}) "
-                f"after {dt.total_seconds():,.2f}s."
+                f"after {dt.total_seconds():,.2f} seconds."
             ),
             flush=True,
         )
