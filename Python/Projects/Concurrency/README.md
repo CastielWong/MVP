@@ -6,6 +6,7 @@
   - [Lock](#lock)
 - [Thread vs AsyncIO](#thread-vs-asyncio)
 - [Multiprocessing](#multiprocessing)
+- [Mixed Mode](#mixed-mode)
 - [Reference](#reference)
 
 This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
@@ -35,6 +36,17 @@ Python has a memory management feature called __the GIL__, or __Global Interpret
 - Do both easier
   - trio
   - unsync
+
+The need of additional libraries:
+- Executing an async function __outside of an existing event__  loop is troublesome
+- `asyncio.Future` is not thread safe
+- `concurrent.Future` cannot be directly awaited
+- `Future.result()` is a blocking operation even within an event loop
+- `asyncio.Future.result()` will throw an exception if the future is not done
+- async functions __always execute in the `asyncio` loop__ (not thread or process backed)
+- Cancellation and timeouts are tricky in threads and processes
+- Thread local storage doesn't work for asyncio concurrency
+- Testing concurrent code can be very tricky
 
 
 ## AsyncIO
@@ -132,7 +144,35 @@ pool.join()
 ```
 
 
+## Mixed Mode
+Mixed mode parallelism with `unsync`:
+```py
+tasks = [
+  compute_some(),       # multiprocess
+  download_some_more(), # asyncio
+  download_some(),      # thread
+  wait_some(),          # asyncio
+]
+
+[t.result() for t in tasks]
+
+@unsync(cpu_bound=True)
+def compute_some():
+  pass
+
+@unsync()
+def download_some():
+  pass
+
+@unsync()
+async def download_some_more():
+  pass
+```
+
+
 ## Reference
 - Async Techniques and Examples in Python: https://training.talkpython.fm/courses/details/async-in-python-with-threading-and-multiprocessing
 - Power and Head Problems Led to Multiple Cores and Prevent Further Improvements in Speed: https://www.slideshare.net/Funk98/end-of-moores-law-or-a-change-to-something-else
 - Sample Code: https://github.com/talkpython/async-techniques-python-course
+- Unsynchronize asyncio: https://github.com/alex-sherman/unsync
+- A friendly Python library for async concurrency and I/O: https://github.com/python-trio/trio

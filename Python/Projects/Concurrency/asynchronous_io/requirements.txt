@@ -3,8 +3,6 @@
 aiohttp>=3.7.4
 # aiodns    # other library related to aiohttp
 # cchardet  # other library related to aiohttp
-beautifulsoup4>=4.9.3
-requests>=2.26.0
 uvloop>=0.16.0
 
 # some other asynio libraries
