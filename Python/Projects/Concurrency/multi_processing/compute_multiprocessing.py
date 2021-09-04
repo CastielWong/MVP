@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Demonstrate high CPU computation via multiprocessing."""
+"""Demonstrate intensive CPU computation in multi-processing."""
 from datetime import datetime
 import math
 import multiprocessing

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Demonstrate high CPU computation."""
+"""Demonstrate intensive CPU computation."""
 from datetime import datetime
 import math
 
