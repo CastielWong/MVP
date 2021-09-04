@@ -7,11 +7,25 @@
 - [Thread vs AsyncIO](#thread-vs-asyncio)
 - [Multiprocessing](#multiprocessing)
 - [Mixed Mode](#mixed-mode)
+- [Cython](#cython)
 - [Reference](#reference)
 
 This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
 
-![overview](overview.png)
+![Structure](structure.png)
+- Do more at once
+  - asyncio
+  - threads
+- Do things faster
+  - multiprocessing
+  - C / Cython
+- Do both easier
+  - trio
+  - unsync
+
+
+![Async Techniques](async_techniques.png)
+
 
 Python has a memory management feature called __the GIL__, or __Global Interpreter Lock__.
 
@@ -27,15 +41,6 @@ Python has a memory management feature called __the GIL__, or __Global Interpret
 9. parallelism in C (with Cython)
 
 
-- Do more at once
-  - asyncio
-  - threads
-- Do things faster
-  - multiprocessing
-  - C / Cython
-- Do both easier
-  - trio
-  - unsync
 
 The need of additional libraries:
 - Executing an async function __outside of an existing event__  loop is troublesome
@@ -170,9 +175,58 @@ async def download_some_more():
 ```
 
 
+## Cython
+Cython is an optimizing static compiler for the Python programming language. It makes writing C extensions for Python as easy as Python itself.
+
+Advantages:
+- Write Python code that calls back and forth from and to C or C++ code natively at any point
+- Easily tune readable Python code into plain C performance by adding static tpe declarations
+- Use combined source code level debugging to find bugs in your Python, Cython and C code
+- Interact efficiently with large data sets, e.g. using multi-dimensional Numpy arrays
+- Quickly build applications within the large, mature and widely used CPython ecosystem
+- Integrate natively with existing code and data from legacy, low-level or high-performance libraries and applications
+
+Pure Python:
+```py
+import math
+
+def do_math(start: int, num: int):
+  dist =0.0
+  pos = start
+  k_sq = 1_000 * 1_000
+
+  while pos < num:
+    pos += 1
+    dist = math.sqrt((pos - k_sq) * (pos - k_sq))
+```
+
+Converted Cython:
+```py
+from libc.math cimport sqrt
+
+def do_math(start: cython.int, num: cython.int):
+  dist: cython.float =0.0
+  pos: cython.float = start
+  k_sq: cython.float = 1_000 * 1_000
+
+  while pos < num:
+    pos += 1
+    dist = math.sqrt((pos - k_sq) * (pos - k_sq))
+```
+
+Running Cython:
+1. Write Cython code, ".pyx"
+2. Create a "setup.py"
+3. Compile the Cython code using "setup.py" via `python setup.py build_ext --inplace`. 
+
+The corresponding ".so" compiled file will be created.
+
+
 ## Reference
 - Async Techniques and Examples in Python: https://training.talkpython.fm/courses/details/async-in-python-with-threading-and-multiprocessing
 - Power and Head Problems Led to Multiple Cores and Prevent Further Improvements in Speed: https://www.slideshare.net/Funk98/end-of-moores-law-or-a-change-to-something-else
 - Sample Code: https://github.com/talkpython/async-techniques-python-course
 - Unsynchronize asyncio: https://github.com/alex-sherman/unsync
 - A friendly Python library for async concurrency and I/O: https://github.com/python-trio/trio
+- Quart:https://gitlab.com/pgjones/quart/ 
+- wrk - a HTTP benchmarking tool: https://github.com/wg/wrk
