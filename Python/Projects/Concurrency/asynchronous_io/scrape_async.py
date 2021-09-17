@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 """Demo to process web scrping asynchronously."""
 from datetime import datetime
+from asyncio import AbstractEventLoop
 import asyncio
 
 from colorama import Fore
 import aiohttp
 import bs4
-
-# Older versions of python require calling LOOP.create_task() rather than
-# on asyncio.Make this available more easily.
-LOOP = asyncio.get_event_loop()
 
 
 async def get_html(episode_number: int) -> str:
@@ -65,11 +62,15 @@ async def get_title_range_no_loop():
     return
 
 
-async def get_title_range_with_loop():
-    """Get titles of the specified range with loop involved."""
+async def get_title_range_with_loop(loop: AbstractEventLoop):
+    """Get titles of the specified range with loop involved.
+
+    Args:
+        loop: the event loop
+    """
     tasks = []
     for e_n in range(150, 160):
-        tasks.append((e_n, LOOP.create_task(get_html(e_n))))
+        tasks.append((e_n, loop.create_task(get_html(e_n))))
 
     for e_n, task in tasks:
         html = await task
@@ -81,11 +82,15 @@ def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
 
-    # loop.run_until_complete(get_title_range_no_loop())
-    LOOP.run_until_complete(get_title_range_with_loop())
+    # Older versions of python require calling LOOP.create_task() rather than
+    # on asyncio.Make this available more easily.
+    loop = asyncio.get_event_loop()
 
-    dt = datetime.now() - t0
-    print(f"Done in {dt.total_seconds():.2f} sec.")
+    task = get_title_range_with_loop(loop=loop)
+    loop.run_until_complete(task)
+
+    elapsed = datetime.now() - t0
+    print(f"Done in {elapsed.total_seconds():.2f} seconds.")
 
     return
 

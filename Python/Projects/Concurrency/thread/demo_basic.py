@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Demo the basic usage of threading."""
+from typing import NamedTuple
 import time
 import threading
 
+from colorama import Fore
 from colorama.ansi import AnsiFore
-import colorama
+
+Fruit = NamedTuple("Fruit", [("name", str), ("amount", int), ("color", AnsiFore)])
 
 
 def greeter(fruit: str, number: int, color: AnsiFore) -> None:
@@ -24,31 +27,33 @@ def greeter(fruit: str, number: int, color: AnsiFore) -> None:
 
 def main() -> None:
     """Execute the main workflow."""
-    threads = [
-        threading.Thread(
-            target=greeter, args=("Apple", 10, colorama.Fore.GREEN), daemon=True
-        ),
-        threading.Thread(
-            target=greeter, args=("Berry", 5, colorama.Fore.BLUE), daemon=True
-        ),
-        threading.Thread(
-            target=greeter, args=("Coconut", 2, colorama.Fore.WHITE), daemon=True
-        ),
-        threading.Thread(
-            target=greeter, args=("Date", 11, colorama.Fore.RED), daemon=True
-        ),
+    fruits = [
+        Fruit("Apple", 10, Fore.GREEN),
+        Fruit("Berry", 5, Fore.BLUE),
+        Fruit("Coconut", 2, Fore.WHITE),
+        Fruit("Date", 11, Fore.RED),
     ]
 
-    for job in threads:
-        job.start()
+    tasks = []
+    for fruit in fruits:
+        # thread would continue running if it's not a daemon thread
+        thread = threading.Thread(
+            target=greeter,
+            args=(fruit.name, fruit.amount, fruit.color),
+            daemon=True,
+        )
+        tasks.append(thread)
 
-    print(f"{colorama.Fore.YELLOW}This is the main thread.")
+    for thread in tasks:
+        thread.start()
 
-    for job in threads:
-        job.join(timeout=2)
+    print(f"{Fore.YELLOW}This is the main thread.")
 
-    print(f"{colorama.Fore.YELLOW}Main thread continues.")
-    print(f"{colorama.Fore.YELLOW}Done.")
+    for thread in tasks:
+        thread.join(timeout=2)
+
+    print(f"{Fore.YELLOW}Main thread continues.")
+    print(f"{Fore.YELLOW}Done.")
 
     return
 

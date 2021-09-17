@@ -6,32 +6,31 @@ from datetime import datetime
 import asyncio
 import random
 
-import colorama
+from colorama import Fore
 
 
 async def generate_data(num: int, data: Queue) -> None:
-    """Generate data at asynchronous [0.5, 1.5] seconds.
+    """Generate data at asynchronous [0.0, 1.0] seconds.
 
     Args:
         num: number of times to generate data
         data: list of data generated
     """
     for idx in range(1, num + 1):
-        item = idx * idx
         curr_time = datetime.now()
 
-        await data.put((item, curr_time))
+        await data.put((idx, curr_time))
 
         print(
-            (f"{colorama.Fore.YELLOW}" f"--- generated record ({idx:-3}, {curr_time})"),
+            f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})",
             flush=True,
         )
-        await asyncio.sleep(random.random() + 0.5)  # nosec
+        await asyncio.sleep(random.random())  # nosec
 
     return
 
 
-async def process_data(num: int, data: Queue):
+async def process_data(num: int, data: Queue) -> None:
     """Process data at asynchronous 0.5 second.
 
     Args:
@@ -46,16 +45,17 @@ async def process_data(num: int, data: Queue):
         processed += 1
         item, moment = record
 
-        dt = datetime.now() - moment
+        elapsed = datetime.now() - moment
 
         print(
             (
-                f"{colorama.Fore.CYAN}"
-                f"+++ Processed record ({item:-3}, {moment}) "
-                f"after {dt.total_seconds():,.2f} seconds."
+                f"{Fore.CYAN}"
+                f"+++ Processed record ({item:-2}, {moment}) "
+                f"after {elapsed.total_seconds():,.2f} seconds."
             ),
             flush=True,
         )
+        # ensure the coroutine will await to `sleep`
         await asyncio.sleep(0.5)
 
     return
@@ -63,26 +63,21 @@ async def process_data(num: int, data: Queue):
 
 def main() -> None:
     """Execute the main workflow."""
-    loop = asyncio.get_event_loop()
-
     t0 = datetime.now()
-    print(f"{colorama.Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.", flush=True)
 
+    loop = asyncio.get_event_loop()
     data: Queue = Queue()
 
-    task1 = loop.create_task(generate_data(20, data))
-    task2 = loop.create_task(generate_data(20, data))
-    task3 = loop.create_task(process_data(40, data))
+    producer = loop.create_task(generate_data(20, data))
+    consumer = loop.create_task(process_data(20, data))
 
-    final_task = asyncio.gather(task1, task2, task3)
-    loop.run_until_complete(final_task)
+    task = asyncio.gather(producer, consumer)
+    loop.run_until_complete(task)
 
-    dt = datetime.now() - t0
+    elapsed = datetime.now() - t0
     print(
-        (
-            f"{colorama.Fore.WHITE}"
-            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
-        ),
+        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
         flush=True,
     )
 

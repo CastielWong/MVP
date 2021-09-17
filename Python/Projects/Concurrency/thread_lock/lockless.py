@@ -7,12 +7,14 @@ from datetime import datetime
 import random
 import time
 
-import colorama
+from colorama import Fore
 
 
 # pylint: disable=R0903 (too-few-public-methods)
 class Account:
     """Account class."""
+
+    __slots__ = ["balance"]
 
     def __init__(self, balance=0):
         """Initialize Account.
@@ -69,17 +71,15 @@ def validate_bank(accounts: List[Account], total: int, quiet: bool = False) -> N
 
     if current != total:
         print(
-            (
-                f"{colorama.Fore.RED}ERROR: "
-                f"Inconsistent account balance: ${current:,} vs ${total:,}"
-            ),
+            f"{Fore.RED}"
+            f"ERROR: Inconsistent account balance: ${current:,} vs ${total:,}",
             flush=True,
         )
         return
 
     if not quiet:
         print(
-            f"{colorama.Fore.YELLOW}All good: Consistent account balance: ${total:,}",
+            f"{Fore.YELLOW}All good: Consistent account balance: ${total:,}",
             flush=True,
         )
 
@@ -121,9 +121,9 @@ def main():
 
     validate_bank(accounts, total)
 
-    print(f"{colorama.Fore.RESET}Starting transfers...")
+    print(f"{Fore.RESET}Starting transfers...")
 
-    jobs = [
+    tasks = [
         Thread(target=do_bank_stuff, args=(accounts, total)),
         Thread(target=do_bank_stuff, args=(accounts, total)),
         Thread(target=do_bank_stuff, args=(accounts, total)),
@@ -133,17 +133,13 @@ def main():
 
     t0 = datetime.now()
 
-    for job in jobs:
-        job.start()
+    for thread in tasks:
+        thread.start()
+        thread.join(0.001)
 
-    for job in jobs:
-        job.join()
+    elapsed = datetime.now() - t0
 
-    dt = datetime.now() - t0
-
-    print(
-        f"{colorama.Fore.RESET}Transfers complete ({dt.total_seconds():,.2f}) seconds."
-    )
+    print(f"{Fore.RESET}Transfers complete ({elapsed.total_seconds():,.2f}) seconds.")
 
     validate_bank(accounts, total)
 

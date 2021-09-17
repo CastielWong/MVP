@@ -6,35 +6,36 @@ import random
 import time
 import threading
 
-import colorama
+from colorama import Fore
 
 
 def check_cancel() -> None:
     """Check if there is cancel."""
-    print(colorama.Fore.RED + "Press enter to cancel...", flush=True)
+    print(Fore.RED + "Press enter to cancel...", flush=True)
+    # monitor and capture input
+    # so that it would return when enter is pressed
     input()
 
     return
 
 
 def generate_data(num: int, data: list) -> None:
-    """Generate data at asynchronous [0.5, 1.5] seconds.
+    """Generate data at asynchronous [0.0, 1.0] seconds.
 
     Args:
         num: number of times to generate data
         data: list of data generated
     """
     for idx in range(1, num + 1):
-        item = idx * idx
         curr_time = datetime.now()
 
-        data.append((item, curr_time))
+        data.append((idx, curr_time))
 
         print(
-            (f"{colorama.Fore.YELLOW}" f"--- generated record ({idx:-3}, {curr_time})"),
+            (f"{Fore.YELLOW}--- Generated record ({idx:-3}, {curr_time})"),
             flush=True,
         )
-        time.sleep(random.random() + 0.5)  # nosec
+        time.sleep(random.random())  # nosec
 
     return
 
@@ -59,16 +60,14 @@ def process_data(num: int, data: list) -> None:
             continue
 
         processed += 1
-
         item, moment = record
 
-        dt = datetime.now() - moment
+        elapsed = datetime.now() - moment
 
         print(
             (
-                f"{colorama.Fore.CYAN}"
-                f"+++ Processed record ({item:-3}, {moment}) "
-                f"after {dt.total_seconds():,.2f} seconds."
+                f"{Fore.CYAN}+++ Processed record ({item:-3}, {moment}) "
+                f"after {elapsed.total_seconds():,.2f} seconds."
             ),
             flush=True,
         )
@@ -80,35 +79,33 @@ def process_data(num: int, data: list) -> None:
 def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
-    print(f"{colorama.Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.", flush=True)
 
     data: list = []
 
-    threads = [
+    jobs = [
         threading.Thread(target=generate_data, args=(20, data), daemon=True),
-        threading.Thread(target=generate_data, args=(20, data), daemon=True),
-        threading.Thread(target=process_data, args=(40, data), daemon=True),
+        threading.Thread(target=process_data, args=(20, data), daemon=True),
     ]
+
     abort_thread = threading.Thread(target=check_cancel, daemon=True)
     abort_thread.start()
 
-    for job in threads:
-        job.start()
+    for thread in jobs:
+        thread.start()
+        thread.join(0.001)
 
-    while any((job.is_alive() for job in threads)):
-        for job in threads:
-            job.join(0.001)
+    while any((thread.is_alive() for thread in jobs)):
+        if abort_thread.is_alive():
+            continue
 
-        if not abort_thread.is_alive():
-            print("Cancelling on your request!", flush=True)
-            break
+        # stop when the abort thread is triggered
+        print("Cancelling on your request!", flush=True)
+        break
 
-    dt = datetime.now() - t0
+    elapsed = datetime.now() - t0
     print(
-        (
-            f"{colorama.Fore.WHITE}"
-            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
-        ),
+        f"{Fore.WHITE}App exiting, total time: {elapsed.total_seconds():,.2f} seconds.",
         flush=True,
     )
 

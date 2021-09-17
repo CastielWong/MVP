@@ -5,33 +5,41 @@ from asyncio import Queue
 from datetime import datetime
 import asyncio
 
-import colorama
+from colorama import Fore
 
 
-async def generate_data(num: int, data: Queue) -> None:
+async def generate_data(num: int, data: Queue, name: str = "Producer") -> None:
     """Generate data consecutively.
 
     Args:
         num: number of times to generate data
         data: list of data generated
+        name: name of this task
     """
+    message = f"{Fore.YELLOW}Starting {name}..."
+
+    print(message, flush=True)
+
     for idx in range(1, num + 1):
-        item = idx * idx
         curr_time = datetime.now()
 
-        await data.put((item, curr_time))
+        await data.put((idx, curr_time))
         await asyncio.sleep(0)
 
     return
 
 
-async def process_data(num: int, data: Queue) -> None:
+async def process_data(num: int, data: Queue, name: str = "Consumer") -> None:
     """Process data consecutively.
 
     Args:
         num: number of times to process
         data: list of data have been generated
+        name: name of this task
     """
+    message = f"{Fore.CYAN}Starting {name}..."
+    print(message, flush=True)
+
     processed = 0
 
     while processed < num:
@@ -44,27 +52,32 @@ async def process_data(num: int, data: Queue) -> None:
 
 def main() -> None:
     """Execute the main workflow."""
-    lim = 150_000
+    iterations = 50_000
+    num_of_producers = 2
 
     t0 = datetime.now()
-    print(f"Running standard loop with {lim * 2:,} actions.")
+    print(f"Running standard loop with {iterations * num_of_producers:,} actions.")
 
     loop = asyncio.get_event_loop()
-    data = Queue()
+    data: Queue = Queue()
 
-    task1 = loop.create_task(generate_data(lim, data))
-    task3 = loop.create_task(generate_data(lim, data))
-    task2 = loop.create_task(process_data(2 * lim, data))
+    producers = []
+    for i in range(num_of_producers):
+        producer = loop.create_task(
+            generate_data(num=iterations, data=data, name=f"Producer {i+1}")
+        )
+        producers.append(producer)
 
-    final_task = asyncio.gather(task1, task2, task3)
-    loop.run_until_complete(final_task)
+    consumer = loop.create_task(
+        process_data(num=iterations * num_of_producers, data=data)
+    )
 
-    dt = datetime.now() - t0
+    task = asyncio.gather(consumer, *producers)
+    loop.run_until_complete(task)
+
+    elapsed = datetime.now() - t0
     print(
-        (
-            f"{colorama.Fore.WHITE}"
-            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
-        ),
+        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
         flush=True,
     )
 

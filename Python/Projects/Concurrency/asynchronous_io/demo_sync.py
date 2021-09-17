@@ -5,27 +5,25 @@ from datetime import datetime
 import random
 import time
 
-import colorama
+from colorama import Fore
 
 
 def generate_data(num: int, data: list) -> None:
-    """Generate data at every [0.5, 1.5] seconds.
+    """Generate data at every [0.0, 1.0] seconds.
 
     Args:
         num: number of times to generate data
         data: list of data generated
     """
     for idx in range(1, num + 1):
-        item = idx * idx
         curr_time = datetime.now()
-
-        data.append((item, curr_time))
+        data.append((idx, curr_time))
 
         print(
-            (f"{colorama.Fore.YELLOW}" f"--- generated record ({idx:-3}, {curr_time})"),
+            f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})",
             flush=True,
         )
-        time.sleep(random.random() + 0.5)  # nosec
+        time.sleep(random.random())  # nosec
 
     return
 
@@ -45,13 +43,12 @@ def process_data(num: int, data: list) -> None:
         processed += 1
         item, moment = record
 
-        dt = datetime.now() - moment
+        elapsed = datetime.now() - moment
 
         print(
             (
-                f"{colorama.Fore.CYAN}"
-                f"+++ Processed record ({item:-3}, {moment}) "
-                f"after {dt.total_seconds():,.2f} seconds."
+                f"{Fore.CYAN}+++ Processed record ({item:-2}, {moment}) "
+                f"after {elapsed.total_seconds():,.2f} seconds."
             ),
             flush=True,
         )
@@ -63,18 +60,15 @@ def process_data(num: int, data: list) -> None:
 def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
-    print(f"{colorama.Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.", flush=True)
 
     data: list = []
     generate_data(20, data)
     process_data(20, data)
 
-    dt = datetime.now() - t0
+    elapsed = datetime.now() - t0
     print(
-        (
-            f"{colorama.Fore.WHITE}"
-            f"App exiting, total time: {dt.total_seconds():,.2f} seconds."
-        ),
+        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
         flush=True,
     )
 

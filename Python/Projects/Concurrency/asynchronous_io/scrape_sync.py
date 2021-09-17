@@ -20,10 +20,10 @@ def get_html(episode_number: int) -> str:
     print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}", flush=True)
 
     url = f"https://talkpython.fm/{episode_number}"
-    resp = requests.get(url)
-    resp.raise_for_status()
+    res = requests.get(url)
+    res.raise_for_status()
 
-    return resp.text
+    return res.text
 
 
 def get_title(html: str, episode_number: int) -> str:
@@ -63,9 +63,9 @@ def main() -> None:
     t0 = datetime.now()
 
     get_title_range()
-    dt = datetime.now() - t0
+    elapsed = datetime.now() - t0
 
-    print(f"Done in {dt.total_seconds():.2f} seconds.")
+    print(f"Done in {elapsed.total_seconds():.2f} seconds.")
 
     return
 

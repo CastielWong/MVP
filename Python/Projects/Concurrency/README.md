@@ -1,4 +1,7 @@
 
+This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
+
+- [Overview](#overview)
 - [AsyncIO](#asyncio)
   - [Anatomy](#anatomy)
 - [Thread](#thread)
@@ -6,29 +9,17 @@
   - [Lock](#lock)
 - [Thread vs AsyncIO](#thread-vs-asyncio)
 - [Multiprocessing](#multiprocessing)
-- [Mixed Mode](#mixed-mode)
+- [Third-Party Library](#third-party-library)
 - [Cython](#cython)
 - [Reference](#reference)
 
-This project is to demonstrate how Python works for concurrency. The version of Python is expected to be 3.5 or above.
+## Overview
 
 ![Structure](structure.png)
-- Do more at once
-  - asyncio
-  - threads
-- Do things faster
-  - multiprocessing
-  - C / Cython
-- Do both easier
-  - trio
-  - unsync
-
 
 ![Async Techniques](async_techniques.png)
 
-
-Python has a memory management feature called __the GIL__, or __Global Interpreter Lock__.
-
+Python has a memory management feature called the __GIL__, or __Global Interpreter Lock__.
 
 1. why async and when
 2. async and await (asyncio)
@@ -41,24 +32,16 @@ Python has a memory management feature called __the GIL__, or __Global Interpret
 9. parallelism in C (with Cython)
 
 
-
-The need of additional libraries:
-- Executing an async function __outside of an existing event__  loop is troublesome
-- `asyncio.Future` is not thread safe
-- `concurrent.Future` cannot be directly awaited
-- `Future.result()` is a blocking operation even within an event loop
-- `asyncio.Future.result()` will throw an exception if the future is not done
-- async functions __always execute in the `asyncio` loop__ (not thread or process backed)
-- Cancellation and timeouts are tricky in threads and processes
-- Thread local storage doesn't work for asyncio concurrency
-- Testing concurrent code can be very tricky
-
-
 ## AsyncIO
-Cooperative Concurrency or Parallelism
+
+Cooperative Concurrency or Parallelism.
+
+> Asynchrony, in computer programming, refers to the occurrence of events independent of the main program flow and ways to deal with such events.
+>
+> These may be "outside" events such as the arrival of signals, or actions instigated by a program that take place concurrently with program execution, without the program blocking to wait for results.
 
 ### Anatomy
-Async method:
+Asynchronous method:
 - Begin by making method `async`
 - `await` all async methods called
 
@@ -68,7 +51,10 @@ async def process_data(num: int, data: asyncio.Queue):
 
   while processed < num:
     item = await data.get()
-    # work with item when acquired
+    # further process with item when acquired
+    ...
+
+  return
 ```
 
 Async web request:
@@ -85,10 +71,6 @@ async def get_html(url: str):
 ```
 
 
-> Asynchrony,  in computer programming, refers to the occurrence of events independent of the main program flow and ways to deal with such events.
-> These may be "outside" events such as the arrival of signals, or actions instigated by a program that take place concurrently with program execution, without the program blocking to wait for results.
-
-
 ## Thread
 
 ### Anatomy
@@ -97,8 +79,12 @@ async def get_html(url: str):
 def generate_data(num: int, inputs: list):
   ...
 
-# create the thread, set thread executing at background by setting daemon to True
-work = threading.Thread(target=generate_data, args=(20,[]), daemon=True)
+# create the thread, set thread executing at the background by setting daemon to True
+work = threading.Thread(
+  target=generate_data,
+  args=(20,[]),
+  daemon=True
+)
 
 # start the thread
 work.start()
@@ -116,10 +102,9 @@ work.join()
 ### Lock
 There are multiple cases that would cause unexpected situations:
 - no lock: data inconsistency
-- multiple thread share two locks:
-  - when one thread gets one and the other gets another, starvation would occur
-  - when locks doesn't have an order to acquire, starvation would occur
-
+- multiple threads share two locks:
+  - when one thread holds one and the other holds another, starvation would occur since each thread won't release the lock
+  - when locks doesn't have an order to acquire, starvation would occur since each thread may keep acquire and release the same lock
 
 
 ## Thread vs AsyncIO
@@ -139,9 +124,9 @@ All in all, AsyncIO when you can, Thread when you must.
 pool = Pool(processes=3)
 
 # start the work with `apply_async`
-pool.apply_async(func=do_math, args(0, 100))
-pool.apply_async(func=do_math, args(101, 200))
-pool.apply_async(func=do_math, args(201, 200))
+pool.apply_async(func=do_math, args({arg1}, {arg2}))
+pool.apply_async(func=do_math, args({arg1}, {arg2}))
+pool.apply_async(func=do_math, args({arg1}, {arg2}))
 
 # must call `close` then `join`
 pool.close()
@@ -149,7 +134,18 @@ pool.join()
 ```
 
 
-## Mixed Mode
+## Third-Party Library
+The reasons for the need of additional libraries:
+- Executing an asynchronous function __outside of an existing event__ loop is troublesome
+- `asyncio.Future` is not thread safe
+- `concurrent.Future` cannot be directly awaited
+- `Future.result()` is a blocking operation even within an event loop
+- `asyncio.Future.result()` will throw an exception if the future is not done
+- Asynchronous functions __always execute in the `asyncio` loop__ (not thread or process backed)
+- Cancellation and timeouts are tricky in threads and processes
+- Thread local storage doesn't work for `asyncio`concurrency
+- Testing concurrent code can be very tricky
+
 Mixed mode parallelism with `unsync`:
 ```py
 tasks = [
@@ -191,13 +187,15 @@ Pure Python:
 import math
 
 def do_math(start: int, num: int):
-  dist =0.0
+  dist = 0.0
   pos = start
   k_sq = 1_000 * 1_000
 
   while pos < num:
     pos += 1
     dist = math.sqrt((pos - k_sq) * (pos - k_sq))
+
+  return
 ```
 
 Converted Cython:
@@ -212,14 +210,16 @@ def do_math(start: cython.int, num: cython.int):
   while pos < num:
     pos += 1
     dist = math.sqrt((pos - k_sq) * (pos - k_sq))
+
+  return
 ```
 
 Running Cython:
 1. Write Cython code, ".pyx"
 2. Create a "setup.py"
-3. Compile the Cython code using "setup.py" via `python setup.py build_ext --inplace`. 
+3. Compile the Cython code using "setup.py" via `python setup.py build_ext --inplace`.
 
-The corresponding ".so" compiled file will be created.
+The corresponding ".so" compiled file should be created.
 
 
 ## Reference
@@ -228,5 +228,5 @@ The corresponding ".so" compiled file will be created.
 - Sample Code: https://github.com/talkpython/async-techniques-python-course
 - Unsynchronize asyncio: https://github.com/alex-sherman/unsync
 - A friendly Python library for async concurrency and I/O: https://github.com/python-trio/trio
-- Quart:https://gitlab.com/pgjones/quart/ 
+- Quart:https://gitlab.com/pgjones/quart/
 - wrk - a HTTP benchmarking tool: https://github.com/wg/wrk

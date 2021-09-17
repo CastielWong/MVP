@@ -7,14 +7,16 @@ from datetime import datetime
 import random
 import time
 
-import colorama
+from colorama import Fore
 
-transfer_lock = RLock()
+TRANSFER_LOCK = RLock()
 
 
 # pylint: disable=R0903 (too-few-public-methods)
 class Account:
     """Account class."""
+
+    __slot__ = ["balance", "lock"]
 
     def __init__(self, balance=0):
         """Initialize Account.
@@ -67,27 +69,6 @@ def do_transfer(from_account: Account, to_account: Account, amount: int) -> None
     return
 
 
-def do_transfer_global_style(
-    from_account: Account, to_account: Account, amount: int
-) -> None:
-    """Transfer money between accounts.
-
-    Args:
-        from_account: whose balance is to decrease
-        to_account: whose balance is to increase
-        amount: amount to transfer
-    """
-    if from_account.balance < amount:
-        return
-
-    with transfer_lock:
-        from_account.balance -= amount
-        time.sleep(0.000)
-        to_account.balance += amount
-
-    return
-
-
 def validate_bank(accounts: List[Account], total: int, quiet=False) -> None:
     """Validate if the total balance is still consistent in the bank.
 
@@ -96,9 +77,6 @@ def validate_bank(accounts: List[Account], total: int, quiet=False) -> None:
         total: total balance expected
         quiet: whether to print if balance is consistent
     """
-    # with transfer_lock:
-    #     current = sum(a.balance for a in accounts)
-
     for acct in accounts:
         acct.lock.acquire()
     current = sum(a.balance for a in accounts)
@@ -107,17 +85,15 @@ def validate_bank(accounts: List[Account], total: int, quiet=False) -> None:
 
     if current != total:
         print(
-            (
-                f"{colorama.Fore.RED}ERROR: "
-                f"Inconsistent account balance: ${current:,} vs ${total:,}"
-            ),
+            f"{Fore.RED}"
+            f"ERROR: Inconsistent account balance: ${current:,} vs ${total:,}",
             flush=True,
         )
         return
 
     if not quiet:
         print(
-            f"{colorama.Fore.YELLOW}All good: Consistent account balance: ${total:,}",
+            f"{Fore.YELLOW}All good: Consistent account balance: ${total:,}",
             flush=True,
         )
 
@@ -159,9 +135,9 @@ def main():
 
     validate_bank(accounts, total)
 
-    print(f"{colorama.Fore.RESET}Starting transfers...")
+    print(f"{Fore.RESET}Starting transfers...")
 
-    jobs = [
+    tasks = [
         Thread(target=do_bank_stuff, args=(accounts, total)),
         Thread(target=do_bank_stuff, args=(accounts, total)),
         Thread(target=do_bank_stuff, args=(accounts, total)),
@@ -171,17 +147,13 @@ def main():
 
     t0 = datetime.now()
 
-    for job in jobs:
-        job.start()
+    for thread in tasks:
+        thread.start()
+        thread.join(0.001)
 
-    for job in jobs:
-        job.join()
+    elapsed = datetime.now() - t0
 
-    dt = datetime.now() - t0
-
-    print(
-        f"{colorama.Fore.RESET}Transfers complete ({dt.total_seconds():,.2f}) seconds."
-    )
+    print(f"{Fore.RESET}Transfers complete ({elapsed.total_seconds():,.2f}) seconds.")
 
     validate_bank(accounts, total)
 
