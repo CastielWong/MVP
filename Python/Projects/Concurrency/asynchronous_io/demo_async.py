@@ -21,10 +21,7 @@ async def generate_data(num: int, data: Queue) -> None:
 
         await data.put((idx, curr_time))
 
-        print(
-            f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})",
-            flush=True,
-        )
+        print(f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})")
         await asyncio.sleep(random.random())  # nosec
 
     return
@@ -48,12 +45,8 @@ async def process_data(num: int, data: Queue) -> None:
         elapsed = datetime.now() - moment
 
         print(
-            (
-                f"{Fore.CYAN}"
-                f"+++ Processed record ({item:-2}, {moment}) "
-                f"after {elapsed.total_seconds():,.2f} seconds."
-            ),
-            flush=True,
+            f"{Fore.CYAN}+++ Processed record ({item:-2}, {moment}) "
+            f"after {elapsed.total_seconds():,.2f} seconds."
         )
         # ensure the coroutine will await to `sleep`
         await asyncio.sleep(0.5)
@@ -64,7 +57,7 @@ async def process_data(num: int, data: Queue) -> None:
 def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
-    print(f"{Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.")
 
     loop = asyncio.get_event_loop()
     data: Queue = Queue()
@@ -72,14 +65,11 @@ def main() -> None:
     producer = loop.create_task(generate_data(20, data))
     consumer = loop.create_task(process_data(20, data))
 
-    task = asyncio.gather(producer, consumer)
-    loop.run_until_complete(task)
+    tasks = asyncio.gather(producer, consumer)
+    loop.run_until_complete(tasks)
 
     elapsed = datetime.now() - t0
-    print(
-        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
-        flush=True,
-    )
+    print(f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.")
 
     return
 

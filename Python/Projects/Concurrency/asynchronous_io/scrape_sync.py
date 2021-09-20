@@ -17,7 +17,7 @@ def get_html(episode_number: int) -> str:
     Returns:
         Text in HTML
     """
-    print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}", flush=True)
+    print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}")
 
     url = f"https://talkpython.fm/{episode_number}"
     res = requests.get(url)
@@ -36,7 +36,7 @@ def get_title(html: str, episode_number: int) -> str:
     Returns:
         Title of the episode
     """
-    print(f"{Fore.CYAN}Getting TITLE for episode {episode_number}", flush=True)
+    print(f"{Fore.CYAN}Getting TITLE for episode {episode_number}")
 
     soup = bs4.BeautifulSoup(html, "html.parser")
     header = soup.select_one("h1")
@@ -53,7 +53,7 @@ def get_title_range() -> None:
         html = get_html(e_n)
         title = get_title(html, e_n)
 
-        print(f"{Fore.WHITE}Title found: {title}", flush=True)
+        print(f"{Fore.WHITE}Title found: {title}")
 
     return
 

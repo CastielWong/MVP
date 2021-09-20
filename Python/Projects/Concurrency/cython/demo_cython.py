@@ -5,49 +5,54 @@ from datetime import datetime
 from threading import Thread
 import multiprocessing
 
+from colorama import Fore
 import math_core
 
 TIME_SPENT_BASIC = 0.74
 
+# note that it's possible Cython would be overflowing when the number is too large
+NUMBER = 3_000_000
+
 
 def main() -> None:
     """Execute the main workflow."""
-    math_core.do_math(1)  # pylint: disable=I1101 (c-extension-no-member)
-
     t0 = datetime.now()
 
-    # it's possible Cython would be overflowing when the number is too large
-    number = 3_000_000
+    color_mapping = {
+        0: Fore.YELLOW,
+        1: Fore.CYAN,
+        2: Fore.GREEN,
+        3: Fore.MAGENTA,
+    }
 
     processor_count = multiprocessing.cpu_count()
     print(f"Doing math on {processor_count} processors.")
 
-    threads = []
-    for index in range(1, processor_count + 1):
-        threads.append(
-            Thread(
-                target=math_core.do_math,  # pylint: disable=I1101
-                args=(
-                    number * (index - 1) / processor_count,
-                    number * index / processor_count,
-                ),
-                daemon=True,
-            )
+    processor_count = min(processor_count, 4)
+    print(f"Doing math on {processor_count} processors.")
+
+    tasks = []
+    for index in range(processor_count):
+        task = Thread(
+            target=math_core.do_math,  # pylint: disable=I1101
+            args=(
+                int(NUMBER * index / processor_count),
+                int(NUMBER * (index + 1) / processor_count),
+                color_mapping[index],
+            ),
+            daemon=True,
         )
+        tasks.append(task)
 
-    for job in threads:
-        job.start()
+    for thread in tasks:
+        thread.start()
 
-    for job in threads:
-        job.join()
+    for thread in tasks:
+        thread.join()
 
-    dt = datetime.now() - t0
-    print(
-        (
-            f"Done in {dt.total_seconds():,.2f} seconds. "
-            f"(factor: {TIME_SPENT_BASIC/dt.total_seconds():,.2f}x)"
-        )
-    )
+    elapsed = datetime.now() - t0
+    print(f"{Fore.RESET}Done in {elapsed.total_seconds():,.2f} seconds. ")
+    print(f"(factor: {TIME_SPENT_BASIC / elapsed.total_seconds():,.2f}x)")
 
     return
 

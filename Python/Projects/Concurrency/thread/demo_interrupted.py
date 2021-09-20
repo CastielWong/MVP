@@ -11,7 +11,7 @@ from colorama import Fore
 
 def check_cancel() -> None:
     """Check if there is cancel."""
-    print(Fore.RED + "Press enter to cancel...", flush=True)
+    print(Fore.RED + "Press enter to cancel...")
     # monitor and capture input
     # so that it would return when enter is pressed
     input()
@@ -31,10 +31,7 @@ def generate_data(num: int, data: list) -> None:
 
         data.append((idx, curr_time))
 
-        print(
-            (f"{Fore.YELLOW}--- Generated record ({idx:-3}, {curr_time})"),
-            flush=True,
-        )
+        print(f"{Fore.YELLOW}--- Generated record ({idx:-3}, {curr_time})")
         time.sleep(random.random())  # nosec
 
     return
@@ -65,11 +62,8 @@ def process_data(num: int, data: list) -> None:
         elapsed = datetime.now() - moment
 
         print(
-            (
-                f"{Fore.CYAN}+++ Processed record ({item:-3}, {moment}) "
-                f"after {elapsed.total_seconds():,.2f} seconds."
-            ),
-            flush=True,
+            f"{Fore.CYAN}+++ Processed record ({item:-3}, {moment}) "
+            f"after {elapsed.total_seconds():,.2f} seconds."
         )
         time.sleep(0.5)
 
@@ -79,7 +73,7 @@ def process_data(num: int, data: list) -> None:
 def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
-    print(f"{Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.")
 
     data: list = []
 
@@ -100,13 +94,12 @@ def main() -> None:
             continue
 
         # stop when the abort thread is triggered
-        print("Cancelling on your request!", flush=True)
+        print("Cancelling on your request!")
         break
 
     elapsed = datetime.now() - t0
     print(
-        f"{Fore.WHITE}App exiting, total time: {elapsed.total_seconds():,.2f} seconds.",
-        flush=True,
+        f"{Fore.WHITE}App exiting, total time: {elapsed.total_seconds():,.2f} seconds."
     )
 
     return

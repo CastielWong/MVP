@@ -92,16 +92,12 @@ def validate_bank(accounts: List[Account], total: int, quiet: bool = False) -> N
     if current != total:
         print(
             f"{Fore.RED}"
-            f"ERROR: Inconsistent account balance: ${current:,} vs ${total:,}",
-            flush=True,
+            f"ERROR: Inconsistent account balance: ${current:,} vs ${total:,}"
         )
         return
 
     if not quiet:
-        print(
-            f"{Fore.YELLOW}All good: Consistent account balance: ${total:,}",
-            flush=True,
-        )
+        print(f"{Fore.YELLOW}All good: Consistent account balance: ${total:,}")
 
     return
 

@@ -52,18 +52,18 @@ def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
 
-    processor_count = multiprocessing.cpu_count()
-    print(f"There are {processor_count} processors in total.")
-
-    processor_count = min(processor_count, 4)
-    print(f"Doing math on {processor_count} processors.")
-
     color_mapping = {
         0: Fore.YELLOW,
         1: Fore.CYAN,
         2: Fore.GREEN,
         3: Fore.MAGENTA,
     }
+
+    processor_count = multiprocessing.cpu_count()
+    print(f"There are {processor_count} processors in total.")
+
+    processor_count = min(processor_count, 4)
+    print(f"Doing math on {processor_count} processors.")
 
     pool = multiprocessing.Pool()  # pylint: disable=R1732 (consider-using-with)
     tasks = []

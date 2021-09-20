@@ -19,7 +19,7 @@ async def get_html(episode_number: int) -> str:
     Returns:
         Text in HTML
     """
-    print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}", flush=True)
+    print(f"{Fore.YELLOW}Getting HTML for episode {episode_number}")
 
     url = f"https://talkpython.fm/{episode_number}"
 
@@ -40,7 +40,7 @@ def get_title(html: str, episode_number: int) -> str:
     Returns:
         Title of the episode
     """
-    print(f"{Fore.CYAN}Getting TITLE for episode {episode_number}", flush=True)
+    print(f"{Fore.CYAN}Getting TITLE for episode {episode_number}")
 
     soup = bs4.BeautifulSoup(html, "html.parser")
     header = soup.select_one("h1")
@@ -51,18 +51,18 @@ def get_title(html: str, episode_number: int) -> str:
     return header.text.strip()
 
 
-async def get_title_range_no_loop():
+async def get_title_range_no_loop() -> None:
     """Get titles of the specified range."""
     for e_n in range(150, 160):
         html = await get_html(e_n)
         title = get_title(html, e_n)
 
-        print(f"{Fore.WHITE}Title found: {title}", flush=True)
+        print(f"{Fore.WHITE}Title found: {title}")
 
     return
 
 
-async def get_title_range_with_loop(loop: AbstractEventLoop):
+async def get_title_range_with_loop(loop: AbstractEventLoop) -> None:
     """Get titles of the specified range with loop involved.
 
     Args:
@@ -75,7 +75,9 @@ async def get_title_range_with_loop(loop: AbstractEventLoop):
     for e_n, task in tasks:
         html = await task
         title = get_title(html, e_n)
-        print(f"{Fore.WHITE}Title found: {title}", flush=True)
+        print(f"{Fore.WHITE}Title found: {title}")
+
+    return
 
 
 def main() -> None:

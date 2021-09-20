@@ -25,7 +25,7 @@ async def generate_data(num: int, data: Queue, name: str = "Producer") -> None:
         name: name of this task
     """
     message = f"{Fore.YELLOW}Starting {name}..."
-    print(message, flush=True)
+    print(message)
 
     for idx in range(1, num + 1):
         curr_time = datetime.now()
@@ -45,7 +45,7 @@ async def process_data(num: int, data: Queue, name: str = "Consumer"):
         name: name of this task
     """
     message = f"{Fore.CYAN}Starting {name}..."
-    print(message, flush=True)
+    print(message)
 
     processed = 0
 
@@ -83,10 +83,7 @@ def main() -> None:
     loop.run_until_complete(task)
 
     elapsed = datetime.now() - t0
-    print(
-        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
-        flush=True,
-    )
+    print(f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.")
 
     return
 

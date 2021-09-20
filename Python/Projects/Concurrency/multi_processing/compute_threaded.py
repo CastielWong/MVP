@@ -51,11 +51,7 @@ def do_math(start: int = 0, stop: int = 10, color: AnsiFore = Fore.RESET) -> flo
 
 def main() -> None:
     """Execute the main workflow."""
-    processor_count = multiprocessing.cpu_count()
-    print(f"There are {processor_count} processors in total.")
-
-    processor_count = min(processor_count, 4)
-    print(f"Doing math on {processor_count} processors.")
+    t0 = datetime.now()
 
     color_mapping = {
         0: Fore.YELLOW,
@@ -64,7 +60,11 @@ def main() -> None:
         3: Fore.MAGENTA,
     }
 
-    t0 = datetime.now()
+    processor_count = multiprocessing.cpu_count()
+    print(f"There are {processor_count} processors in total.")
+
+    processor_count = min(processor_count, 4)
+    print(f"Doing math on {processor_count} processors.")
 
     tasks = []
     for index in range(processor_count):

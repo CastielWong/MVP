@@ -6,6 +6,7 @@ import math
 import time
 
 from colorama import Fore
+from colorama.ansi import AnsiFore
 import requests
 
 
@@ -19,35 +20,24 @@ def compute_some() -> None:
     return
 
 
-def download_some() -> None:
-    """Perform network intensive operation."""
-    print(f"{Fore.BLUE}Downloading...")
+def download_some(url: str, msg: str = "", color: AnsiFore = Fore.BLUE) -> None:
+    """Perform network intensive operation.
 
-    url = (
-        "https://talkpython.fm/episodes/show/174/"
-        "coming-into-python-from-another-industry-part-2"
-    )
+    Args:
+        url: url to download
+        msg: message to print
+        color: color to print
+    """
+    if not msg:
+        msg = "Downloading..."
+    print(f"{color}{msg}")
+
     resp = requests.get(url)
     resp.raise_for_status()
 
     text = resp.text
 
-    print(f"Downloaded (more) {len(text):,} characters.")
-
-    return
-
-
-def download_some_more() -> None:
-    """Perform more network intensive operation."""
-    print(f"{Fore.LIGHTBLUE_EX}Downloading more ...")
-
-    url = "https://pythonbytes.fm/episodes/show/92/will-your-python-be-compiled"
-    resp = requests.get(url)
-    resp.raise_for_status()
-
-    text = resp.text
-
-    print(f"Downloaded {len(text):,} characters.")
+    print(f"{color}Length of characters downloaded: {len(text):,}.")
 
     return
 
@@ -70,16 +60,25 @@ def main() -> None:
         compute_some()
 
     for _ in range(2):
-        download_some()
+        download_some(
+            url="https://talkpython.fm/episodes/show/102/effective-code-reviews",
+        )
 
     for _ in range(2):
-        download_some_more()
+        download_some(
+            url="https://pythonbytes.fm/episodes/show/92/will-your-python-be-compiled",
+            msg="Downloading more....",
+            color=Fore.LIGHTBLUE_EX,
+        )
 
     for _ in range(4):
         wait_some()
 
-    dt = datetime.now() - t0
-    print(f"{Fore.RESET}Synchronous version done in {dt.total_seconds():,.2f} seconds.")
+    elapsed = datetime.now() - t0
+    print(
+        f"{Fore.RESET}"
+        f"Synchronous version done in {elapsed.total_seconds():,.2f} seconds."
+    )
 
     return
 

@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 """Demonstrate how to easily swop between multithreading and multiprocessing."""
 from concurrent.futures import Future
-from concurrent.futures.process import ProcessPoolExecutor as PoolExecutor
+from concurrent.futures.process import ProcessPoolExecutor
+from concurrent.futures.thread import ThreadPoolExecutor
 import multiprocessing
 
+from colorama import Fore
 import requests
 import bs4
-
-# from concurrent.futures.thread import ThreadPoolExecutor as PoolExecutor
 
 
 def get_title(url: str) -> str:
@@ -22,9 +22,8 @@ def get_title(url: str) -> str:
     """
     process = multiprocessing.current_process()
     print(
-        f"Getting title from {url.replace('https://', '')}, "
-        f"PID: {process.pid}, ProcName: {process.name}",
-        flush=True,
+        f"{Fore.YELLOW}Getting title from {url:<30} | "
+        f"PID: {process.pid:>8} | ProcName: {process.name}"
     )
 
     resp = requests.get(
@@ -43,51 +42,58 @@ def get_title(url: str) -> str:
     soup = bs4.BeautifulSoup(html, features="html.parser")
     tag: bs4.Tag = soup.select_one("h1")
 
+    prefix = f"From {url:<30}:"
     if not tag:
-        return "NONE"
+        return f"{prefix} NONE"
 
     if not tag.text:
         anchor = tag.select_one("a")
         if anchor and anchor.text:
-            return anchor.text
+            return f"{prefix} {anchor.text}"
 
         if anchor and "title" in anchor.attrs:
-            return anchor.attrs["title"]
+            return f"{prefix} {anchor.attrs['title']}"
 
-        return "NONE"
+        return f"{prefix} NONE"
 
-    return tag.get_text(strip=True)
+    return f"{prefix} {tag.get_text(strip=True)}"
 
 
-def main() -> None:
-    """Execute the main workflow."""
+def main(mode: str) -> None:
+    """Execute the main workflow.
+
+    Args:
+        mode: either "process" or "thread"
+    """
+    pool_executor = {
+        "process": ProcessPoolExecutor(),
+        "thread": ThreadPoolExecutor(),
+    }
+    print(f"Running in mode: {Fore.GREEN}{mode}")
+
     urls = [
         "https://talkpython.fm",
         "https://pythonbytes.fm",
         "https://google.com",
         "https://realpython.com",
-        "https://training.talkpython.fm/",
+        "https://training.talkpython.fm",
     ]
 
     work = []
 
-    with PoolExecutor() as executor:
+    with pool_executor[mode] as executor:
         for url in urls:
-            # print(
-            #     f"Getting title from {url.replace('https', '')}",
-            #     end='... ',
-            #     flush=True,
-            # )
-            # title = get_title(url)
             future: Future = executor.submit(get_title, url)
             work.append(future)
 
-        print("Waiting for downloads...", flush=True)
+        print(f"{Fore.RESET}Waiting for downloads...")
 
-    print("Done", flush=True)
     for future in work:
-        print(f"{future.result()}", flush=True)
+        print(f"{Fore.CYAN}{future.result()}")
+
+    print(f"{Fore.RESET}Done")
 
 
 if __name__ == "__main__":
-    main()
+    main(mode="process")
+    # main(mode="thread")

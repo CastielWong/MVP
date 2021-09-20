@@ -17,12 +17,10 @@ def generate_data(num: int, data: list) -> None:
     """
     for idx in range(1, num + 1):
         curr_time = datetime.now()
+
         data.append((idx, curr_time))
 
-        print(
-            f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})",
-            flush=True,
-        )
+        print(f"{Fore.YELLOW}--- Generated record ({idx:-2}, {curr_time})")
         time.sleep(random.random())  # nosec
 
     return
@@ -46,11 +44,8 @@ def process_data(num: int, data: list) -> None:
         elapsed = datetime.now() - moment
 
         print(
-            (
-                f"{Fore.CYAN}+++ Processed record ({item:-2}, {moment}) "
-                f"after {elapsed.total_seconds():,.2f} seconds."
-            ),
-            flush=True,
+            f"{Fore.CYAN}+++ Processed record ({item:-2}, {moment}) "
+            f"after {elapsed.total_seconds():,.2f} seconds."
         )
         time.sleep(0.5)
 
@@ -60,17 +55,14 @@ def process_data(num: int, data: list) -> None:
 def main() -> None:
     """Execute the main workflow."""
     t0 = datetime.now()
-    print(f"{Fore.WHITE}App started.", flush=True)
+    print(f"{Fore.WHITE}App started.")
 
     data: list = []
     generate_data(20, data)
     process_data(20, data)
 
     elapsed = datetime.now() - t0
-    print(
-        f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.",
-        flush=True,
-    )
+    print(f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.")
 
     return
 

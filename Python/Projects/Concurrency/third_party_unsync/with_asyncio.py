@@ -6,6 +6,7 @@ import asyncio
 import math
 
 from colorama import Fore
+from colorama.ansi import AnsiFore
 import aiohttp
 import requests
 
@@ -20,14 +21,15 @@ async def compute_some() -> None:
     return
 
 
-async def download_some() -> None:
-    """Perform network intensive operation."""
-    print(f"{Fore.BLUE}Downloading...")
+async def download_some(url: str, color: AnsiFore = Fore.BLUE) -> None:
+    """Perform network intensive operation.
 
-    url = (
-        "https://talkpython.fm/episodes/show/174/"
-        "coming-into-python-from-another-industry-part-2"
-    )
+    Args:
+        url: url to download
+        color: color to print
+    """
+    print(f"{color}Downloading...")
+
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
@@ -36,22 +38,26 @@ async def download_some() -> None:
 
             text = await resp.text()
 
-    print(f"Downloaded (more) {len(text):,} characters.")
+    print(f"{color}Length of characters downloaded: {len(text):,}.")
 
     return
 
 
-async def download_some_more() -> None:
-    """Perform more network intensive operation."""
-    print(f"{Fore.LIGHTBLUE_EX}Downloading more ...")
+async def download_some_more(url: str, color: AnsiFore = Fore.LIGHTBLUE_EX) -> None:
+    """Perform more network intensive operation.
 
-    url = "https://pythonbytes.fm/episodes/show/92/will-your-python-be-compiled"
+    Args:
+        url: url to download
+        color: color to print
+    """
+    print(f"{color}Downloading more ...")
+
     resp = requests.get(url)
     resp.raise_for_status()
 
     text = resp.text
 
-    print(f"Downloaded {len(text):,} characters.")
+    print(f"{color}Length of characters downloaded: {len(text):,}.")
 
     return
 
@@ -78,18 +84,28 @@ def main() -> None:
         tasks.append(loop.create_task(compute_some()))
 
     for _ in range(2):
-        tasks.append(loop.create_task(download_some()))
+        tasks.append(
+            loop.create_task(
+                download_some(url="https://talkpython.fm/episodes/show/102")
+            )
+        )
 
     for _ in range(2):
-        tasks.append(loop.create_task(download_some_more()))
+        tasks.append(
+            loop.create_task(
+                download_some_more(url="https://pythonbytes.fm/episodes/show/92")
+            )
+        )
 
     for _ in range(4):
         tasks.append(loop.create_task(wait_some()))
 
     loop.run_until_complete(asyncio.gather(*tasks))
 
-    dt = datetime.now() - t0
-    print(f"{Fore.RESET}`asyncio` version done in {dt.total_seconds():,.2f} seconds.")
+    elapsed = datetime.now() - t0
+    print(
+        f"{Fore.RESET}`asyncio` version done in {elapsed.total_seconds():,.2f} seconds."
+    )
 
     return
 
