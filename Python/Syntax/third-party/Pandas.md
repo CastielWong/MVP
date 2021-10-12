@@ -3,6 +3,11 @@
 - [Meta](#meta)
 - [Indexing](#indexing)
 - [Manipulation](#manipulation)
+  - [Table Join](#table-join)
+  - [Drop](#drop)
+  - [Map](#map)
+  - [Pivot](#pivot)
+- [GroupBy](#groupby)
 - [Null](#null)
 - [Regex](#regex)
 - [Reference](#reference)
@@ -115,6 +120,9 @@ print(df[["{col1}", "{col2}"]])
 print(df.iloc[:, 0:2])
 print(df.loc[:, ["{col1}", "{col2}"]])
 
+df.loc["{index}"]
+df.loc["{index}", "{col}"]
+df.loc[["{index1}", "{index3}"], ["{colB}", "{colC}"]]
 
 df.loc[df["seq"] == "baz"]
 df.loc[df["id"].isin([1, 6])]
@@ -124,19 +132,108 @@ df.iloc[0:2]["value"]
 
 # retrieve the index who has the maximum value for each column
 df.idxmax()
+# set index column(s) to column(s) if not drop
+df.reset_index(drop=False)
 
-df.reset_index()
+# append a new index level
+df.set_index(keys="{col}", append=True, inplace=True)
+# reorder indexes if it's MultiIndex
+df.reorder_levels(["{index2}", "{index1}"])
 ```
 
 
 
+
+
 ## Manipulation
+
+### Table Join
+It's recommended to apply `concat` over `join` or `merge` when joining multiple tables:
+- `concat` performs much quicker than `join` and `merge`, performance of `join` and `merge` are similar
+- It accepts a list of Series/DataFrames, which makes the process easier
+- It works as full outer join by default to avoid data loss
+- However, `join` would be preferred if there are duplicate column names, since `concat` wouldn't be able to tell the difference.
+
+Sample data to test:
+```py
+series = []
+for i in range(100):
+    a = pd.Series([1, 2, 3], index=[1, 3, 4], name=f"a_{i}")
+    b = pd.Series(["a", "b", "c"], index=[1, 3, 5], name=f"b_{i}")
+    c = pd.Series(["apple", "berry", "coco", "date"], index=[1, 2, 3, 4], name=f"c_{i}")
+    series.append(a)
+    series.append(b)
+    series.append(c)
+
+# use `concat`
+df_concat = pd.concat(objs=series, axis=1)
+
+# use `join`
+df_join = pd.DataFrame(index=[1, 3, 4, 5])
+for i in series:
+    df_join = df_join.join(other=i, how="left")
+
+# use `merge`
+df_merge = pd.DataFrame(index=[1, 3, 4, 5])
+for i in series:
+    df_merge = df_merge.merge(right=i, how="left", left_index=True, right_index=True)
+
+# # merge two DataFrame
+# combined = pd.merge(df1, df2, how='left', on=['{column}'])
+```
+
+### Drop
+```py
+# drop row
+df.drop("{row}", axis=0, inplace=True)
+# drop column
+df.drop("{col}", axis=1, inplace=True)
+```
+
+### Map
 ```py
 # one to one mapping
 df['{col}'] = df['{col}'].map({"{value1}": 1, "{value2}": 2})
 
-# merge two DataFrame
-combined = pd.merge(df1, df2, how='left', on=['{column}'])
+```
+
+### Pivot
+
+```py
+df = pd.DataFrame(data={
+    "Day": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"],
+    "Apple": [1, 2, 2, 5, 3],
+    "Berry": [.5, .3, .5, .8, 3.8],
+    "Coconut": [15.5, 12.3, 13.5, 16.0, 13.6]
+})
+
+df_melted = df.melt(
+    id_vars=["Day"],
+    value_vars=["Berry", "Coconut"],
+    var_name=["Fruit"], # can be MultiIndex
+    value_name="Price",
+)
+
+df_pivot = df_melted.pivot(index="Day", columns=["Fruit"])
+# remove the unneeded MultiIndex by resetting
+df_pivot = df_pivot["Price"].reset_index()
+
+```
+
+
+## GroupBy
+
+```py
+# reset index based on the group
+check = pd.DataFrame(
+    data={
+        "group": [1, 1, 2, 1, 2],
+        "num": [1, 2, 3, 4, 5]
+    },
+    index=[1, 2, 3, 8, 9]
+)
+
+check.groupby("group").apply(lambda x: x.reset_index(drop=True))
 ```
 
 
@@ -169,3 +266,5 @@ df = df[~df["{column}"].str.contains(pattern, flags=re.I | re.M)]
 
 ## Reference
 - 400x times faster Pandas Data Frame Iteration: https://towardsdatascience.com/400x-time-faster-pandas-data-frame-iteration-16fb47871a0a
+- Reshaping Pandas Data frames with Melt & Pivot: https://medium.com/@durgaswaroop/reshaping-pandas-dataframes-melt-and-unmelt-9f57518c7738
+- Merge, join, concatenate and compare: https://pandas.pydata.org/pandas-docs/stable/user_guide/merging.html
