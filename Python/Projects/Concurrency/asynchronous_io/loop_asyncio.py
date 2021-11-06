@@ -47,6 +47,8 @@ async def process_data(num: int, data: Queue, name: str = "Consumer") -> None:
         processed += 1
         await asyncio.sleep(0)
 
+    print(f"Result after processed: {processed:,}")
+
     return
 
 
@@ -76,6 +78,7 @@ def main() -> None:
     loop.run_until_complete(task)
 
     elapsed = datetime.now() - t0
+
     print(f"{Fore.WHITE}Finished, total time: {elapsed.total_seconds():,.2f} seconds.")
 
     return

@@ -1,4 +1,5 @@
 
+- [Administration](#administration)
 - [Memory](#memory)
 - [Comprehension](#comprehension)
 - [Generator](#generator)
@@ -9,6 +10,22 @@
 - [Miscellaneous](#miscellaneous)
 - [Profiling](#profiling)
 - [Reference](#reference)
+
+## Administration
+
+```py
+import platform
+import sys
+
+from importlib_metadata import version
+
+print(platform.platform())
+print("-" * 80)
+print(platform.python_version())
+print(sys.version)
+print("-" * 80)
+print(version("{module}"))
+```
 
 
 ## Memory
