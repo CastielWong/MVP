@@ -89,7 +89,7 @@ def main() -> None:
         thread.start()
         thread.join(0.001)
 
-    while any((thread.is_alive() for thread in jobs)):
+    while any(thread.is_alive() for thread in jobs):
         if abort_thread.is_alive():
             continue
 
