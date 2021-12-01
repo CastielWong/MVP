@@ -1,22 +1,48 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Extract url links from Medium marketing email text."""
+from argparse import ArgumentParser
 from typing import Dict
 import re
+import subprocess  # nosec
 
-START_FACTOR = 0
-START_FACTOR = 1
-START_FACTOR = 2
-START_FACTOR = 3
-START_FACTOR = 4
-START_FACTOR = 5
-# START_FACTOR = 6
+MULTIPLIER = 4  # define how many pages open at a time
 
 
-MULTIPLIER = 4
-START_INDEX = START_FACTOR * MULTIPLIER
+def create_parser() -> ArgumentParser:
+    """Create the parser."""
+    parser = ArgumentParser(
+        description=(
+            "Extract Medium links automatically then access through Google Chrome "
+            '"Incognito" mode'
+        )
+    )
+    parser.add_argument(
+        "--source", type=str, default="source.txt", help="specify the raw source file"
+    )
+
+    mandatory = parser.add_argument_group("mandatory arguments")
+    mandatory.add_argument(
+        "-f",
+        "--factor",
+        required=True,
+        type=int,
+        default=0,
+        help="set the factor to the start index",
+    )
+
+    return parser
 
 
 def extract_post(text: str) -> str:
+    """Extract post from the text.
+
+    Args:
+        text: raw text from Medium
+
+    Returns:
+        HTTPS link extracted
+    """
     # pattern_v1 = r"\((https://medium\.com/(.)+)\?source=3D[=]?email.+\&sectionName=3D.+\)"    # noqa: E501
     pattern = r"<a href=3D\"(https://medium\.com/[^?]+)\?source=3Demail.+none;\">"
     matcher = re.search(pattern, text, re.IGNORECASE)
@@ -30,6 +56,14 @@ def extract_post(text: str) -> str:
 
 
 def retrieve_posts(source: str) -> Dict[str, int]:
+    """Retrieve posts from Medium raw text.
+
+    Args:
+        source: the raw source text
+
+    Returns:
+        Dictionary mapping from web link to index number
+    """
     mapping = {}
 
     counter = 0
@@ -71,8 +105,11 @@ def retrieve_posts(source: str) -> Dict[str, int]:
 
 
 def open_link_in_chrome_incognito(url: str) -> None:
-    import subprocess
+    """Open the link via Incognito mode in Google Chrome.
 
+    Args:
+        url: the url link to access
+    """
     commands = [
         "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         "--args",
@@ -80,19 +117,26 @@ def open_link_in_chrome_incognito(url: str) -> None:
         url,
     ]
 
-    subprocess.run(commands)
+    subprocess.check_output(commands)  # nosec
+
+    return
 
 
-def main():
-    source = "source.txt"
-    # source = "previous.txt"
+def main(source: str, factor: int) -> None:
+    """Execute as the entry point.
+
+    Args:
+        source: file path which stores raw text acquired from Medium marketing email
+        factor: factor used to calculate the start index
+    """
+    start_index = factor * MULTIPLIER
 
     posts = retrieve_posts(source)
 
     counter = 0
     for post, index in posts.items():
         # start from the index indicated
-        if index < START_INDEX:
+        if index < start_index:
             continue
 
         # stop when the limit is reached
@@ -103,6 +147,11 @@ def main():
         open_link_in_chrome_incognito(post)
         counter += 1
 
+    return
+
 
 if __name__ == "__main__":
-    main()
+    args_parser = create_parser()
+    args = args_parser.parse_args()
+
+    main(source=args.source, factor=args.factor)

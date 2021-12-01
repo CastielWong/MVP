@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Demonstrate the construction of a parser."""
 from argparse import ArgumentParser
 
 
 def create_parser() -> ArgumentParser:
+    """Create the parser."""
     parser = ArgumentParser(description="Sample argument parser")
-    parser.add_argument("x", metavar="X", type=float, help="the base")
-    parser.add_argument("y", metavar="Y", type=int, help="the exponent")
+    parser.add_argument("-v", "--version", action="version", version="v0.0.1")
+
+    mandatory = parser.add_argument_group("mandatory")
+    mandatory.add_argument("x", metavar="X", type=float, help="the base")
+    mandatory.add_argument("y", metavar="Y", type=int, help="the exponent")
+
     parser.add_argument(
         "integers",
         metavar="N",
@@ -28,6 +34,7 @@ def create_parser() -> ArgumentParser:
         type=str,
         choices=["value", "equation"],
         default="value",
+        required=True,
         help="print either a final value or the equation (default: only the value)",
     )
     parser.add_argument(
@@ -42,6 +49,7 @@ def create_parser() -> ArgumentParser:
 
 
 def main():
+    """Execute as the entry point."""
     parser = create_parser()
 
     args = parser.parse_args()
