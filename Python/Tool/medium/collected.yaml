@@ -2,23 +2,29 @@
 %YAML 1.1
 ---
 Technique:
-  - title: REST security Basics
-    url: https://medium.com/@yellow/rest-security-basics-f59013850c4e
-  - title: Evolutionary Decision Trees
-    url: https://towardsdatascience.com/evolutionary-decision-trees-when-machine-learning-draws-its-inspiration-from-biology-7d427fa7554b
-  - title: Not Push Unencrypted Secrets into Git
-    url: https://medium.com/faun/foolproof-method-to-not-push-unencrypted-secrets-into-git-34309d2c3a3b
-  - title: This Is How I Hacked My Neighbors Computer
-    url: https://medium.com/bugbountywriteup/this-is-how-i-hacked-my-neighbors-computer-a823e2054d15
-  - title: Persistent Python Backdoor
-    url: https://medium.com/python-in-plain-english/persistent-python-backdoor-447814ed6b93
+- title: REST security Basics
+  url: https://medium.com/@yellow/rest-security-basics-f59013850c4e
+- title: Evolutionary Decision Trees
+  url: https://towardsdatascience.com/evolutionary-decision-trees-when-machine-learning-draws-its-inspiration-from-biology-7d427fa7554b
+- title: Not Push Unencrypted Secrets into Git
+  url: https://medium.com/faun/foolproof-method-to-not-push-unencrypted-secrets-into-git-34309d2c3a3b
+- title: This Is How I Hacked My Neighbors Computer
+  url: https://medium.com/bugbountywriteup/this-is-how-i-hacked-my-neighbors-computer-a823e2054d15
+- title: Persistent Python Backdoor
+  url: https://medium.com/python-in-plain-english/persistent-python-backdoor-447814ed6b93
+- title: How To Track Phone Number Location With Python
+  url: https://python.plainenglish.io/how-to-track-phone-number-location-with-python-526bbf06c89e
+- title: 12 mind blowing things you didn’t know you could do with your iPhone
+  url: https://medium.com/macoclock/12-mind-blowing-things-you-didnt-know-you-could-do-with-your-iphone-19cdf5ecf3a9
+- title: 5 new Git commands and 1 tip you’ll use every day
+  url: https://blog.argoproj.io/5-new-git-commands-and-1-tip-youll-use-every-day-3c28e97c9321
 Privacy:
-  - title: Build Your Own VPN Using GCP
-    url: https://betterprogramming.pub/build-your-own-vpn-using-google-cloud-platform-2e22b0a7d489
-  - title: How to Make a Cloud-Free Security Camera for $3
-    url: https://debugger.medium.com/how-to-make-a-cloud-free-security-camera-for-3-a2f2b467bfa5
-  - title: How to get off Google and redo your personal tech stack
-    url: https://medium.com/swlh/how-to-get-off-google-and-redo-your-personal-tech-stack-9327ef12f3e0
+- title: Build Your Own VPN Using GCP
+  url: https://betterprogramming.pub/build-your-own-vpn-using-google-cloud-platform-2e22b0a7d489
+- title: How to Make a Cloud-Free Security Camera for $3
+  url: https://debugger.medium.com/how-to-make-a-cloud-free-security-camera-for-3-a2f2b467bfa5
+- title: How to get off Google and redo your personal tech stack
+  url: https://medium.com/swlh/how-to-get-off-google-and-redo-your-personal-tech-stack-9327ef12f3e0
 Life:
-  - title: 9 micro habits
-    url: https://medium.com/live-your-life-on-purpose/9-micro-habits-that-will-completely-change-your-life-in-a-year-6bd291aee5c1
+- title: 9 micro habits
+  url: https://medium.com/live-your-life-on-purpose/9-micro-habits-that-will-completely-change-your-life-in-a-year-6bd291aee5c1
