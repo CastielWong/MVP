@@ -1,5 +1,7 @@
 #!/usr/bin/env/ python
 # -*- coding: utf-8 -*-
+"""Demonstrate application uses logging."""
+# pylint: disable=W1203(logging-fstring-interpolation)
 import logging
 import os
 
@@ -8,20 +10,27 @@ import application as app
 
 
 def log_from_general() -> None:
+    """Showcase a simple log with different levels."""
     # make sure the name matches the customization
     logger = utility.get_logger("LogDemo")
 
     message = "from LogDemo"
     logger.debug(f"DEBUG - {message}")
     logger.info(f"INFO - {message}")
-    logger.warning(f"WARNING - {message}")
-    logger.error(f"ERROR - {message}")
-    logger.critical(f"CRITICAL - {message}")
+    logger.warning(f"WARNING - {message}", exc_info=True)
+    logger.exception(f"ERROR - {message}")
+    logger.error(f"ERROR - {message}", exc_info=True)  # same as `exception()`
+    logger.critical(f"CRITICAL - {message}", exc_info=True)
 
     return
 
 
 def redirect_root_log(keep_log: bool = True) -> None:
+    """Redirect root log via handler.
+
+    Args:
+        keep_log: whether to remove existing log
+    """
     logger = logging.root
 
     # find then remove current file handler(s)
@@ -45,10 +54,11 @@ def redirect_root_log(keep_log: bool = True) -> None:
 
         logger.addHandler(file_handler)
 
-        return
+    return
 
 
 def main() -> None:
+    """Execute as the entry point."""
     app.log_from_root("from application")
     log_from_general()
 

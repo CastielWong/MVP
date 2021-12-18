@@ -1,4 +1,5 @@
 
+- [Printing](#printing)
 - [Literals](#literals)
   - [f-string](#f-string)
   - [r-string](#r-string)
@@ -21,6 +22,45 @@
 - [Copy](#copy)
 - [Exception](#exception)
 - [Reference](#reference)
+
+
+## Printing
+There are two ways to keep printing message overwrite within a line.
+The fitted case for it will be monitoring jobs finished in different time.
+Note that there will be IO issue in the `print` example code when `time.sleep()` applied.
+So the example below use a larger number in iteration to demonstrate the effect.
+```py
+import sys
+
+ITERATION = 2_000_000
+
+print("start\t\t- `sys.stdout` way...")
+for i in range(ITERATION):
+    sys.stdout.write(f"\tprint out {i:<8,}\r")
+print("complete\t- `sys.stdout` way.")
+
+print("-" * 80)
+
+print("start\t\t- `print` way...")
+for i in range(ITERATION):
+    print(f"\tprint out {i:<8,}", end="\r", flush=True)
+print("complete\t- `print` way.")
+```
+
+Apply `sys.stdout` is more flexible for status bar:
+```py
+import sys
+import time
+
+for i in range(1, 21):
+    # the new line must print ahead
+    sys.stdout.write("\r")
+
+    sys.stdout.write(f"[{'=' * i:<20}] {5 * i}%")
+    # sys.stdout.write(f"print out {i:<5}")
+
+    time.sleep(.2)
+```
 
 
 ## Literals
