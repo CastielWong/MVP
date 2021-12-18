@@ -44,3 +44,34 @@ def debug(func):
         return value
 
     return wrapper
+
+
+def slow(_func=None, *, num_of_second: float = 1):
+    """Slow down the function by 1 second before calling."""
+
+    def inner_decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs) -> Any:
+            time.sleep(num_of_second)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    if _func is None:
+        return inner_decorator
+    return inner_decorator(_func)
+
+
+def singleton(cls):
+    """Make a class a Singleton class (only one instance)."""
+
+    @functools.wraps(cls)
+    def wrapper_singleton(*args, **kwargs):
+        if wrapper_singleton.instance is None:
+            print("No existing instance, one is creating...")
+            wrapper_singleton.instance = cls(*args, **kwargs)
+
+        return wrapper_singleton.instance
+
+    wrapper_singleton.instance = None
+    return wrapper_singleton
