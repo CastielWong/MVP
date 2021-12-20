@@ -1,5 +1,7 @@
 
 - [Printing](#printing)
+  - [Status Bar](#status-bar)
+  - [Colorization](#colorization)
 - [Literals](#literals)
   - [f-string](#f-string)
   - [r-string](#r-string)
@@ -25,6 +27,8 @@
 
 
 ## Printing
+
+### Status Bar
 There are two ways to keep printing message overwrite within a line.
 The fitted case for it will be monitoring jobs finished in different time.
 Note that there will be IO issue in the `print` example code when `time.sleep()` applied.
@@ -59,8 +63,27 @@ for i in range(1, 21):
     sys.stdout.write(f"[{'=' * i:<20}] {5 * i}%")
     # sys.stdout.write(f"print out {i:<5}")
 
+    # sys.stdout.flush()  # would be necessary on some system
     time.sleep(.2)
 ```
+
+### Colorization
+
+```py
+from colorama import Fore, Back, Style
+
+print(Fore.BLACK, end="")
+print(Back.BLUE, end="")
+print(Style.DIM, end="")
+
+print(f"Text in red")
+print(f"Background in greed")
+print(f"Style in dim")
+
+print(Style.RESET_ALL, end="")
+print("Back to normal")
+```
+
 
 
 ## Literals

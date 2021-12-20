@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""The context setup for subpart tests."""
 from os.path import dirname
-from typing import TypeVar
+from typing import Generator, TypeVar
 
 import boto3
 import pytest
@@ -14,8 +15,9 @@ ResourceS3 = TypeVar("ResourceS3")
 
 
 @pytest.fixture(scope="package")
-def mock_s3_resource() -> ResourceS3:
-    s3_resource = boto3.resource(
+def mock_s3_resource() -> Generator[ResourceS3, None, None]:
+    """Mock to provide the S3 resource object."""
+    s3_resource = boto3.resource(  # nosec
         "s3",
         region_name="us-east-1",
         aws_access_key_id="mock-access-key",
