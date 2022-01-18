@@ -8,6 +8,7 @@ This documentation is to suggest/recommend the good coding style in Python.
 - [Main Function](#main-function)
 - [Type Hinting](#type-hinting)
 - [Docstring](#docstring)
+- [SemVer](#semver)
 - [Docker](#docker)
 - [Reference](#reference)
 
@@ -110,6 +111,17 @@ def demo_function(arg1: int, arg2: float) -> [str, int]:
 ```
 
 
+## SemVer
+SemVer, which refers to __Semantic Versioning__, is the phrase describe how to version the system.
+
+SemVer is a 3-component system in the format of "x.y.z" where:
+- "x" stands for a __major__ version
+- "y" stands for a __minor__ version
+- "z" stands for a __patch__
+
+Note that it should be considered as development phase when the version is before __1.0.0__.
+
+
 ## Docker
 For docker-compose, the configuration order structure is suggested to be:
 - config related to container
@@ -159,7 +171,8 @@ networks:
 - The Meaning of Underscores: https://dbader.org/blog/meaning-of-underscores-in-python
 - Functional Programming HOWTO: https://docs.python.org/3/howto/functional.html#introduction
 - Defining Main Functions in Python: https://realpython.com/python-main-function/#summary-of-python-main-function-best-practices
-- How to Write a Git Commit Message: https://chris.beams.io/posts/git-commit/
+- How to Write a Git Commit Message: https://cbea.ms/git-commit/
 - Google Python Style Guide: https://google.github.io/styleguide/pyguide.html
 - Python Code Quality - Tools & Best Practices: https://realpython.com/python-code-quality/
 - The Big Ol' List of Rules: https://www.flake8rules.com/
+- Semantic Versioning: Why You Should Be Using it: https://www.sitepoint.com/semantic-versioning-why-you-should-using/

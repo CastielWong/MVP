@@ -222,16 +222,20 @@ df_pivot = df_pivot["Price"].reset_index()
 ## GroupBy
 
 ```py
-# reset index based on the group
 check = pd.DataFrame(
     data={
         "group": [1, 1, 2, 1, 2],
-        "num": [1, 2, 3, 4, 5]
+        "user": ["a", "b", "c", "d", "e"],
+        "num": [1, 2, 3, 4, 5],
     },
     index=[1, 2, 3, 8, 9]
 )
 
+# reset index based on the group
 check.groupby("group").apply(lambda x: x.reset_index(drop=True))
+
+# group nominal values in the same column
+check.groupby(by=["group"])[["user"]].agg(lambda x: " | ".join(x))
 ```
 
 

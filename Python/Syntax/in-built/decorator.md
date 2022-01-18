@@ -119,3 +119,4 @@ for function in [sum_without_calling, sum_with_calling, sum_with_calling_positio
 
 ## Reference
 - Primer on Python Decorators: https://realpython.com/primer-on-python-decorators/#fancy-decorators
+- Python Decorators Examples: https://static.realpython.com/decorators-cheatsheet.pdf

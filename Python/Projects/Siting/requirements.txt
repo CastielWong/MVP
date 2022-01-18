@@ -1,0 +1,5 @@
+# -*- coding: utf-8 -*-
+--index-url https://pypi.org/simple
+livereload~=2.6.3   # reload automatically
+myst-parser~=0.16.1 # render restructured text
+sphinx~=4.3.2

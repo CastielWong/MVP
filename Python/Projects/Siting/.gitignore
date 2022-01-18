@@ -1,0 +1,7 @@
+
+# ignore file/directory sphinx generated
+_*
+/conf.py
+/index.rst
+Makefile
+make.bat
