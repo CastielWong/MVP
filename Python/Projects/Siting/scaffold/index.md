@@ -2,7 +2,9 @@
 # Siting Homepage
 This is a demo page for Siting.
 
-There is a logo at {ref}`logo-role`
+Check how to work with {ref}`linkage`.
+
+There is a logo at {ref}`logo-role`.
 
 ```{toctree}
 :maxdepth: 2
