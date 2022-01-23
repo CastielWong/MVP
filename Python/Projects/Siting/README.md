@@ -5,7 +5,11 @@ Start the project from very beginning:
    - "Project name"
    - "Author name(s)"
 2. Add `"myst_parser"` to `extensions` inside "conf.py"
-3. Create a new markdown page named "xxx.md", then place "xxx" under section "toctree" inside index page, either "index.rst" or "index.md", to add the hyperlink to the page
+3. Create a new markdown page named "xxx.md", then place "xxx" (sphinx will find the name matched exactly) under section "toctree" inside index page, either "index.rst" or "index.md", to add the hyperlink to the page
 4. Run `python3 liver_load.py` for testing
 
 Anything else can be blank.
+
+## Reference
+- Sphinx: https://www.sphinx-doc.org/en/master/index.html
+- reStructuredText: https://docutils.sourceforge.io/rst.html
