@@ -16,6 +16,7 @@ author = "Castiel"
 extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
 ]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_static_path = ["_static"]
@@ -24,3 +25,8 @@ templates_path = ["_templates"]
 myst_enable_extensions = [
     "colon_fence",
 ]
+myst_url_schemes = ["http", "https"]
+
+intersphinx_mapping = {
+    "sphinx": ("https://www.sphinx-doc.org/en/master", None),
+}

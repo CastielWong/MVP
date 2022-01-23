@@ -11,6 +11,7 @@ This is the demo page to demonstrate markdown syntax.
   - [Code Block](#code-block)
   - [Include File](#include-file)
   - [Document Module](#document-module)
+  - [Inter Link](#inter-link)
 
 ## Markdown
 
@@ -127,7 +128,6 @@ emphasize-lines: 1, 9-11
 The `:lines:` matches lines in the original file, while `:linenos:` is generate new line numbers in sequence based on the lines specified.
 And `:emphasize-lines:` is based on `:linenos:` other than `:lines:`.
 
-
 ### Document Module
 Sphinx has a feature to include documentation from docstring within the code.
 To turn on such feature, add `"sphinx.ext.autodoc"` under `extensions` in "conf.py".
@@ -138,3 +138,10 @@ Since there is no a direct wrapper for "autodoc" to be expressed in markdown, re
 .. autoclass:: sample.Demo
     :members:
 ```
+
+### Inter Link
+To turn on the feature for interlinks (deep links into a section of the remote document), add `"sphinx.ext.intersphinx"` under `extensions` in "conf.py".
+
+Run `sphinx-build -a . _build` to load intersphinx inventory.
+
+Then the new link will be shown on [Sphinx roles](sphinx:ref-role) or [](sphinx:ref-role).
