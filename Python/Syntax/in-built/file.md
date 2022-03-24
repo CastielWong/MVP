@@ -2,6 +2,7 @@
 - [Meta](#meta)
 - [IO](#io)
   - [Standard](#standard)
+  - [Text](#text)
   - [CSV](#csv)
   - [JSON](#json)
   - [YAML](#yaml)
@@ -41,6 +42,24 @@ with open("{file}", "a") as file_handler:
 with open("{file}", "r+") as file_handler:
     file_handler.seek(0, os.SEEK_END)
     file_handler.write("checking\n")
+```
+
+### Text
+```py
+import io
+
+lines = [
+    "abc",
+    "qwe",
+    "123",
+]
+
+f_r = io.StringIO("\n".join(lines))
+
+line = " "
+while line:
+    line = f_r.readline()
+    print(repr(line))
 ```
 
 ### CSV

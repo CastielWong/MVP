@@ -16,11 +16,34 @@ from core.subpart import auxiliary  # noqa: E402
 
 ResourceS3 = TypeVar("ResourceS3")
 
+_FILE_LINES = [f"0{x}" if x < 10 else str(x) for x in range(1, 21)]
 
 _MOCKING_CONTENT = {
     "success": {"url": "https://httpbin.org/anything", "code": 200},
     "failure": {"url": "https://httpbin.org/nothing", "code": 404},
 }
+
+
+def test_get_content_in_range(mocker: MockerFixture):
+    """Verify content retrieving is functioning well.
+
+    Args:
+        mocker: fixture used to mock
+    """
+    mock_file = mocker.mock_open(read_data="\n".join(_FILE_LINES))
+    mocker.patch(target="core.subpart.auxiliary.open", new=mock_file)
+
+    results = auxiliary.get_content_in_range(
+        file_name="dummy",
+        start=2,
+        end=10,
+    )
+
+    assert len(results) == 9
+    assert results[0].strip() == "02"
+    assert results[-1].strip() == "10"
+
+    return
 
 
 def test_get_url_mock(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
@@ -44,7 +67,7 @@ def test_get_url_mock(mocker: MockerFixture, mock_config_conn: Dict[str, Dict]):
 
         return response
 
-    mocker.patch("requests.Session.get", mock_session_get)
+    mocker.patch(target="requests.Session.get", new=mock_session_get)
     res = auxiliary.get_url(url=mock_config_conn["remote"])
 
     assert res.status_code == 200

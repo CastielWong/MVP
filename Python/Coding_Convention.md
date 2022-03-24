@@ -8,6 +8,7 @@ This documentation is to suggest/recommend the good coding style in Python.
 - [Main Function](#main-function)
 - [Type Hinting](#type-hinting)
 - [Docstring](#docstring)
+- [Testing](#testing)
 - [SemVer](#semver)
 - [Docker](#docker)
 - [Reference](#reference)
@@ -110,6 +111,19 @@ def demo_function(arg1: int, arg2: float) -> [str, int]:
     pass
 ```
 
+
+## Testing
+Here is the general cases to refer when developing unit tests:
+- happy path:
+  - parameter - single
+  - parameter - multiple in order
+  - parameter - multiple in disorder
+  - parameter - all
+- corner case:
+  - parameter - null
+  - parameter - missing
+  - parameter - extra
+  - parameter - different types
 
 ## SemVer
 SemVer, which refers to __Semantic Versioning__, is the phrase describe how to version the system.
