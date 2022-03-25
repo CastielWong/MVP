@@ -1,5 +1,14 @@
 
-This is to provision a CentOS VM with Python3 installed.
+Files inside "sandbox" are used to provision a CentOS VM with Python3 installed.
+
+
+## Scripts
+
+Remove a list of files/directories:
+```sh
+sh prune_dirs.sh <file.txt>
+```
+
 
 ## Reference
 - CentOS: https://hub.docker.com/_/centos
