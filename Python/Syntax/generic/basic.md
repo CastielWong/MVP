@@ -197,10 +197,12 @@ print(checking[22:22+16].decode("utf-8"))               # "value_123456789a"
 
 ### Basics
 ```py
-a = 3 / 2       # 1.5
-a = 3 // 2      # 1
+a = 11 / 3      # 3.6666666666666665
+a = 11 % 3      # 2
+a = 11 // 3     # 3
 a = 3 ** 2      # 9
 a = 3 << 1      # 6
+a = 3 ^ 6       # 5 (0011 & 0110 = 0101)
 a = 100_000     # 100,000
 a = 2.99e8      # 299,000,000.0
 a = 4.2e-4      # 0.00042
@@ -399,7 +401,7 @@ print(sys.argv)
 ```
 
 ### Variadic
-There are two different types of arguments in variadic functions: Positinal and Keyword.
+There are two different types of arguments in variadic functions: Positional and Keyword.
 - `*`
     - usually set as `args` for conventional
     - it's used to pack elements if it's in the function signature

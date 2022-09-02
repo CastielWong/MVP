@@ -17,8 +17,11 @@ echo $SHELL
 # convert date to format specified
 date --date='2000-12-31 01:23:45.123456+00:00' -u +'%Y%m%dT%H%M%S'
 
-# display disk usage
+# display disk usage in human readable
 du -h
+# display disk usage in bytes
+du --block-size=1
+
 
 # check process
 ps aux

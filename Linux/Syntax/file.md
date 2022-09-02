@@ -81,8 +81,9 @@ popd
 # pop out the (n + 1)th one started from bottom in dirs stack
 popd +{n}
 
-# retrieve specified lines from a large file
+# retrieve specified lines from a large file (stop reading at certain line)
 sed -n '{start_line}, {end_line}p; {stop_line}q' {file}
+sed -n -e '{start_line}, +{amount}p' -e {number}p {file}
 awk 'NR>=<start_line> && NR<=<end_line>; NR==<stop_line> {exit}' <file>
 
 # find file (case-insensitive) under certain folder
@@ -102,6 +103,8 @@ find {folder} -cmin -60
 # find files between x MB and y MB (x < y)
 find {folder} -size +{x}M -size -{y}M
 
+find . -type f -exec md5sum {} +
+
 # search text in files under certain directory
 grep -rnw {folder} -e {pattern}
 # perform a command over multiple rows
@@ -111,4 +114,17 @@ grep -rnw {folder} -e {pattern}
 diff {file1} {file12}
 sdiff {file1} {file12}
 vimdiff {file1} {file12}
+
+
+# split a large file
+split -b 100m {file}
+# join split files back
+cat x* > {file}
+
+# upload multiple files via `lftp`
+mirror -R -P 50 -v
 ```
+
+## Reference
+- Calculate an MD5 Checksum of a Directory in Linux: https://www.baeldung.com/linux/directory-md5-checksum
+- What's the best way to join files again after splitting them: https://unix.stackexchange.com/questions/24630/whats-the-best-way-to-join-files-again-after-splitting-them

@@ -284,7 +284,7 @@ literal = r"foo\^bar\(baz\)\|qux"
 escaped = re.escape(line)
 print(escaped)  # "foo\^bar\(baz\)\|qux"
 
-check = re.match(line, line)
+check = re.match(pattern=line, string=literal)
 print(check)    # None
 
 check = re.match("foo\^bar\(baz\)\|qux", line)

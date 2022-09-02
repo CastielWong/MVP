@@ -74,6 +74,7 @@ print(comp_dict)    # {1: 1, -9: 81, 10: 100, 3: 9, -5: 25}
 Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗,m∗,φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
 Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗, m∗, φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
 
+
 ## Generator
 Generator functions are a special kind of function that return a laze iterator. For instance, when open a file, a generator would loop through each line then yields each row, other than read all lines and return as a whole.
 ```py
@@ -285,8 +286,9 @@ def get_prices_with_comprehension():
 def get_prices_with_loop():
     prices = []
     for txn in txns:
-        prices.append(get_price(txn
-                                ))
+        prices.append(
+            get_price(txn)
+        )
     return prices
 
 # time cost: map < comprehension < loop

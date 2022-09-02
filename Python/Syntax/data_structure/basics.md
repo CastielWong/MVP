@@ -41,6 +41,7 @@ stack.append(1) # [1]
 stack.pop() # 1
 ```
 
+
 ## Set
 ```py
 set_a = {3, 5}
@@ -87,7 +88,6 @@ queue.popleft()  # deque([])
 ```
 
 
-
 ## Heap
 ```py
 # default is MinHeap, which means the minimum would be the one to pop
@@ -100,7 +100,6 @@ heappush(heap, 1)   # [1, 2]
 print(heap[0])  # 1, the one which would be popped
 heappop(heap)       # [2]
 ```
-
 
 
 ## Default Dictionary

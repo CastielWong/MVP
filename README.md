@@ -1,6 +1,7 @@
 
+- [Philosophy](#philosophy)
 - [Setup](#setup)
-    - [Pre-commit](#pre-commit)
+  - [Pre-commit](#pre-commit)
 
 This repo is used for MVP (Minimum Viable Product), which works more like a cache to quickly set up projects.
 
@@ -10,6 +11,14 @@ To push this repo from local to Github:
 git remote add origin https://github.com/CastielWong/MVP.git
 git push -u origin master
 ```
+
+
+## Philosophy
+
+Continuous Learning & Automation:
+> Incident -> Resolution -> Review ->
+> Remediation -> Analysis -> Best Practice ->
+> Automation -> Adoption
 
 
 ## Setup
