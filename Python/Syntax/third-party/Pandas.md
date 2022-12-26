@@ -10,7 +10,6 @@
 - [GroupBy](#groupby)
 - [Null](#null)
 - [Regex](#regex)
-- [Output](#output)
 - [Reference](#reference)
 
 
@@ -264,20 +263,6 @@ for c in ["{col1}", "{col2}"]:
 pattern = r"{regex}"
 # note that `~` is the invert operator
 df = df[~df["{column}"].str.contains(pattern, flags=re.I | re.M)]
-```
-
-
-## Output
-The default behavior of float number outputting on `to_csv()` is real number
-(when decimal place is within 6) and scientific notation (over 6).
-Below is the way to make `to_csv()` to avoid scientific notation when outputting float numbers.
-```py
-import numpy as np
-
-def format_float_with_precision(num):
-    return np.format_float_positional(num, trim="-")
-
-df.to_csv(..., float_format=format_float_with_precision, ...)
 ```
 
 

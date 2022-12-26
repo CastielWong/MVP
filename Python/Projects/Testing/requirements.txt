@@ -3,6 +3,7 @@
 boto3~=1.15
 moto~=1.3.16
 pandas>=1.1
+pyfakefs>=5.0.0
 pytest~=6.2
 pytest-mock~=3.6
 pyyaml~=5.4

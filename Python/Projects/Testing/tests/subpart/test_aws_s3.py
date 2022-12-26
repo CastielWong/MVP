@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Test the AWS S3 module."""
 from typing import TypeVar
 import sys
 
@@ -18,6 +19,7 @@ ResourceS3 = TypeVar("ResourceS3")
 
 @mock_s3
 def test_upload_df_to_s3(mocker: MockerFixture, mock_s3_resource: ResourceS3):
+    """Verify file upload to S3."""
     param = {
         "df": DataFrame(),
         "bucket_name": "mock_bucket",
@@ -37,7 +39,9 @@ def test_upload_df_to_s3(mocker: MockerFixture, mock_s3_resource: ResourceS3):
         object_.put(Body=Body)
         return object_
 
-    mocker.patch.object(conn_s3.client, "put_object", mock_s3_put_object)
+    mocker.patch.object(
+        target=conn_s3.client, attribute="put_object", new=mock_s3_put_object
+    )
 
     s3_object = conn_s3.upload_dataframe(**param)
 
