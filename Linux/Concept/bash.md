@@ -18,10 +18,13 @@ To customize the shell prompt for bash, set environment variable `$PS1` for the 
 ## Meta
 There are variables automatically set by Bash when it's a Bash script:
 
-- `$0`: name of the script
+- `$0`: name of the script, reserved for function name
 - `$n`: the nth arguments passed to the script
 - `$#`: number of arguments passed to the script
 - `$*` / `$@`: all arguments passed to the script
+  - `"$*"`, expands to a single string separated by space: `"$1 $2 $n"`
+  - `"$@"`, expands to separate strings: `"$1" "$2" "$n"`
+  - `$*` and `$@` have the same effect: `"$1" "$2" "$n"`
 - `$?`: exit status of the most recently run process
 - `$$`: process ID of current script
 - `$SECONDS`: number of seconds since the script was started

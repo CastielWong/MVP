@@ -56,4 +56,8 @@ fg %{job_id}
 # press "ctrl + Z" to suspend current foreground process
 # start paused process running in the background
 bg %{job_id}
+
+# find out which process is using a port
+netstat -pntl | grep $PORT  # Linux
+lsof -nP -i4TCP:$PORT       # Mac
 ```

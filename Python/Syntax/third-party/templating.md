@@ -35,3 +35,4 @@ rendered = template.render(**params)
 
 ## Reference
 - Python Jinja tutorial: http://zetcode.com/python/jinja/
+- Primer on Jinja Templating: https://realpython.com/primer-on-jinja-templating/
