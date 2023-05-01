@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S pytest
 # -*- coding: utf-8 -*-
 """Test the auxiliary module."""
 from typing import Dict, List, TypeVar

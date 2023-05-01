@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """The context setup for subpart tests."""
 from os.path import dirname

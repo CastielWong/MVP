@@ -1,5 +1,5 @@
-#!/usr/bin/env/ python
 # -*- coding: utf-8 -*-
+"""Utility module."""
 from logging import Logger
 import os
 import logging.config

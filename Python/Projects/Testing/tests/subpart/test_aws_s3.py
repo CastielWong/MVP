@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S pytest
 # -*- coding: utf-8 -*-
 """Test the AWS S3 module."""
 from typing import TypeVar
