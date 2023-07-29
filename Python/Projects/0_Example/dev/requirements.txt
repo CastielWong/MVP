@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+--index-url https://pypi.org/simple/
+pre-commit>=2.20.0
+pyfakefs>=5.0.0
+pytest>=7.2.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+wily>=1.24.0

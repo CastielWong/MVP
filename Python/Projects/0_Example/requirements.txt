@@ -1,0 +1,2 @@
+# -*- coding: utf-8 -*-
+--index-url https://pypi.org/simple/

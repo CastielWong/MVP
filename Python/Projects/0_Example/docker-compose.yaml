@@ -1,0 +1,27 @@
+services:
+  ci:
+    image: example:ci
+    container_name: example-ci
+    build:
+      context: .
+      dockerfile: dev/test.dockerfile
+    command: python -m
+      pytest /app/tests
+      --cov=/app/core
+      --cov-config=/app/dev/.coveragerc
+      --cov-fail-under=0
+      --junit-xml=/app/tests/results.xml
+    volumes:
+      - $PWD/core:/app/core # include to reduce image rebuilding
+      - $PWD/tests:/app/tests
+    networks:
+      example_project:
+        ipv4_address: 20.1.0.2
+
+networks:
+  example_project:
+    name: example_project
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 20.1.0.0/28
