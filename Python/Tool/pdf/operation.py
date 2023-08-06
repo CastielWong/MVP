@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Customization on PDF."""
 from pathlib import Path
 from typing import List
 import copy
@@ -22,8 +23,8 @@ def extract_information(pdf_path: str) -> DocumentInformation:
     Returns:
         The meta information
     """
-    with open(pdf_path, "rb") as f:
-        pdf = PdfFileReader(f)
+    with open(pdf_path, "rb") as f_r:
+        pdf = PdfFileReader(f_r)
         information = pdf.documentInfo
 
     txt = f"""
@@ -94,11 +95,12 @@ def merge_pdfs(pdf_paths: List[str], output: str) -> None:
     return
 
 
-def split_pdf(pdf_path: str, prefix: str) -> None:
+def split_pdf(pdf_path: str, dir_output: str, prefix: str) -> None:
     """Split a PDF file into individual pages.
 
     Args:
         pdf_path: pdf file to split
+        dir_output: directory to output
         prefixes: prefix used in generated pdf pages
     """
     pdf = PdfFileReader(pdf_path)
@@ -110,7 +112,7 @@ def split_pdf(pdf_path: str, prefix: str) -> None:
         pdf_writer = PdfFileWriter()
         pdf_writer.addPage(pdf.getPage(index))
 
-        output = f"{_DIR_OUTPUT}/{prefix}_{page}.pdf"
+        output = f"{dir_output}/{prefix}_{page}.pdf"
         with open(output, "wb") as output_pdf:
             pdf_writer.write(output_pdf)
 
@@ -149,7 +151,6 @@ def convert_to_txt(pdf_path: str) -> str:
     Returns:
         File path of the output text file
     """
-
     file_name = Path(pdf_path).name.split(".")[0]
     output = _CWD / _DIR_OUTPUT / f"{file_name}.txt"
 
@@ -200,7 +201,9 @@ def crop_page(pdf_path: str) -> str:
     return str(output)
 
 
-def encrypt(pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super") -> str:
+def encrypt(  # nosec
+    pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super"
+) -> str:
     """Encrypt a PDF file with password(s).
 
     Args:
@@ -220,13 +223,13 @@ def encrypt(pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super") -> 
     for page in pdf_reader.pages:
         pdf_writer.addPage(page)
 
-    with open(output, "wb") as fw:
-        pdf_writer.write(fw)
+    with open(output, "wb") as f_w:
+        pdf_writer.write(f_w)
 
     return str(output)
 
 
-def decrypt(pdf_encrypted: str, password: str = "demo") -> str:
+def decrypt(pdf_encrypted: str, password: str = "demo") -> str:  # nosec
     """Decrypt a PDF file with password.
 
     Args:
@@ -245,8 +248,8 @@ def decrypt(pdf_encrypted: str, password: str = "demo") -> str:
     for page in pdf_reader.pages:
         pdf_writer.addPage(page)
 
-    with open(output, "wb") as fw:
-        pdf_writer.write(fw)
+    with open(output, "wb") as f_w:
+        pdf_writer.write(f_w)
 
     return str(output)
 
@@ -269,30 +272,3 @@ def draft_blank(pdf_path: str) -> None:
     canvas.save()
 
     return
-
-
-if __name__ == "__main__":
-    sample = "sample.pdf"
-
-    # extract_information(pdf_path=sample)
-
-    # rotate_pages(pdf_old=sample, pdf_new=f"{_DIR_OUTPUT}/rotated.pdf")
-
-    # merge_pdfs(pdf_paths=[sample, sample], output=f"{_DIR_OUTPUT}/merged.pdf")
-
-    # split_pdf(pdf_path=sample, prefix="a")
-
-    # create_watermark(
-    #     pdf_path=sample,
-    #     watermark_pdf="icon.pdf",
-    #     output=f"{_DIR_OUTPUT}/watermarked.pdf",
-    # )
-
-    # convert_to_txt(pdf_path=sample)
-
-    # crop_page(pdf_path=sample)
-
-    # file_encrypted = encrypt(pdf_path=sample)
-    # decrypt(pdf_encrypted=file_encrypted)
-
-    draft_blank(pdf_path=f"{_DIR_OUTPUT}/blank.pdf")
