@@ -4,6 +4,7 @@
 from pathlib import Path
 from typing import List
 import copy
+import os
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.pdf import DocumentInformation
@@ -73,23 +74,29 @@ def rotate_pages(pdf_old: str, pdf_new: str) -> None:
     return
 
 
-def merge_pdfs(pdf_paths: List[str], output: str) -> None:
+def merge_pdfs(dir_input: List[str], dir_output: str) -> None:
     """Merge a list of pdf files into one.
 
     Args:
-        pdf_paths: a list of pdf files to merge
-        output: pdf file after merged
+        dir_input: a list of pdf files to merge, note that name of files are expected
+            to be in order so as to keep the the merged PDF aligned
+        dir_output: pdf file after merged
     """
+    files = os.listdir(dir_input)  # type: ignore
+
+    pdf_files = [a_file for a_file in files if a_file.endswith(".pdf")]
+
     pdf_writer = PdfFileWriter()
 
-    for path in pdf_paths:
-        pdf_reader = PdfFileReader(path)
+    for file_name in pdf_files:
+        file_path = f"{dir_input}/{file_name}"
+        pdf_reader = PdfFileReader(file_path)
         for page in range(pdf_reader.getNumPages()):
             # add each page to the writer object
             pdf_writer.addPage(pdf_reader.getPage(page))
 
     # write out the merged PDF
-    with open(output, "wb") as out:
+    with open(f"{dir_output}/merged.pdf", "wb") as out:
         pdf_writer.write(out)
 
     return
@@ -120,7 +127,7 @@ def split_pdf(pdf_path: str, dir_output: str, prefix: str) -> None:
 
 
 def create_watermark(pdf_path: str, watermark_pdf: str, output: str) -> None:
-    """Embeded watermark to the PDF.
+    """Embedded watermark to the PDF.
 
     Args:
         pdf_path: pdf file to embed watermark

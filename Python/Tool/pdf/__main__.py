@@ -21,13 +21,19 @@ def get_cli_args() -> Namespace:
         "--operation",
         help="indicate what operation to perform",
         type=str,
-        choices=["split"],
-        default="split",
+        choices=["draft", "split", "merge"],
+        default="draft",
     )
     parser.add_argument(
         "--name",
         help="PDF file name to process",
-        required=True,
+        required=False,
+        type=str,
+    )
+    parser.add_argument(
+        "--input",
+        help="directory for input PDF files, applied to 'merge' only",
+        required=False,
         type=str,
     )
     parser.add_argument(
@@ -44,19 +50,16 @@ if __name__ == "__main__":
     args = get_cli_args()
     file_name = args.name
 
-    if args.operation == "split":
+    if args.operation == "draft":
+        op.draft_blank(pdf_path=f"{args.output}/blank.pdf")
+    elif args.operation == "split":
         op.split_pdf(pdf_path=file_name, dir_output=args.output, prefix="o")
-    # elif args.operation == "draft":
-    #     op.draft_blank(pdf_path=f"{args.output}/blank.pdf")
+    elif args.operation == "merge":
+        op.merge_pdfs(dir_input=args.input, dir_output=args.output)
     # elif args.operation == "extract":
     #     op.extract_information(pdf_path=file_name)
     # elif args.operation == "rotate":
     #     op.rotate_pages(pdf_old=file_name, pdf_new=f"{args.output}/rotated.pdf")
-    # elif args.operation == "merge":
-    #     op.merge_pdfs(
-    #         pdf_paths=["core/output/a_1.pdf", "core/output/a_2.pdf"],
-    #         output=f"{args.output}/merged.pdf"
-    #     )
     # elif args.operation == "watermark":
     #     op.create_watermark(
     #         pdf_path=file_name,
