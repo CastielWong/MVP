@@ -25,6 +25,8 @@ install: clean uninstall
 #
 #	python setup.py bdist_wheel upload -r local
 
+run:
+	python -m core
 
 ## development
 prune: clean

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Utility module."""
 from string import Template
+import hashlib
 import os
 
 import numpy as np
@@ -41,3 +42,19 @@ def format_float_with_precision(real: float) -> str:
         Converted string with all digits kept, without decimal point nor trailing 0
     """
     return np.format_float_positional(real, trim="-")
+
+
+def calc_file_sha256(file_path: str) -> str:
+    """Calculate the SHA256 digest for all contents inside a file.
+
+    Args:
+        file_path: path to the file for such calculation
+
+    Returns:
+        The SHA256 digest value
+    """
+    with open(file_path, "r", encoding="utf-8") as f_r:
+        contents = f_r.read()
+        digest = hashlib.sha256(contents.encode("utf-8"))
+
+    return digest.hexdigest()

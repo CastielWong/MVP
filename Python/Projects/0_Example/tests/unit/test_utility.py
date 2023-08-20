@@ -3,6 +3,7 @@
 """Module to test the utility."""
 import os
 
+from pyfakefs.fake_filesystem import FakeFilesystem
 from pytest_mock import MockerFixture
 from core import utility as util
 import pytest
@@ -77,6 +78,25 @@ def test_format_float_with_precision(real_number: float, expected: str):
     not presented in the tests.
     """
     actual = util.format_float_with_precision(real_number)
+    assert actual == expected
+
+    return
+
+
+@pytest.mark.parametrize(
+    "contents, expected",
+    [
+        ("a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"),
+        ("a/tb", "b0a1d74a4b5a8d84f9982c5b3eb563dd8fe9918a216433ae13add04da870c754"),
+        ("a/nb", "5a622fb61477cafc6e6b11a4a7437eaa599eb804e88637b07597b2728f9580d2"),
+    ],
+)
+def test_calc_file_sha256(fs: FakeFilesystem, contents: str, expected: str):
+    """Validate the functionality of SHA256 calculation."""
+    file_name = "dummy.txt"
+    fs.create_file(file_name, contents=contents)
+
+    actual = util.calc_file_sha256(file_name)
     assert actual == expected
 
     return
