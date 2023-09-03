@@ -9,6 +9,19 @@ from pdf import operation as op
 _CWD = Path(__file__).parent.absolute()
 DEFAULT_OUTPUT = _CWD / "output"
 
+OPERATIONS = [
+    "draft",
+    "split",
+    "merge",
+    "extract",
+    "rotate",
+    "watermark",
+    "text",
+    "crop",
+    "encrypt",
+    "decrypt",
+]
+
 
 def get_cli_args() -> Namespace:
     """Get command line arguments.
@@ -21,7 +34,7 @@ def get_cli_args() -> Namespace:
         "--operation",
         help="indicate what operation to perform",
         type=str,
-        choices=["draft", "split", "merge"],
+        choices=OPERATIONS,
         default="draft",
     )
     parser.add_argument(
@@ -46,7 +59,7 @@ def get_cli_args() -> Namespace:
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # noqa: C901
     args = get_cli_args()
     file_name = args.name
 
@@ -56,20 +69,21 @@ if __name__ == "__main__":
         op.split_pdf(pdf_path=file_name, dir_output=args.output, prefix="o")
     elif args.operation == "merge":
         op.merge_pdfs(dir_input=args.input, dir_output=args.output)
-    # elif args.operation == "extract":
-    #     op.extract_information(pdf_path=file_name)
-    # elif args.operation == "rotate":
-    #     op.rotate_pages(pdf_old=file_name, pdf_new=f"{args.output}/rotated.pdf")
-    # elif args.operation == "watermark":
-    #     op.create_watermark(
-    #         pdf_path=file_name,
-    #         watermark_pdf="icon.pdf",
-    #         output=f"{args.output}/watermarked.pdf",
-    #     )
-    # elif args.operation == "text":
-    #     op.convert_to_txt(pdf_path=file_name)
-    # elif args.operation == "crop":
-    #     op.crop_page(pdf_path=file_name)
-    # elif args.operation == "decrypt":
-    #     file_encrypted = op.encrypt(pdf_path=file_name)
-    #     op.decrypt(pdf_encrypted=file_encrypted)
+    elif args.operation == "extract":
+        op.extract_information(pdf_path=file_name)
+    elif args.operation == "rotate":
+        op.rotate_pages(pdf_old=file_name, pdf_new=f"{args.output}/rotated.pdf")
+    elif args.operation == "watermark":
+        op.create_watermark(
+            pdf_path=file_name,
+            watermark_pdf="pdf/input/icon.pdf",
+            output=f"{args.output}/watermarked.pdf",
+        )
+    elif args.operation == "text":
+        op.convert_to_txt(pdf_path=file_name)
+    elif args.operation == "crop":
+        op.crop_page(pdf_path=file_name)
+    elif args.operation == "encrypt":
+        file_encrypted = op.encrypt(pdf_path=file_name)
+    elif args.operation == "decrypt":
+        op.decrypt(pdf_encrypted=file_name)

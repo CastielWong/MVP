@@ -148,6 +148,8 @@ def create_watermark(pdf_path: str, watermark_pdf: str, output: str) -> None:
     with open(output, "wb") as out:
         pdf_writer.write(out)
 
+    return
+
 
 def convert_to_txt(pdf_path: str) -> str:
     """Convert a pdf into a text file.
@@ -209,7 +211,7 @@ def crop_page(pdf_path: str) -> str:
 
 
 def encrypt(  # nosec
-    pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super"
+    pdf_path: str, pwd_user: str = "super", pwd_owner: str = "demo"
 ) -> str:
     """Encrypt a PDF file with password(s).
 
