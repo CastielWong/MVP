@@ -30,7 +30,7 @@ run:
 
 ## development
 prune: clean
-	rm-rf .mypy_cache/ .pytest_cache/ .coverage results.xml
+	rm -rf .mypy_cache/ .pytest_cache/ .coverage results.xml
 
 build-ci:
 	docker-compose build --no-cache ci
