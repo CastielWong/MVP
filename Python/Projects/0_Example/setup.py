@@ -12,7 +12,7 @@ import pathlib
 
 import setuptools
 
-PACKAGE_NAME = os.getenv("PACKAGE_NAME", "example_pacakge")
+PACKAGE_NAME = os.getenv("PACKAGE_NAME", "example_package")
 VERSION = os.getenv("PACKAGE_VERSION", "0.0.0")
 
 PACKAGE_MAPPING = {PACKAGE_NAME: "core"}

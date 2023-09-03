@@ -9,11 +9,11 @@ services:
       pytest /app/tests
       --cov=/app/core
       --cov-config=/app/dev/.coveragerc
-      --cov-fail-under=0
+      --cov-fail-under=80
       --junit-xml=/app/tests/results.xml
     volumes:
-      - $PWD/core:/app/core # include to reduce image rebuilding
-      - $PWD/tests:/app/tests
+      - ${PWD}/core:/app/core # include to reduce image rebuilding
+      - ${PWD}/tests:/app/tests
     networks:
       example_project:
         ipv4_address: 20.1.0.2

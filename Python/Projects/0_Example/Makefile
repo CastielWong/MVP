@@ -25,17 +25,19 @@ install: clean uninstall
 #
 #	python setup.py bdist_wheel upload -r local
 
+run:
+	python -m core
 
 ## development
+prune: clean
+	rm -rf .mypy_cache/ .pytest_cache/ .coverage results.xml
+
 build-ci:
 	docker-compose build --no-cache ci
 
 test:
 	docker-compose up --exit-code-from ci ci
 	docker-compose down
-
-prune: clean
-	rm-rf .mypy_cache/ .pytest_cache/ .coverage results.xml
 
 check-container:
 	docker run --name check-example --rm -it example:ci bash
