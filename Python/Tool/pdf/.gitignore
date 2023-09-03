@@ -1,2 +1,5 @@
 *.pdf
 output/
+
+!input/icon.pdf
+!input/sample.pdf

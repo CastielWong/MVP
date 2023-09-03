@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Customization on PDF."""
 from pathlib import Path
 from typing import List
 import copy
+import os
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.pdf import DocumentInformation
@@ -22,8 +24,8 @@ def extract_information(pdf_path: str) -> DocumentInformation:
     Returns:
         The meta information
     """
-    with open(pdf_path, "rb") as f:
-        pdf = PdfFileReader(f)
+    with open(pdf_path, "rb") as f_r:
+        pdf = PdfFileReader(f_r)
         information = pdf.documentInfo
 
     txt = f"""
@@ -72,33 +74,40 @@ def rotate_pages(pdf_old: str, pdf_new: str) -> None:
     return
 
 
-def merge_pdfs(pdf_paths: List[str], output: str) -> None:
+def merge_pdfs(dir_input: List[str], dir_output: str) -> None:
     """Merge a list of pdf files into one.
 
     Args:
-        pdf_paths: a list of pdf files to merge
-        output: pdf file after merged
+        dir_input: a list of pdf files to merge, note that name of files are expected
+            to be in order so as to keep the the merged PDF aligned
+        dir_output: pdf file after merged
     """
+    files = os.listdir(dir_input)  # type: ignore
+
+    pdf_files = [a_file for a_file in files if a_file.endswith(".pdf")]
+
     pdf_writer = PdfFileWriter()
 
-    for path in pdf_paths:
-        pdf_reader = PdfFileReader(path)
+    for file_name in pdf_files:
+        file_path = f"{dir_input}/{file_name}"
+        pdf_reader = PdfFileReader(file_path)
         for page in range(pdf_reader.getNumPages()):
             # add each page to the writer object
             pdf_writer.addPage(pdf_reader.getPage(page))
 
     # write out the merged PDF
-    with open(output, "wb") as out:
+    with open(f"{dir_output}/merged.pdf", "wb") as out:
         pdf_writer.write(out)
 
     return
 
 
-def split_pdf(pdf_path: str, prefix: str) -> None:
+def split_pdf(pdf_path: str, dir_output: str, prefix: str) -> None:
     """Split a PDF file into individual pages.
 
     Args:
         pdf_path: pdf file to split
+        dir_output: directory to output
         prefixes: prefix used in generated pdf pages
     """
     pdf = PdfFileReader(pdf_path)
@@ -110,7 +119,7 @@ def split_pdf(pdf_path: str, prefix: str) -> None:
         pdf_writer = PdfFileWriter()
         pdf_writer.addPage(pdf.getPage(index))
 
-        output = f"{_DIR_OUTPUT}/{prefix}_{page}.pdf"
+        output = f"{dir_output}/{prefix}_{page}.pdf"
         with open(output, "wb") as output_pdf:
             pdf_writer.write(output_pdf)
 
@@ -118,7 +127,7 @@ def split_pdf(pdf_path: str, prefix: str) -> None:
 
 
 def create_watermark(pdf_path: str, watermark_pdf: str, output: str) -> None:
-    """Embeded watermark to the PDF.
+    """Embedded watermark to the PDF.
 
     Args:
         pdf_path: pdf file to embed watermark
@@ -139,6 +148,8 @@ def create_watermark(pdf_path: str, watermark_pdf: str, output: str) -> None:
     with open(output, "wb") as out:
         pdf_writer.write(out)
 
+    return
+
 
 def convert_to_txt(pdf_path: str) -> str:
     """Convert a pdf into a text file.
@@ -149,7 +160,6 @@ def convert_to_txt(pdf_path: str) -> str:
     Returns:
         File path of the output text file
     """
-
     file_name = Path(pdf_path).name.split(".")[0]
     output = _CWD / _DIR_OUTPUT / f"{file_name}.txt"
 
@@ -200,7 +210,9 @@ def crop_page(pdf_path: str) -> str:
     return str(output)
 
 
-def encrypt(pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super") -> str:
+def encrypt(  # nosec
+    pdf_path: str, pwd_user: str = "super", pwd_owner: str = "demo"
+) -> str:
     """Encrypt a PDF file with password(s).
 
     Args:
@@ -220,13 +232,13 @@ def encrypt(pdf_path: str, pwd_user: str = "demo", pwd_owner: str = "super") -> 
     for page in pdf_reader.pages:
         pdf_writer.addPage(page)
 
-    with open(output, "wb") as fw:
-        pdf_writer.write(fw)
+    with open(output, "wb") as f_w:
+        pdf_writer.write(f_w)
 
     return str(output)
 
 
-def decrypt(pdf_encrypted: str, password: str = "demo") -> str:
+def decrypt(pdf_encrypted: str, password: str = "demo") -> str:  # nosec
     """Decrypt a PDF file with password.
 
     Args:
@@ -245,8 +257,8 @@ def decrypt(pdf_encrypted: str, password: str = "demo") -> str:
     for page in pdf_reader.pages:
         pdf_writer.addPage(page)
 
-    with open(output, "wb") as fw:
-        pdf_writer.write(fw)
+    with open(output, "wb") as f_w:
+        pdf_writer.write(f_w)
 
     return str(output)
 
@@ -269,30 +281,3 @@ def draft_blank(pdf_path: str) -> None:
     canvas.save()
 
     return
-
-
-if __name__ == "__main__":
-    sample = "sample.pdf"
-
-    # extract_information(pdf_path=sample)
-
-    # rotate_pages(pdf_old=sample, pdf_new=f"{_DIR_OUTPUT}/rotated.pdf")
-
-    # merge_pdfs(pdf_paths=[sample, sample], output=f"{_DIR_OUTPUT}/merged.pdf")
-
-    # split_pdf(pdf_path=sample, prefix="a")
-
-    # create_watermark(
-    #     pdf_path=sample,
-    #     watermark_pdf="icon.pdf",
-    #     output=f"{_DIR_OUTPUT}/watermarked.pdf",
-    # )
-
-    # convert_to_txt(pdf_path=sample)
-
-    # crop_page(pdf_path=sample)
-
-    # file_encrypted = encrypt(pdf_path=sample)
-    # decrypt(pdf_encrypted=file_encrypted)
-
-    draft_blank(pdf_path=f"{_DIR_OUTPUT}/blank.pdf")
