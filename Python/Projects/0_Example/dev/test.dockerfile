@@ -3,6 +3,12 @@ FROM python:3.8.14
 
 ARG PIP_REPO=https://pypi.org/simple/
 
+
+# pyodbc dependencies
+RUN apt-get update
+RUN apt-get install -y unixodbc
+
+
 WORKDIR /app
 
 COPY dev/requirements.txt /app/dev/requirements.txt
