@@ -32,7 +32,7 @@ def test_run_script__exception(mocker: MockerFixture):
     mocker.patch("pyodbc.connect", return_values=None)
 
     with pytest.raises(RuntimeError) as exc_info:
-        sql_server = SqlServer(**DUMMY_CONFIG)
+        sql_server = SqlServer(**DUMMY_CONFIG)  # type: ignore
         sql_server.run_script(DUMMY_QUERY)
 
     # note the exception message can only be checked after but not in the context
@@ -48,13 +48,14 @@ def test_run_script__called_with(mocker: MockerFixture):
     mocker.patch("pyodbc.connect", return_values=mocker.MagicMock())
 
     with SqlServer(**DUMMY_CONFIG) as conn:  # type: ignore
+        patcher_execute = mocker.patch.object(conn.cursor.__enter__(), "execute")
         patcher_fetchall = mocker.patch.object(conn.cursor.__enter__(), "fetchall")
         patcher_fetchall.return_value = expected
 
         actual = conn.run_script(DUMMY_QUERY)
 
         # assert the query is called inside `execute()`
-        conn.cursor.__enter__().execute.assert_called_with(DUMMY_QUERY)
+        patcher_execute.assert_called_with(DUMMY_QUERY)
 
         assert actual == expected
 
