@@ -7,6 +7,7 @@ ARG PIP_REPO=https://pypi.org/simple/
 # pyodbc dependencies
 RUN apt-get update
 RUN apt-get install -y unixodbc
+RUN apt-get install -y vim
 
 
 WORKDIR /app
@@ -16,6 +17,6 @@ COPY dev/.coveragerc /app/dev/.coveragerc
 COPY requirements.txt /app/requirements.txt
 COPY core /app/core
 
-RUN pip install --upgrade pip \
-    && pip install -r dev/requirements.txt --index-url ${PIP_REPO} \
-    && pip install -r requirements.txt --index-url ${PIP_REPO}
+RUN python -m pip install --upgrade pip \
+    && python -m pip install -r requirements.txt --index-url ${PIP_REPO} \
+    && python -m pip install -r dev/requirements.txt --index-url ${PIP_REPO}

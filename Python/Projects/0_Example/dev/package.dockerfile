@@ -3,6 +3,7 @@ FROM python:3.8.14
 
 ARG PIP_REPO=https://pypi.org/simple/
 
+
 WORKDIR /app
 
 COPY requirements.txt /app/requirements.txt

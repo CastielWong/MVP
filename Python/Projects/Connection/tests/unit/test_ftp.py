@@ -1,6 +1,7 @@
 #!/usr/bin/env -S python -m pytest
 # -*- coding: utf-8 -*-
 """Test for FTP connection."""
+# pylint: disable=W0212 (protected-access)
 from ftplib import FTP  # nosec
 import os
 

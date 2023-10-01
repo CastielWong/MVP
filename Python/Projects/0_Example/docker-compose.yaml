@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: dev/test.dockerfile
+    user: root
     command: python -m
       pytest /app/tests
       --cov=/app/core
