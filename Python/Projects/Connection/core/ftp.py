@@ -6,24 +6,35 @@ import logging
 import os
 
 from paramiko import SFTPClient
+from paramiko.rsakey import RSAKey
 import paramiko
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(message)s")
 LOGGER = logging.getLogger(__name__)
 
+DEFAULT_TIMEOUT = 2 * 3600
+
 
 class FTPClient:
     """Connection used to interact with FTP."""
 
-    def __init__(
+    def __init__(  # pylint: disable=R0913 (too-many-arguments)
         self,
         hostname: str,
-        username: str,
-        password: str,
         port: int = 21,
-        timeout: int = 2 * 3600,
+        username: str = "",
+        password: Optional[str] = None,
+        timeout: int = DEFAULT_TIMEOUT,
     ):
-        """Initialize SFTP connection."""
+        """Initialize FTP connection.
+
+        Args:
+            hostname: the server to connect to, either URL or IP address
+            port: the server port to connect to
+            username: the username to authenticate as
+            password: used for password authentication
+            timeout: timeout (in seconds) for the TCP connect
+        """
         self.hostname = hostname
         self.port = port
         self.username = username
@@ -34,7 +45,7 @@ class FTPClient:
 
     def __enter__(self):
         """Open context with FTP."""
-        ftp = FTP()
+        ftp = FTP()  # nosec
         ftp.connect(host=self.hostname, port=self.port, timeout=self.timeout)
         ftp.login(user=self.username, passwd=self.password)
         self._client = ftp
@@ -76,7 +87,7 @@ class FTPClient:
         try:
             file_name = os.path.basename(ftp_path)
             remote_dir = os.path.dirname(ftp_path)
-            # prepend a seperator if missing from the remote_dir
+            # prepend a separator if missing from the remote_dir
             if remote_dir == "" or remote_dir[0] != os.sep:
                 remote_dir = os.sep + remote_dir
 
@@ -128,21 +139,44 @@ class FTPClient:
 class SecureFTPClient(FTPClient):
     """Connection used to interact with Secure FTP."""
 
-    def __init__(
+    def __init__(  # pylint: disable=R0913 (too-many-arguments)
         self,
         hostname: str,
-        username: str,
-        password: str,
         port: int = 22,
-        timeout: int = 2 * 3600,
+        username: str = "",
+        password: Optional[str] = None,
+        key_file: Optional[str] = None,
+        timeout: int = DEFAULT_TIMEOUT,
     ):
-        """Initialize SFTP connection."""
+        """Initialize SFTP connection.
+
+        Args:
+            hostname: the server to connect to, either URL or IP address
+            port: the server port to connect to
+            username: the username to authenticate as
+            password: used for password authentication
+            key_file: private key or cert to try for authentication
+            timeout: timeout (in seconds) for the TCP connect
+        """
         super().__init__(
             hostname=hostname,
+            port=port,
             username=username,
             password=password,
-            port=port,
             timeout=timeout,
+        )
+
+        if not password and not key_file:
+            raise ValueError(
+                "Please provide either password or the key file for authentication."
+            )
+        if password is not None and key_file is not None:
+            raise NotImplementedError(
+                "Please provide either password or the key file, but not both."
+            )
+
+        self.pkey = (
+            RSAKey.from_private_key_file(filename=key_file) if key_file else None
         )
 
         self._client: Optional[SFTPClient] = None  # type: ignore
@@ -151,12 +185,17 @@ class SecureFTPClient(FTPClient):
         """Open context."""
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # note that the `disable_algorithms` is needed due to a compatibility bug
+        # https://stackoverflow.com/a/71140149
         ssh.connect(
             hostname=self.hostname,
             port=self.port,
             username=self.username,
             password=self.password,
+            pkey=self.pkey,
             timeout=self.timeout,
+            disabled_algorithms={"pubkeys": ["rsa-sha2-256", "rsa-sha2-512"]},
         )
 
         self._client = ssh.open_sftp()

@@ -3,6 +3,7 @@
 """Test for FTP connection."""
 # pylint: disable=W0212 (protected-access)
 from ftplib import FTP  # nosec
+from typing import Optional
 import os
 
 from pyfakefs.fake_filesystem import FakeFilesystem
@@ -15,17 +16,25 @@ _DUMMY_REMOTE = "/dummy/remote"
 _DUMMY_LOCAL = "dummy/local"
 _DUMMY_CSV = "ham.csv"
 
-
 _CSV_TO_DOWNLOAD = os.path.join(_DUMMY_REMOTE, _DUMMY_CSV)
 
+DUMMY_HOST = "dummy_host"
+DUMMY_USERNAME = "dummy_user"
+DUMMY_PASSWORD = "dummy_pass"  # nosec
+DUMMY_TIMEOUT = 180
 
-ftp_config = {
-    "hostname": "dummy_host",
-    "username": "dummy_user",
-    "password": "dummy_pass",
-}
-DUMMY_FTP = FTPClient(**ftp_config, port=21)
-DUMMY_SFTP = SecureFTPClient(**ftp_config, port=22)
+DUMMY_FTP = FTPClient(
+    hostname=DUMMY_HOST,
+    username=DUMMY_USERNAME,
+    password=DUMMY_PASSWORD,
+    timeout=DUMMY_TIMEOUT,
+)
+DUMMY_SFTP = SecureFTPClient(
+    hostname=DUMMY_HOST,
+    username=DUMMY_USERNAME,
+    password=DUMMY_PASSWORD,
+    timeout=DUMMY_TIMEOUT,
+)
 
 
 @pytest.mark.parametrize("client", [DUMMY_FTP, DUMMY_SFTP])
@@ -42,12 +51,21 @@ def test_check_connection_open__none(client: FTPClient):
     return
 
 
+# -------------------------------------------------------------------------------------
+# FTP
+# -------------------------------------------------------------------------------------
 def test_ftp__check_connection_open(mocker: MockerFixture):
     """Verify the FTP connection."""
-    mocker.patch("ftplib.FTP.connect", return_value=None)
-    mocker.patch("ftplib.FTP.login", return_value=None)
+    patcher_connect = mocker.patch("ftplib.FTP.connect", return_value=None)
+    patcher_login = mocker.patch("ftplib.FTP.login", return_value=None)
 
     with DUMMY_FTP:
+        patcher_connect.assert_called_with(
+            host=DUMMY_HOST,
+            port=21,
+            timeout=DUMMY_TIMEOUT,
+        )
+        patcher_login.assert_called_with(user=DUMMY_USERNAME, passwd=DUMMY_PASSWORD)
         assert isinstance(DUMMY_FTP._client, FTP)
     return
 
@@ -98,12 +116,59 @@ def test_ftp__download_file__nonexistent(mocker: MockerFixture):
     return
 
 
+# -------------------------------------------------------------------------------------
+# SFTP
+# -------------------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "password, key_file",
+    [
+        (None, ""),
+        ("", None),
+        ("", ""),
+        (None, None),
+    ],
+)
+def test_sftp__initialization_exception__neither(
+    password: Optional[str], key_file: Optional[str]
+):
+    """Check when the initialization has neither password nor cert."""
+    with pytest.raises(ValueError) as exc_info:
+        SecureFTPClient(hostname=DUMMY_HOST, password=password, key_file=key_file)
+        assert (
+            exc_info.value
+            == "Please provide either password or the key file for authentication."
+        )
+    return
+
+
+def test_sftp__initialization_exception__both():
+    """Check when the initialization has both password and cert."""
+    with pytest.raises(NotImplementedError) as exc_info:
+        SecureFTPClient(
+            hostname=DUMMY_HOST, password="a_password", key_file="a_key.pem"  # nosec
+        )
+        assert (
+            exc_info.value
+            == "Please provide either password or the key file, but not both."
+        )
+    return
+
+
 def test_sftp__check_connection_open(mocker: MockerFixture):
     """Verify the SFTP connection."""
-    mocker.patch("paramiko.SSHClient.connect", return_value=None)
     mocker.patch("paramiko.SSHClient.open_sftp", return_value=SSHClient())
+    patcher = mocker.patch("paramiko.SSHClient.connect", return_value=None)
 
     with DUMMY_SFTP:
+        patcher.assert_called_with(
+            hostname=DUMMY_HOST,
+            port=22,
+            username=DUMMY_USERNAME,
+            password=DUMMY_PASSWORD,
+            pkey=None,
+            timeout=DUMMY_TIMEOUT,
+            disabled_algorithms={"pubkeys": ["rsa-sha2-256", "rsa-sha2-512"]},
+        )
         assert isinstance(DUMMY_SFTP._client, SSHClient)
     return
 
