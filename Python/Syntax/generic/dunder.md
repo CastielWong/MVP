@@ -96,7 +96,7 @@ def validate_transaction(acc, amount_to_add):
 
 Checking:
 ```py
-DIVIDER = "-" * 80
+SEPARATOR = "-" * 80
 
 if __name__ == "__main__":
     acc_1 = Account("Bob", 10)
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     acc_2.add_transaction(40)
 
     # enable iteration
-    print(DIVIDER)
+    print(SEPARATOR)
     print(len(acc_1))
     for t in acc_1:
         print(t)
@@ -119,29 +119,29 @@ if __name__ == "__main__":
     print(list(reversed(acc_1)))
 
     # overload operator for comparison
-    print(DIVIDER)
+    print(SEPARATOR)
     print(acc_2 > acc_1)
     print(acc_2 < acc_1)
     print(acc_2 == acc_1)
 
     # overload operator for addition
-    print(DIVIDER)
+    print(SEPARATOR)
     acc_3 = acc_1 + acc_2
     print(acc_3.amount)
     print(acc_3.balance)
     print(acc_3._transactions)
 
     # invocate method
-    print(DIVIDER)
+    print(SEPARATOR)
     acc_1()
 
     # support context manager
-    print(DIVIDER)
+    print(SEPARATOR)
     print(f"Balance start: {acc_1.balance}")
     validate_transaction(acc_1, 10)
     print(f"Balance end: {acc_1.balance}")
 
-    print(DIVIDER)
+    print(SEPARATOR)
     print(f"Balance start: {acc_1.balance}")
     try:
         validate_transaction(acc_1, -100)

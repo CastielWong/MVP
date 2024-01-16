@@ -65,7 +65,7 @@ if __name__ == "__main__":
         "name": "admin"
     }
 
-    # need to convert the dict to key-value pair first
+    # convert the dict to key-value pair for instantiation
     role = Role(**data)
 ```
 
@@ -104,7 +104,8 @@ print(emp.email)        # John.Doe@email.com
 print(emp.fullname())   # Jane Doe
 ```
 
-It turns out that some of the attributes would be corrupted. So Python introduce Property decorator to take care Getter, Setter and Deleter for attributes.
+It turns out that some of the attributes would be corrupted.
+So Python introduces Property decorator to take care Getter, Setter and Deleter for attributes.
 
 ```py
 class Employee:
@@ -158,14 +159,16 @@ del emp.fullname        # DELETING...
 ```
 
 ## Interface
-There are two types of Interface implementation Python provides. One is Formal Interface, while the other is Informal Interface.
+There are two types of Interface implementation Python provides.
+One is formal Interface, while the other is informal Interface.
 
-The Informal Interface can be quite confusing, it's suggested to implement Formal Interface whenever possible.
+The informal Interface can be quite confusing, it's suggested to implement formal Interface whenever possible.
 
 ### Informal
 Informal Interface doesn't guarantee the implementation of each method inside the interface.
 
-For the example code below, though both `Achiever` and `Partaker` both inherit(implement) `InfromalInterface`, `Partker` doesn't implement all methods required. For that reason, we don't expect `Partaker` is a subclass of `InformalInterface` theoretically.
+For the example code below, though both `Achiever` and `Partaker` both inherit(implement) `InfromalInterface`, `Partaker` doesn't implement all methods required.
+For that reason, we don't expect `Partaker` is a subclass of `InformalInterface` theoretically.
 ```py
 class InformalInterface:
     def load_data_source(self, path: str, file_name: str) -> str:
@@ -199,9 +202,9 @@ print(Partaker())       # an Partaker object
 ```
 
 #### Metaclass
-Metaclass can solve problem mentioned beofre, yet it introduces two other inconsistency problems:
+Metaclass can solve problem mentioned before, yet it introduces two other inconsistency problems:
 - method parameter is neglected as long as function name is matched
-- there is no explict inheritance defined in Method Resolution Order
+- there is no explicit inheritance defined in Method Resolution Order
 
 ```py
 class CustomMeta(type):
@@ -241,7 +244,8 @@ print(Partaker.__mro__) # Partaker, object
 ```
 
 #### Virtual Base
-The virutal base class is to provide the interface hierarchy for clarity. However, it makes the hierarchy more complicated to understand.
+The Virtual base class is to provide the interface hierarchy for clarity.
+However, it makes the hierarchy more complicated to understand.
 ```py
 class CustomMeta(type):
     def __instancecheck__(cls, instance):
@@ -330,7 +334,7 @@ print(Achiever())       # an Achiever object
 print(Partaker())       # TypeError thrown
 ```
 
-Even though there is no compiled error when defining `Partker`, error will be thrown when it's about to instantiated.
+Even though there is no compiled error when defining `Partaker`, error will be thrown when it's about to instantiate.
 
 
 ## Reference

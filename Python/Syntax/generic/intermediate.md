@@ -71,9 +71,6 @@ print(comp_set)     # {1, 10, 3}
 print(comp_dict)    # {1: 1, -9: 81, 10: 100, 3: 9, -5: 25}
 ```
 
-Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗,m∗,φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
-Given a new source s∗, we would like to infer a semantic model m∗ and an attribute mapping function φ∗ such that δ∗ = (s∗, m∗, φ∗) maximizes the precision and recall between the semantic model m∗ and the gold standard semantic model m† of the new data source s∗.
-
 
 ## Generator
 Generator functions are a special kind of function that return a laze iterator. For instance, when open a file, a generator would loop through each line then yields each row, other than read all lines and return as a whole.
@@ -87,7 +84,10 @@ def csv_reader(file_name):
 csv_gen = (row for row in open(file_name))
 ```
 
-When the `yield` statement is hit, the program suspends function execution and returns the yielded value to the caller. In contrast, return stops function execution completely. When a function is suspended, the state of that function is saved. This includes any variable bindings local to the generator, the instruction pointer, the internal stack, and any exception handling.
+When the `yield` statement is hit, the program suspends function execution and returns the yielded value to the caller.
+In contrast, return stops function execution completely.
+When a function is suspended, the state of that function is saved.
+This includes any variable bindings local to the generator, the instruction pointer, the internal stack, and any exception handling.
 
 `next()` is callable for generator object:
 ```py
@@ -111,10 +111,10 @@ print(nums_generator)   # <generator object ...>
 ## Import
 Since the checking path for import differs, files in different modules may not be able to see others. Reset `sys.path` is an approach to solve such problem. For the project structure like:
 - project
-  - packagea
+  - package_a
     - module_a.py
     - module_b.py
-  - packageb
+  - package_b
     - demo.py
 
 The import statements for "demo.py" can be:

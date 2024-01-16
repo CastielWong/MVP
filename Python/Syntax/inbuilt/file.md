@@ -35,11 +35,11 @@ print(line)
 
 # file appending
 # use "append" mode
-with open("{file}", "a") as file_handler:
+with open("{file}", "a", encoding="utf-8") as file_handler:
     file_handler.write("checking\n")
 
 # apply seek to append
-with open("{file}", "r+") as file_handler:
+with open("{file}", "r+", encoding="utf-8") as file_handler:
     file_handler.seek(0, os.SEEK_END)
     file_handler.write("checking\n")
 ```
@@ -65,7 +65,7 @@ while line:
 ### CSV
 ```py
 # read input from file
-with open("{file}.csv", mode="r") as file_reader:
+with open("{file}.csv", mode="r", encoding="utf-8") as file_reader:
     # note that it's `readline()` but not `read()`
     line = file_reader.readline()
 
@@ -97,11 +97,11 @@ data = json.dumps(data_dict)
 print(type(data), data)
 
 # write data to file
-with open(f"{file_name}.json", "w") as file_writer:
+with open(f"{file_name}.json", "w", encoding="utf-8") as file_writer:
     json.dump(data_dict, file_writer)
 
 # load data from file to dict
-with open(f"{file_name}.json", "r") as file_reader:
+with open(f"{file_name}.json", "r", encoding="utf-8") as file_reader:
     data = json.load(file_reader)
 
 # -----------------------------------------------------------------------------
@@ -157,7 +157,7 @@ numbers = json.loads(raw_string, object_hook=decode_complex)
 ```py
 import yaml
 
-with open("{file}.yaml", "r") as file_reader:
+with open("{file}.yaml", "r", encoding="utf-8") as file_reader:
     output = yaml.load(file_reader, Loader=yaml.FullLoader)
 ```
 
@@ -222,7 +222,7 @@ for f in os.listdir(curr_path):
     else:
         print(f"other - {f}")
 
-# delete a direcotory
+# delete a directory
 shutil.rmtree({directory})
 ```
 

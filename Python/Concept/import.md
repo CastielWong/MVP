@@ -27,7 +27,7 @@
   - [Path Extend](#path-extend)
   - [User-Customized Plugin Directory](#user-customized-plugin-directory)
   - [Instance Reload](#instance-reload)
-  - [Module Repalce](#module-repalce)
+  - [Module Replace](#module-replace)
   - [Impoort Watch](#impoort-watch)
   - [Auto Installer](#auto-installer)
   - [URL Import](#url-import)
@@ -580,7 +580,7 @@ for instance in Spam._instances:
 Even though it's possible to reload a package/module, it's still suggested to avoid such hacking. The only safe/sane way to reload is to restart. Time will be better spent in devising a sane shutdown/restart process to bring in code changes.
 
 
-### Module Repalce
+### Module Replace
 Even though not encouraged, an alternative module can be useful sometimes when the needed module is unavailable. For instance:
 ```py
 try:

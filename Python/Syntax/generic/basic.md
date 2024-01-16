@@ -330,10 +330,8 @@ A function is called __Higher Order Function__ if it contains other functions as
 
 ```py
 from typing import Callable, Dict
-import functools
 
 def decorator_func(func: Callable[[], None]):
-    @functools.wraps(func)
     def inner(*args, **kwargs):
         print("Before the function is called")
         # unpacking both element and dictionary when pass to the function
@@ -356,12 +354,13 @@ def print_demo_with_decorator():
     print("This is the function to decorate with decorator annotation")
     print("------------------------------------------")
 
-# "Before ...\n" ... "This ... normal\n" ... "After ...\n"
 demo = decorator_func(print_demo_normal)
+# "Before ...\n" ... "This ... normal\n" ... "After ...\n"
 demo(1, 2, 3, a="apple", b="banana")
 print("========================================================")
 # "Before ...\n" "This ... annotation\n" "After ...\n"
 print_demo_with_decorator()
+# inner
 print(print_demo_with_decorator.__name__)
 ```
 
@@ -406,7 +405,7 @@ There are two different types of arguments in variadic functions: Positional and
     - usually set as `args` for conventional
     - it's used to pack elements if it's in the function signature
     - it's used for unpacking if it's inside the function
-    - it must come after the required positional arguments
+    - it must come after all required positional arguments
 - `**`
     - usually set as `kwargs` for conventional
     - it's used to pack keyword pairs if it's in the function signature
@@ -492,6 +491,7 @@ b = a.copy()  # [1, 2, 3]
 a[1] = 5  # a: [1, 5, 3], b: [1, 2, 3]
 
 print(f"{a = }\n{b = }")
+print(f"a - {id(a)}\nb - {id(b)}")
 ```
 
 

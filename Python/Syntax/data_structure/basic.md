@@ -5,9 +5,10 @@
   - [Stack](#stack)
 - [Set](#set)
 - [Dictionary](#dictionary)
+  - [Inbuilt](#inbuilt)
+  - [Default Dictionary](#default-dictionary)
 - [Deque](#deque)
 - [Heap](#heap)
-- [Default Dictionary](#default-dictionary)
 
 
 ## Tuple
@@ -52,11 +53,16 @@ set_a.remove(3)                     # {1, 5}
 
 print(set_a.difference(set_b))      # {5}
 print(set_a.union(set_b))           # {1, 3, 5}
-print(set_a.intersection(set_b))    # {3}
+print(set_a.intersection(set_b))    # {1}
 ```
 
 
 ## Dictionary
+Normally, the types of key in dictionary are integer or string, but it's acceptable to have either float/double or tuple type as the key.
+
+Note that list or dictionary can not be the key for a dictionary, for the reason that key must be hashable, which also can be considered as immutable (a value can't be hashed if it's volatile).
+
+### Inbuilt
 ```py
 a_map = {"a": 1, "c": 3}
 
@@ -74,6 +80,16 @@ a_map["c"] = 5      # {'a': 1, 'c': 5}
 a_map = {}
 a_map["c"] = 5      # {'c': 5}
 a_map["a"] = 1      # {'c': 5, 'a': 1}
+```
+
+### Default Dictionary
+```py
+from collections import defaultdict
+
+counter = defaultdict(int)
+for w in ["a", "b", "a"]:
+    counter[w] += 1
+print(counter)  # defaultdict(<class 'int'>, {'a': 2, 'b': 1})
 ```
 
 
@@ -99,15 +115,4 @@ heappush(heap, 2)   # [2]
 heappush(heap, 1)   # [1, 2]
 print(heap[0])  # 1, the one which would be popped
 heappop(heap)       # [2]
-```
-
-
-## Default Dictionary
-```py
-# ---------------------------------------------------------
-from collections import defaultdict
-
-counter = defaultdict(int)
-for w in ["a", "b", "a"]:
-    counter[w] += 1
 ```

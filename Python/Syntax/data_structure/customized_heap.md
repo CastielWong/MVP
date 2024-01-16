@@ -3,6 +3,12 @@
 - [Comparator](#comparator)
 
 
+Generally, there are two ways to have customized heap based on the scenarios.
+One is to place the sorted key in the front, the other is to use `__lt__`.
+The first way is fitted in almost any case, while the second is basically for class.
+Moreover, it's preferred to apply `__lt__` since it offers more flexibility in comparing string, the first approach can't implement MaxHeap for strings.
+
+
 ## General
 The general way to customize a heap is by placing the sorting elements in front, then put all needed elements into the tuple behind.
 ```py
@@ -36,13 +42,13 @@ class Item:
 
         return self.number < other.number
 
-
 heap = []
 heappush(heap, Item("b", 5))
 heappush(heap, Item("c", 3))
 heappush(heap, Item("a", 4))
 heappush(heap, Item("d", 4))
 
+# "c", "d", "a", "b"
 while heap:
     print(heappop(heap).word)
 ```
