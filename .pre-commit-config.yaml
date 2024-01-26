@@ -18,7 +18,7 @@ repos:
   # - id: no-commit-to-branch
   #   args: [--branch, master]
 - repo: https://github.com/ambv/black
-  rev: 23.12.1
+  rev: 24.1.0
   hooks:
   - id: black
     language_version: python3
@@ -43,16 +43,19 @@ repos:
   rev: v1.8.0
   hooks:
   - id: mypy
-    # args:
+    args:
+    - --config-file=dev/mypy.ini
     # - --no-strict-optional
     # - --ignore-missing-imports
     # - --namespace-packages
     # - --explicit-package-bases
+    additional_dependencies: [types-all]
 - repo: https://github.com/pre-commit/mirrors-pylint
   rev: v3.0.0a5
   hooks:
   - id: pylint
     args:
+    - --rcfile=dev/.pylintrc
     - --disable=C0301 # (line-too-long)
     - --disable=E0401 # (import-error)
     - --disable=R0801 # (duplicate-code)
@@ -67,7 +70,7 @@ repos:
   - id: pydocstyle
     language_version: python3
 - repo: https://github.com/PyCQA/bandit
-  rev: 1.7.6
+  rev: 1.7.7
   hooks:
   - id: bandit
     args:

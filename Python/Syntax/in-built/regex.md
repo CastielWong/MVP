@@ -7,6 +7,7 @@
   - [Flag](#flag-1)
 - [Compile](#compile)
 - [Match](#match)
+  - [Greedy](#greedy)
   - [Conditional](#conditional)
 - [Search](#search)
 - [Find](#find)
@@ -166,6 +167,19 @@ print(f"1: {matcher.group(1)}; 2: {matcher[2]}")
 print(f"1: {matcher.group('first')}; 2: {matcher.group('second')}")
 ```
 
+### Greedy
+> The '*', '+', and '?' quantifiers are all greedy; they match as much text as possible.
+
+Adding "?" behind to make the regex pattern non-greedy.
+```py
+pat_greedy = r"^(?P<alpha>.+)(?P<beta>\d{1,2})?$"
+pat_non_greedy = r"^(?P<alpha>.+?)(?P<beta>\d{1,2})?$"
+
+string = "something_10"
+print(re.match(pat_greedy, string).group("alpha"))      # something_10
+print(re.match(pat_non_greedy, string).group("alpha"))  # something_
+```
+
 ### Conditional
 A Conditional Match matches against one of two specified regexes depends on the condition.
 
@@ -183,13 +197,15 @@ print(re.search(regex, "foobar"))       # None
 # match "baz" since there is no "###"
 print(re.search(regex, "foobaz"))       # <re.Match object; span=(0, 6), match='foobaz'>
 
-regex = r"^(?P<ch>\W)?foo(?(ch)(?P=ch)|d)$"
+regex = r"^(?P<character>\W)?foo(?(character)(?P=character)|d)$"
 print(re.search(regex, "foo"))      # None
-# match "#" since group "ch" exists
-print(re.search(regex, "#foo#"))    # <re.Match object; span=(0, 5), match='#foo#'>
+# match "!" since group "character" exists
+matcher = re.search(regex, "!foo!")
+print(matcher)    # <re.Match object; span=(0, 5), match='!foo!'>
+print(matcher.group("character"))   # !
 print(re.search(regex, "#food#"))   # None
 print(re.search(regex, "@food#"))   # None
-# match "d" since group "ch" doesn't exist
+# match "d" since group "character" doesn't exist
 print(re.search(regex, "food"))     # <re.Match object; span=(0, 4), match='food'>
 ```
 
