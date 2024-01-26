@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Demo for AWS S3."""
 from io import StringIO
 from typing import Dict, TypeVar
 
@@ -9,6 +10,8 @@ S3 = TypeVar("S3")
 
 
 class Connection:
+    """Class used for S3 connection."""
+
     def __init__(self, endpoint_url: str, access_key: str, secret_key: str):
         """Initialize the client.
 
@@ -41,8 +44,8 @@ class Connection:
         csv_buffer = StringIO()
         df.to_csv(path_or_buf=csv_buffer, index=False)
 
-        ressponse = self.client.put_object(
+        response = self.client.put_object(
             Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue()
         )
 
-        return ressponse
+        return response

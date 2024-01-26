@@ -1,6 +1,7 @@
 
 - [Directory](#directory)
 - [Authentication](#authentication)
+  - [SSH](#ssh)
 - [Permission](#permission)
 - [Reference](#reference)
 
@@ -73,6 +74,19 @@ passwd {user}
 # add a user to the sudo group to enable it to run with `sudo`
 adduser {user} sudo
 ```
+
+### SSH
+Sample configuration for SSH in "~/.ssh/config":
+```sh
+Host {host alias}
+    HostName {ip}/{alias}
+    Port {port}
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile {path to private id file}
+    User {user name}
+```
+
 
 
 ## Permission

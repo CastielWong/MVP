@@ -5,6 +5,7 @@
 from ftplib import FTP  # nosec
 from typing import Optional
 import os
+import shutil
 
 from pyfakefs.fake_filesystem import FakeFilesystem
 from paramiko import SSHClient
@@ -86,9 +87,12 @@ def test_ftp__download_file(mocker: MockerFixture, fs: FakeFilesystem):
     DUMMY_FTP._client = mocker.MagicMock()
     mocker.patch("ftplib.FTP.pwd", return_value=None)
     mocker.patch("ftplib.FTP.cwd", return_value=None)
+    # mute the actual downloading
     mocker.patch("ftplib.FTP.retrbinary", return_value=None)
 
-    fs.create_file(file_path=_CSV_TO_DOWNLOAD, contents="")
+    fs.create_file(
+        file_path=_CSV_TO_DOWNLOAD, contents="for 'test_ftp__download_file()'"
+    )
 
     DUMMY_FTP._client.nlst = mocker.MagicMock(  # type: ignore
         return_value=[_CSV_TO_DOWNLOAD]
@@ -195,17 +199,36 @@ def test_sftp__exists_file__nonexistent(mocker: MockerFixture):
     return
 
 
-def test_sftp__download_file(mocker: MockerFixture):
+def test_sftp__download_file(mocker: MockerFixture, fs: FakeFilesystem):
     """Verify file downloaded in SFTP."""
-    DUMMY_SFTP._client.get = mocker.MagicMock()  # type: ignore
+    # create directories for file manipulation
+    for dir_name in (_DUMMY_REMOTE, _DUMMY_LOCAL):
+        fs.create_dir(dir_name)
+
+    expected_path = os.path.join(_DUMMY_LOCAL, _DUMMY_CSV)
+
+    def mock_download(**kwargs):  # pyling: disable=W0613 (unused-argument)
+        fs.create_file(
+            file_path=_CSV_TO_DOWNLOAD, contents="for 'test_sftp__download_file'"
+        )
+        shutil.copy(_CSV_TO_DOWNLOAD, expected_path)
+        return
+
     DUMMY_SFTP.exists_file = mocker.MagicMock(return_value=True)  # type: ignore
+    # check = mocker.patch("paramiko.SFTPClient.get", side_effect=mock_download)
+    mocker.patch.object(DUMMY_SFTP._client, "get", side_effect=mock_download)
+
+    # check the file is not "downloaded" before the operation
+    assert fs.exists(expected_path) is False
 
     result = DUMMY_SFTP.download_file(_CSV_TO_DOWNLOAD, _DUMMY_LOCAL)
 
+    # confirm such file is "downloaded" after
     assert result is True
+    assert fs.exists(expected_path) is True
     DUMMY_SFTP.exists_file.assert_called_once_with(_CSV_TO_DOWNLOAD)  # type: ignore
     DUMMY_SFTP._client.get.assert_called_once_with(  # type: ignore
-        remotepath=_CSV_TO_DOWNLOAD, localpath=os.path.join(_DUMMY_LOCAL, _DUMMY_CSV)
+        remotepath=_CSV_TO_DOWNLOAD, localpath=expected_path
     )
     return
 

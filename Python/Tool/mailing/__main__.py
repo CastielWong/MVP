@@ -4,7 +4,7 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from getpass import getpass
-from typing import List
+from typing import List, Optional
 from smtplib import SMTPAuthenticationError
 import smtplib
 import ssl
@@ -21,12 +21,18 @@ SMTP_SERVER = {
 
 # pylint: disable=R1711 (useless-return)
 def send_out_corporate(
-    smtp_server: str, sender: str, receiver: str, subject: str, body: str
+    smtp_server: str,
+    smtp_port: int,
+    sender: str,
+    receiver: str,
+    subject: str,
+    body: str,
 ) -> None:
     """Send out email via corporate SMTP server.
 
     Args:
         smtp_server: SMTP server the corporate set up, e.g, "smtp-au.xxx.com"
+        smtp_port: port of the SMTP server to send out email, e.g, 25
         sender: the address used to send emails, e.g, "product_control@xxx.com"
         receiver: address to receive the email
         subject: email title
@@ -40,7 +46,7 @@ def send_out_corporate(
     msg.attach(MIMEText(body, "html"))
     print(msg.as_string())
 
-    with smtplib.SMTP(smtp_server) as server:
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
         server.sendmail(from_addr=sender, to_addrs=receiver, msg=msg.as_string())
 
     return
@@ -53,7 +59,7 @@ def send_out_personal(
     receiver: str,
     subject: str,
     body: str,
-    copy_list: List[str] = None,
+    copy_list: Optional[List[str]] = None,
 ) -> bool:
     """Send out email via third-party SMTP server.
 
