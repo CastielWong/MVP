@@ -2,12 +2,13 @@ version: "3"
 
 services:
   centos:
-    container_name: airflow
-    image: lab-centos
+    container_name: sandbox-centos
+    image: lab-centos:0.0.1
     build:
       context: $PWD
       dockerfile: Dockerfile
+    tty: true   # keep container running
     ports:
-      - "8080:8080"
+    - "8080:8080"
     volumes:
-      - ./dir_working:/root/volume
+    - ./vol_working:/root/volume

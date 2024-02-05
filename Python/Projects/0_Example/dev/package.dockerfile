@@ -1,5 +1,5 @@
 # Docker image used to build and publish package
-FROM python:3.8.14
+FROM python:3.10.13
 
 ARG PIP_REPO=https://pypi.org/simple/
 

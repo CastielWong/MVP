@@ -11,9 +11,11 @@ services:
       --cov=/app/core
       --cov-config=/app/dev/.coveragerc
       --cov-fail-under=80
+      --cov-report term-missing
       --junit-xml=/app/tests/results.xml
     volumes:
       - ${PWD}/core:/app/core # include to reduce image rebuilding
+      - ${PWD}/dev/.coveragerc:/app/.coveragerc
       - ${PWD}/tests:/app/tests
     networks:
       example_project:
