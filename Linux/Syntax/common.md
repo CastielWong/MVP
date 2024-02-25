@@ -51,6 +51,8 @@ watch -n <second_interval> <running_command>
 jobs
 # list the nth current running background job
 jobs %{n}
+# kill the nth current running background job
+kill -KILL %{n}
 # switch a background process to foreground
 fg %{job_id}
 # press "ctrl + Z" to suspend current foreground process
