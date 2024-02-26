@@ -1,0 +1,51 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pipeline"
+version = "0.1.0"
+description = ""
+authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+poethepoet = "0.24.4"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.7"
+# black = "^24.2.0"
+# flake8 = "^7.0.0"
+# isort = "^5.13.2"
+# mypy = "^1.8.0"
+# pylint = "^3.0.4"
+
+[tool.poetry.group.test.dependencies]
+# pyfakefs = "^5.0.0"
+pytest = "^8.0.2"
+# requests-mock = "^1.10.0"
+# faker = "^23.2.1"
+
+
+[tool.poe.tasks]
+test = "pytest"
+# formatting = "black ./ --exclude 'tests/tmp_*'"
+auto-format = "ruff format ./ --config dev/ruff.toml"
+auto-lint = "ruff check ./ --config dev/ruff.toml"
+
+[tool.poe.tasks.check]
+sequence = ["auto-format", "auto-lint"]
+
+
+# [tool.isort]
+# # https://pycqa.github.io/isort/docs/configuration/profiles.html
+# profile = "hug"
+# src_paths = ["isort", "test"]
+
+# [tool.mypy]
+# exclude = [
+#     "^one\\.py$",  # TOML's double-quoted strings require escaping backslashes
+#     'two\.pyi$',  # but TOML's single-quoted strings do not
+#     '^three\.',
+# ]
