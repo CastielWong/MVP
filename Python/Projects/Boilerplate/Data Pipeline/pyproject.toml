@@ -9,14 +9,17 @@ description = ""
 authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
 readme = "README.md"
 packages = [
-    {include = "apple", from = "src"},
-    {include = "berry", from = "src"},
+    {include = "vendor", from = "src"},
+    {include = "connection", from = "src"},
     {include = "utility", from = "src"},
 ]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 poethepoet = "0.24.4"
+
+mysql-connector-python = "^8.1.0"
+paramiko = "^2.12.0"
 pyodbc = "^5.1.0"
 PyYAML = "^6.0.1"
 
