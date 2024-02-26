@@ -1,0 +1,21 @@
+description: This demos the basic configuration
+prog: "demo"
+arguments:
+- option: --name
+  component:
+    help: "description for name"
+    required: True
+    type: string
+    default: "dummy"
+- option: --env
+  component:
+    help: "description for environment"
+    required: True
+    type: string
+    default: "development"
+- option: --flag
+  component:
+    help: "a boolean flag"
+    required: True
+    type: boolean
+    default: "development"

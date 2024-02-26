@@ -1,0 +1,4 @@
+---
+data_volume: ${VOL_LOCAL}
+working_dir: ${DIR_WORKING}
+db_load: ${DIR_LOAD}

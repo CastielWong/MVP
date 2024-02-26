@@ -45,7 +45,7 @@ Poetry is used for dependency management and packaging within its virtual enviro
 
 ```sh
 # create a new project
-poetry new tmp_demo --name demo_src; cd tmp_demo
+poetry new --src --name demo_src tmp_demo; cd tmp_demo
 # check the virtual environment
 poetry env info --path
 # check available poetry virtual environment

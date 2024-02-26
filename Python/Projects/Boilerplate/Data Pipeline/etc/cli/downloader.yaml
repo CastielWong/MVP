@@ -1,0 +1,19 @@
+description: Pipeline to download data from various vendors
+prog: "downloader"
+arguments:
+- option: --vendor
+  component:
+    help: "vendor to download data from"
+    type: string
+    required: True
+    choices: ["apple", "berry"]
+- option: --input_name
+  component:
+    help: "name to the data file to download"
+    type: string
+    required: True
+- option: --input_date
+  component:
+    help: "date of the data file to download, in the format of 'YYYYMMDD'"
+    type: string
+    required: True

@@ -8,10 +8,16 @@ version = "0.1.0"
 description = ""
 authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
 readme = "README.md"
+packages = [
+    {include = "apple", from = "src"},
+    {include = "berry", from = "src"},
+    {include = "utility", from = "src"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 poethepoet = "0.24.4"
+PyYAML = "^6.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.7"
@@ -22,14 +28,23 @@ ruff = "^0.1.7"
 # pylint = "^3.0.4"
 
 [tool.poetry.group.test.dependencies]
-# pyfakefs = "^5.0.0"
+pyfakefs = { version = ">=5.0.0", optional = false, extras = [] }
 pytest = "^8.0.2"
+pytest-cov = "~=4.0.0"
+pytest-mock = ">=3.10.0"
 # requests-mock = "^1.10.0"
 # faker = "^23.2.1"
 
 
 [tool.poe.tasks]
-test = "pytest"
+test = """
+python -m pytest tests
+--cov=src
+--cov-config=dev/.coveragerc
+--cov-report term-missing
+--cov-fail-under=50
+--junitxml=tests/unit/results.xml
+"""
 # formatting = "black ./ --exclude 'tests/tmp_*'"
 auto-format = "ruff format ./ --config dev/ruff.toml"
 auto-lint = "ruff check ./ --config dev/ruff.toml"
