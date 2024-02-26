@@ -1,0 +1,7 @@
+---
+connection_string: "\
+  DRIVER={FreeTDS};\
+  SERVER=${LOCAL_SERVER},1433;\
+  UID=sa;\
+  PWD=${DB_PASSWORD};\
+"

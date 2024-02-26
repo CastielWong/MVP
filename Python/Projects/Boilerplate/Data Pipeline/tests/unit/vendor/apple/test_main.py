@@ -8,7 +8,7 @@ from datetime import date
 # import pytest
 from pyfakefs.fake_filesystem import FakeFilesystem
 from pytest_mock import MockerFixture
-from src.apple import main as apple
+from src.vendor.apple import main as apple
 
 _DUMMY_CONTENT = (
     "FileDate   Activated   ISIN    ... EffectiveDate\n"

@@ -1,8 +1,8 @@
 #!/usr/bin/env -S python -m pytest
 # -*- coding: utf-8 -*-
 """Test for metadata of Apple file."""
-from src.apple import metadata
-from src.apple.metadata import FileMeta
+from src.vendor.apple import metadata
+from src.vendor.apple.metadata import FileMeta
 import pytest
 
 
