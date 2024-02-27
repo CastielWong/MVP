@@ -1,0 +1,60 @@
+%YAML 1.2
+---
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-added-large-files
+  - id: check-case-conflict
+  - id: check-docstring-first
+  - id: check-json
+  - id: check-yaml
+    args:
+    - --allow-multiple-documents
+  - id: check-merge-conflict
+  - id: detect-private-key
+  - id: no-commit-to-branch
+    args: [--branch, master]
+- repo: https://github.com/ambv/black
+  rev: 24.2.0
+  hooks:
+  - id: black
+    language_version: python3
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.2.2
+  hooks:
+  - id: ruff-format
+    args:
+    - --config
+    - dev/ruff.toml
+  - id: ruff
+    args:
+    - --config
+    - dev/ruff.toml
+    - --fix
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.8.0
+  hooks:
+  - id: mypy
+    args:
+    - --config-file=dev/mypy.ini
+    - --no-strict-optional
+    # - --ignore-missing-imports
+    # - --namespace-packages
+    # - --explicit-package-bases
+    additional_dependencies: [types-all]
+- repo: https://github.com/tonybaloney/wily
+  rev: 1.25.0
+  hooks:
+  - id: wily
+    name: wily
+    verbose: true
+    language: python
+    additional_dependencies: [wily]
+    entry: wily diff
+    args:
+    - --no-detail

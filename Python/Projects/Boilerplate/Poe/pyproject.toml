@@ -3,13 +3,12 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "pipeline"
+name = "boilerplate"
 version = "0.1.0"
 description = ""
 authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
 readme = "README.md"
 packages = [
-    {include = "vendor", from = "src"},
     {include = "connection", from = "src"},
     {include = "utility", from = "src"},
 ]
@@ -18,19 +17,21 @@ packages = [
 python = "^3.10"
 poethepoet = "0.24.4"
 
-mysql-connector-python = "^8.1.0"
-paramiko = "^2.12.0"
-pyodbc = "^5.1.0"
-PyYAML = "^6.0.1"
-
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.7"
+# black = "^24.2.0"
+# flake8 = "^7.0.0"
+# isort = "^5.13.2"
+# mypy = "^1.8.0"
+# pylint = "^3.0.4"
 
 [tool.poetry.group.test.dependencies]
 pyfakefs = { version = ">=5.0.0", optional = false, extras = [] }
 pytest = "^8.0.2"
 pytest-cov = "~=4.0.0"
 pytest-mock = ">=3.10.0"
+# requests-mock = "^1.10.0"
+# faker = "^23.2.1"
 
 
 [tool.poe.tasks]
@@ -39,9 +40,10 @@ python -m pytest tests
 --cov=src
 --cov-config=dev/.coveragerc
 --cov-report term-missing
---cov-fail-under=50
+--cov-fail-under=80
 --junitxml=tests/unit/results.xml
 """
+# formatting = "black ./ --exclude 'tests/tmp_*'"
 auto-format = "ruff format ./ --config dev/ruff.toml"
 auto-lint = "ruff check ./ --config dev/ruff.toml"
 

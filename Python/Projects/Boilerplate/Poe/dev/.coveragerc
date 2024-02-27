@@ -3,5 +3,5 @@
 omit =
     */__main__.py
     */__init__.py
-    # */conftest.py
+    */conftest.py
 data_file = tmp_coverage
