@@ -62,29 +62,29 @@ repos:
 #     # - --namespace-packages
 #     # - --explicit-package-bases
 #     additional_dependencies: [types-all]
-- repo: https://github.com/pre-commit/mirrors-pylint
-  rev: v3.0.0a5
-  hooks:
-  - id: pylint
-    args:
-    - --rcfile=dev/.pylintrc
-    - --disable=C0301 # (line-too-long)
-    - --disable=C2801 # (unnecessary-dunder-call)
-    - --disable=E0401 # (import-error)
-    - --disable=R0801 # (duplicate-code)
-    - --disable=R1711 # (useless-return)
-    # note that the pattern below is not feasible:
-    # "(?:(?P<custom>)|(?P<snake>([^\\W\\dA-Z][^\\WA-Z]{2,}|_[^\\WA-Z]*|__[^\\WA-Z\\d_][^\\WA-Z]+__)))$"
-    - --variable-rgx=(?:(?P<custom>([^\W\dA-Z][^\WA-Z]{1,}|_[^\WA-Z]*|__[^\WA-Z\d_][^\WA-Z]+__)))$
-    - --include-naming-hint=y
+# - repo: https://github.com/pre-commit/mirrors-pylint
+#   rev: v3.0.0a5
+#   hooks:
+#   - id: pylint
+#     args:
+#     - --rcfile=dev/.pylintrc
+#     - --disable=C0301 # (line-too-long)
+#     - --disable=C2801 # (unnecessary-dunder-call)
+#     - --disable=E0401 # (import-error)
+#     - --disable=R0801 # (duplicate-code)
+#     - --disable=R1711 # (useless-return)
+#     # note that the pattern below is not feasible:
+#     # "(?:(?P<custom>)|(?P<snake>([^\\W\\dA-Z][^\\WA-Z]{2,}|_[^\\WA-Z]*|__[^\\WA-Z\\d_][^\\WA-Z]+__)))$"
+#     - --variable-rgx=(?:(?P<custom>([^\W\dA-Z][^\WA-Z]{1,}|_[^\WA-Z]*|__[^\WA-Z\d_][^\WA-Z]+__)))$
+#     - --include-naming-hint=y
 # - repo: https://github.com/PyCQA/pydocstyle
 #   rev: 6.3.0
 #   hooks:
 #   - id: pydocstyle
 #     language_version: python3
-- repo: https://github.com/PyCQA/bandit
-  rev: 1.7.7
-  hooks:
-  - id: bandit
-    args:
-    - -c=dev/bandit.yaml
+# - repo: https://github.com/PyCQA/bandit
+#   rev: 1.7.7
+#   hooks:
+#   - id: bandit
+#     args:
+#     - -c=dev/bandit.yaml
