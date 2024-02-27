@@ -1,9 +1,10 @@
 #!/usr/bin/env -S python -m pytest
 # -*- coding: utf-8 -*-
 """Test for metadata of Apple file."""
+import pytest
+
 from src.vendor.apple import metadata
 from src.vendor.apple.metadata import FileMeta
-import pytest
 
 
 @pytest.mark.parametrize(

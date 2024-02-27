@@ -4,12 +4,13 @@
 from typing import Dict
 
 from pytest_mock import MockerFixture
+import pytest
+
 from src.connection.database import (
     Connector,
     MySqlConnector,
     SqlServerConnector,
 )
-import pytest
 
 DUMMY_CONFIG_SQL_SERVER = {
     "server": "localhost",

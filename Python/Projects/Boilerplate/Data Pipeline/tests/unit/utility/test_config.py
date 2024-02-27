@@ -7,9 +7,10 @@ import os
 
 from pyfakefs.fake_filesystem import FakeFilesystem
 from pytest_mock import MockerFixture
-from tests import DIR_RESOURCE
-from utility import config
 import pytest
+
+from src.utility import config
+from tests import DIR_RESOURCE
 
 CONTENTS = (
     "description: This is for testing\n"

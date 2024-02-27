@@ -7,11 +7,12 @@ from typing import Optional
 import os
 import shutil
 
-from pyfakefs.fake_filesystem import FakeFilesystem
 from paramiko import SSHClient
+from pyfakefs.fake_filesystem import FakeFilesystem
 from pytest_mock import MockerFixture
-from src.connection.ftp import FTPClient, SecureFTPClient
 import pytest
+
+from src.connection.ftp import FTPClient, SecureFTPClient
 
 _DUMMY_REMOTE = "/dummy/remote"
 _DUMMY_LOCAL = "dummy/local"
@@ -21,7 +22,7 @@ _CSV_TO_DOWNLOAD = os.path.join(_DUMMY_REMOTE, _DUMMY_CSV)
 
 DUMMY_HOST = "dummy_host"
 DUMMY_USERNAME = "dummy_user"
-DUMMY_PASSWORD = "dummy_pass"  # nosec
+DUMMY_PASSWORD = "dummy_pass"  # noqa: S105 (hardcoded-password-string)
 DUMMY_TIMEOUT = 180
 
 DUMMY_FTP = FTPClient(
@@ -150,8 +151,8 @@ def test_sftp__initialization_exception__both():
     with pytest.raises(NotImplementedError) as exc_info:
         SecureFTPClient(
             hostname=DUMMY_HOST,
-            password="a_password",
-            key_file="a_key.pem",  # nosec
+            password="a_password",  # noqa: S106 (hardcoded-password-func-arg)
+            key_file="a_key.pem",
         )
         assert (
             exc_info.value

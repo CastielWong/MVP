@@ -22,7 +22,7 @@ repos:
   hooks:
   - id: black
     language_version: python3
-    exclude: "Python/Projects/Boilerplate/Sample Module/"
+    exclude: "Python/Projects/Boilerplate"
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.2.2
   hooks:
@@ -34,17 +34,18 @@ repos:
     args:
     - --config
     - dev/ruff.toml
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
-  hooks:
-  - id: isort
-    args:
-    - -m=VERTICAL_HANGING_INDENT
-    # specify the directory for --from-first is mandatory
-    - --from-first
-    - --only-sections
-    # need the trailing comma to avoid the conflict with black's auto-formatting
-    - --trailing-comma
+    - --fix
+# - repo: https://github.com/pycqa/isort
+#   rev: 5.13.2
+#   hooks:
+#   - id: isort
+#     args:
+#     - -m=VERTICAL_HANGING_INDENT
+#     # specify the directory for --from-first is mandatory
+#     - --from-first
+#     - --only-sections
+#     # need the trailing comma to avoid the conflict with black's auto-formatting
+#     - --trailing-comma
 # - repo: https://github.com/pycqa/flake8
 #   rev: 7.0.0
 #   hooks:

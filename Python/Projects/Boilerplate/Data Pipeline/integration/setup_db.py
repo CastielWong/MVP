@@ -54,9 +54,9 @@ def main() -> None:
     for pipeline in PIPELINES:
         LOGGER.info("Set up for '%s' pipeline", pipeline)
         for script, seconds in INIT_SQL_SCRIPTS:
-            script = os.path.join(pipeline, script)
+            script_file = os.path.join(pipeline, script)
             run_sql_script(
-                db_conn_string=conn_string, path_script=script, sec_to_wait=seconds
+                db_conn_string=conn_string, path_script=script_file, sec_to_wait=seconds
             )
 
     return

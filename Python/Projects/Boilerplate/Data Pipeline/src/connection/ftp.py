@@ -45,7 +45,7 @@ class FTPClient:
 
     def __enter__(self):
         """Open context with FTP."""
-        ftp = FTP()  # nosec
+        ftp = FTP()  # noqa: S321 (suspicious-ftp-lib-usage)
         ftp.connect(host=self.hostname, port=self.port, timeout=self.timeout)
         ftp.login(user=self.username, passwd=self.password)
         self._client = ftp
@@ -184,7 +184,7 @@ class SecureFTPClient(FTPClient):
     def __enter__(self):
         """Open context."""
         ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # nosec
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # noqa: S507 (ssh-no-host-key-verification)
 
         # note that the `disable_algorithms` is needed due to a compatibility bug
         # https://stackoverflow.com/a/71140149
