@@ -5,10 +5,10 @@ import os
 import re
 
 FILE_NAME_REGEX = re.compile(
-    "^(?P<prefix>[a-z]*)"
+    "^(?P<prefix>[a-z]*)"  # fmt: off
     r"_(?P<date>\d{8})"
     "(.(?P<extension>(csv|txt)))?$"
-)  # fmt: off
+)
 
 
 @dataclass
