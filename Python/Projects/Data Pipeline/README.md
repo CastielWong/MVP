@@ -36,7 +36,8 @@ poetry env remove --all
 # create a new virtual environment dedicated for the project
 poetry env use python3
 
-poetry install
+# install packages needed only (without packaging)
+poetry install --no-root
 ```
 
 

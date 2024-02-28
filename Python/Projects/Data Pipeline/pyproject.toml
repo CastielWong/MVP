@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pipeline"
-version = "0.1.0"
+version = "0.0.0"
 description = ""
 authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
 readme = "README.md"
@@ -22,6 +22,7 @@ mysql-connector-python = "^8.1.0"
 paramiko = "^2.12.0"
 pyodbc = "^5.1.0"
 PyYAML = "^6.0.1"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.7"
@@ -31,6 +32,7 @@ pyfakefs = { version = ">=5.0.0", optional = false, extras = [] }
 pytest = "^8.0.2"
 pytest-cov = "~=4.0.0"
 pytest-mock = ">=3.10.0"
+requests-mock = "^1.11.0"
 
 
 [tool.poe.tasks]

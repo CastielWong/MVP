@@ -91,14 +91,14 @@ repos:
 #   - id: bandit
 #     args:
 #     - -c=dev/bandit.yaml
-- repo: https://github.com/tonybaloney/wily
-  rev: 1.25.0
-  hooks:
-  - id: wily
-    name: wily
-    verbose: true
-    language: python
-    additional_dependencies: [wily]
-    entry: wily diff
-    args:
-    - --no-detail
+# - repo: https://github.com/tonybaloney/wily
+#   rev: 1.25.0
+#   hooks:
+#   - id: wily
+#     name: wily
+#     verbose: true
+#     language: python
+#     additional_dependencies: [wily]
+#     entry: wily diff
+#     args:
+#     - --no-detail

@@ -4,9 +4,9 @@
 import os
 
 from src import DIR_ETC
-from src.apple import main as apple
-from src.berry import main as berry
 from src.utility import config
+from src.vendor.apple import main as apple
+from src.vendor.berry import main as berry
 
 if __name__ == "__main__":
     parser = config.parse_yaml(os.path.join(DIR_ETC, "cli.yaml"))

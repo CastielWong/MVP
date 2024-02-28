@@ -1,4 +1,6 @@
 # customization
 .ruff_cache
 poetry.lock
+tmp_*
+
 **results.xml
