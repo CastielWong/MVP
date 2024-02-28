@@ -20,7 +20,7 @@ class FTPClient:
 
     def __init__(  # pylint: disable=R0913 (too-many-arguments)
         self,
-        hostname: str,
+        host: str,
         port: int = 21,
         username: str = "",
         password: Optional[str] = None,
@@ -29,13 +29,13 @@ class FTPClient:
         """Initialize FTP connection.
 
         Args:
-            hostname: the server to connect to, either URL or IP address
+            host: the server to connect to, either URL or IP address
             port: the server port to connect to
             username: the username to authenticate as
             password: used for password authentication
             timeout: timeout (in seconds) for the TCP connect
         """
-        self.hostname = hostname
+        self.host = host
         self.port = port
         self.username = username
         self.password = password
@@ -46,7 +46,7 @@ class FTPClient:
     def __enter__(self):
         """Open context with FTP."""
         ftp = FTP()  # noqa: S321 (suspicious-ftp-lib-usage)
-        ftp.connect(host=self.hostname, port=self.port, timeout=self.timeout)
+        ftp.connect(host=self.host, port=self.port, timeout=self.timeout)
         ftp.login(user=self.username, passwd=self.password)
         self._client = ftp
         return self
@@ -141,7 +141,7 @@ class SecureFTPClient(FTPClient):
 
     def __init__(  # pylint: disable=R0913 (too-many-arguments)
         self,
-        hostname: str,
+        host: str,
         port: int = 22,
         username: str = "",
         password: Optional[str] = None,
@@ -151,7 +151,7 @@ class SecureFTPClient(FTPClient):
         """Initialize SFTP connection.
 
         Args:
-            hostname: the server to connect to, either URL or IP address
+            host: the server to connect to, either URL or IP address
             port: the server port to connect to
             username: the username to authenticate as
             password: used for password authentication
@@ -159,7 +159,7 @@ class SecureFTPClient(FTPClient):
             timeout: timeout (in seconds) for the TCP connect
         """
         super().__init__(
-            hostname=hostname,
+            host=host,
             port=port,
             username=username,
             password=password,
@@ -191,7 +191,7 @@ class SecureFTPClient(FTPClient):
         # note that the `disable_algorithms` is needed due to a compatibility bug
         # https://stackoverflow.com/a/71140149
         ssh.connect(
-            hostname=self.hostname,
+            host=self.host,
             port=self.port,
             username=self.username,
             password=self.password,

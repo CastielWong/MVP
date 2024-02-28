@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 """Demo download."""
-
 from mimetypes import guess_extension
 from pathlib import Path
 import logging
@@ -7,7 +7,18 @@ import os
 
 from requests import Response
 
+from src.connection.ftp import SecureFTPClient
+
 LOGGER = logging.getLogger(__name__)
+
+
+_SFTP_CONFIG = {
+    "host": "dummy_host",
+    "port": 22,
+    "username": "dummy",
+    "password": os.environ.get("DUMMY_FTP_PASSWORD", "notProvided"),
+    "key_file": os.environ.get("DUMMY_FTP_KEYFILE", None),
+}
 
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
 CONTENT_ENCODING_TO_EXTENSION = {
@@ -18,6 +29,21 @@ CONTENT_ENCODING_TO_EXTENSION = {
 }
 
 COMPRESSION_EXTENSIONS = [".gz", ".7z", ".zip"]
+
+
+def download_from_ftp(source_file: str, dir_target: str) -> None:
+    """Download a data file from SFTP.
+
+    Args:
+        source_file: path of the data file to download in the source
+        dir_target: directory of the file downloaded in archiving volume
+    """
+    with SecureFTPClient(**_SFTP_CONFIG) as client:
+        client.download_file(ftp_path=source_file, dir_local=dir_target)
+
+    LOGGER.info(f"The source file {source_file} is downloaded in {dir_target}.")
+
+    return
 
 
 def download_raw_response(  # noqa: C901 (complex-structure)

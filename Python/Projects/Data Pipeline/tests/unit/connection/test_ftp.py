@@ -26,13 +26,13 @@ DUMMY_PASSWORD = "dummy_pass"  # noqa: S105 (hardcoded-password-string)
 DUMMY_TIMEOUT = 180
 
 DUMMY_FTP = FTPClient(
-    hostname=DUMMY_HOST,
+    host=DUMMY_HOST,
     username=DUMMY_USERNAME,
     password=DUMMY_PASSWORD,
     timeout=DUMMY_TIMEOUT,
 )
 DUMMY_SFTP = SecureFTPClient(
-    hostname=DUMMY_HOST,
+    host=DUMMY_HOST,
     username=DUMMY_USERNAME,
     password=DUMMY_PASSWORD,
     timeout=DUMMY_TIMEOUT,
@@ -138,7 +138,7 @@ def test_sftp__initialization_exception__neither(
 ):
     """Check when the initialization has neither password nor cert."""
     with pytest.raises(ValueError) as exc_info:
-        SecureFTPClient(hostname=DUMMY_HOST, password=password, key_file=key_file)
+        SecureFTPClient(host=DUMMY_HOST, password=password, key_file=key_file)
         assert (
             exc_info.value
             == "Please provide either password or the key file for authentication."
@@ -150,7 +150,7 @@ def test_sftp__initialization_exception__both():
     """Check when the initialization has both password and cert."""
     with pytest.raises(NotImplementedError) as exc_info:
         SecureFTPClient(
-            hostname=DUMMY_HOST,
+            host=DUMMY_HOST,
             password="a_password",  # noqa: S106 (hardcoded-password-func-arg)
             key_file="a_key.pem",
         )
@@ -168,7 +168,7 @@ def test_sftp__check_connection_open(mocker: MockerFixture):
 
     with DUMMY_SFTP:
         patcher.assert_called_with(
-            hostname=DUMMY_HOST,
+            host=DUMMY_HOST,
             port=22,
             username=DUMMY_USERNAME,
             password=DUMMY_PASSWORD,

@@ -1,15 +1,41 @@
+# -*- coding: utf-8 -*-
 """Test download."""
-
 from pathlib import Path
 import gzip
 import os
 
+from pytest_mock import MockerFixture
 import pytest
 import requests
 
 from src.utility import downloading
 
 DUMMY_NFS_LOCATION = "tmp_nfs"
+
+
+def test_download_from_ftp(mocker: MockerFixture, monkeypatch):
+    """Verify the download."""
+    monkeypatch.setenv("DUMMY_FTP_PASSWORD", "nothing1$real")
+
+    source_file = "/storage/20231005/infix/dummy.csv"
+    dir_target = "/opt/vendor/"
+
+    # prepare for SecureFTPClient mocking
+    check = mocker.MagicMock()
+
+    mocker.patch("paramiko.SSHClient", mocker.MagicMock())
+    mocker.patch("src.connection.ftp.SecureFTPClient.__enter__", return_value=check)
+    mocker.patch(
+        "src.connection.ftp.SecureFTPClient.__exit__",
+        return_value=mocker.MagicMock(),
+    )
+
+    downloading.download_from_ftp(source_file=source_file, dir_target=dir_target)
+
+    # verify the `SecureFTPClient.download_file()` is called with expected parameters
+    check.download_file.assert_called_with(ftp_path=source_file, dir_local=dir_target)
+
+    return
 
 
 @pytest.mark.parametrize(
