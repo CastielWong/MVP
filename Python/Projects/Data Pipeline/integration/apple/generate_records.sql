@@ -1,8 +1,8 @@
 
 --- Insert sample records
-DECLARE @prefix CHAR(26) = 'vendor_'
+DECLARE @prefix VARCHAR(10) = 'apple_'
 
-DECLARE @countries TABLE (country CHAR(1))
+DECLARE @countries TABLE (country VARCHAR(10))
 INSERT INTO @countries VALUES ('Australia'), ('Brazil'), ('China')
     , ('Denmark'), ('England')
 
@@ -22,10 +22,11 @@ BEGIN
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            INSERT INTO {db}.{schema}.{tb} (
-                [source_date], [source_name], [to_be_processed]
+            PRINT @check_date
+            INSERT INTO DataPipeline.dbo.apple (
+                [source_date], [source_name], [complete]
             )
-            VALUES (@check_date, @prefix + @var_name + '.csv', 1)
+            VALUES (@check_date, @prefix + @var_name + '.csv', 0)
 
             FETCH NEXT FROM name_cursor INTO @var_name
         END

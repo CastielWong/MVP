@@ -1,12 +1,41 @@
 version: "3.9"
 
 services:
+  local-env:
+    image: dp-local:0.0.1
+    container_name: dp-local-env
+    build:
+      context: .
+      dockerfile: dev/Dockerfile
+    depends_on:
+    - database
+    environment:
+    - LOCAL_SERVER=10.10.0.13
+    - DB_USER=sa
+    - DB_PASSWORD=DataBase1!
+    command: tail -F anything
+    volumes:
+    - ${PWD}/src:/app/src
+    - ${PWD}/etc:/app/etc
+    - ${PWD}/integration:/app/integration
+    - ${PWD}/dev/.coveragerc:/app/.coveragerc
+    - ${PWD}/tests:/app/tests
+    networks:
+      data_piepline:
+        ipv4_address: 10.10.0.22
+
   ci:
-    image: dp-ci:0.0.1
+    image: dp-local:0.0.1
     container_name: dp-integration-test
     build:
       context: .
       dockerfile: dev/Dockerfile
+    depends_on:
+    - database
+    environment:
+    - LOCAL_SERVER=10.10.0.13
+    - DB_USER=sa
+    - DB_PASSWORD=DataBase1!
     command: python -m
       pytest /app/tests
       --cov=src
@@ -17,11 +46,12 @@ services:
     volumes:
     - ${PWD}/src:/app/src
     - ${PWD}/etc:/app/etc
+    - ${PWD}/integration:/app/integration
     - ${PWD}/dev/.coveragerc:/app/.coveragerc
     - ${PWD}/tests:/app/tests
     networks:
       data_piepline:
-        ipv4_address: 10.10.0.2
+        ipv4_address: 10.10.0.12
 
   database:
     # image: mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
@@ -49,7 +79,7 @@ services:
     # - $PWD/script:/app/script
     networks:
       data_piepline:
-        ipv4_address: 10.10.0.3
+        ipv4_address: 10.10.0.13
 
 networks:
   data_piepline:
@@ -57,4 +87,4 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: 10.10.0.0/28
+      - subnet: 10.10.0.0/26
