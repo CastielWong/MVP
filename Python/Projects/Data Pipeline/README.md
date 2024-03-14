@@ -3,6 +3,9 @@
 - [Development](#development)
   - [Setup](#setup)
   - [Usage](#usage)
+  - [Test](#test)
+    - [Unit](#unit)
+    - [Integration](#integration)
 - [Poetry](#poetry)
   - [Poe the Poet](#poe-the-poet)
 
@@ -39,6 +42,15 @@ poetry env use python3
 # install packages needed only (without packaging)
 poetry install --no-root
 ```
+
+### Test
+"Makefile" is utilized for the convenience of testing.
+
+#### Unit
+The Unit Testing is done via `poetry`, run it via `make unit-test`.
+
+#### Integration
+Integration Testing requires the help of Docker
 
 
 ## Poetry

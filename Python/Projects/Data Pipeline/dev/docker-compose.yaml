@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  ci:
+    image: dp-ci:0.0.1
+    container_name: dp-integration-test
+    build:
+      context: .
+      dockerfile: dev/Dockerfile
+    command: python -m
+      pytest /app/tests
+      --cov=src
+      --cov-config=/app/.coveragerc
+      --cov-report term-missing
+      --cov-fail-under=80
+      --junit-xml=/app/tests/unit/results.xml
+    volumes:
+    - ${PWD}/src:/app/src
+    - ${PWD}/etc:/app/etc
+    - ${PWD}/dev/.coveragerc:/app/.coveragerc
+    - ${PWD}/tests:/app/tests
+    networks:
+      data_piepline:
+        ipv4_address: 10.10.0.2
+
+  database:
+    # image: mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: dp-sql-server
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 1500M
+        reservations:
+          cpus: "0.25"
+          memory: 1000M
+    command: /opt/mssql/bin/sqlservr
+    restart: always
+    environment:
+    - ACCEPT_EULA=1 # accept license agreement
+    - SA_USER=sa
+    - SA_PASSWORD=DataBase1!
+    - DIR_CONFIG=/app/config
+    ports:
+    - "1433:1433"
+    # volumes:
+    # - $PWD/config:/app/config
+    # - $PWD/script:/app/script
+    networks:
+      data_piepline:
+        ipv4_address: 10.10.0.3
+
+networks:
+  data_piepline:
+    name: data_piepline
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 10.10.0.0/28
