@@ -1,0 +1,25 @@
+---
+services:
+  ocr:
+    image: debian-ocr:0.0.1
+    container_name: mvp-ocr
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true   # keep container running
+    # command: tail -F anything
+    volumes:
+    - ${PWD}/dev/requirements.txt:/app/requirements.txt
+    - ${PWD}/src:/app/src
+    - ${PWD}/images:/app/images
+    networks:
+      sandbox:
+        ipv4_address: 20.20.0.21
+
+networks:
+  sandbox:
+    name: sandbox
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 20.20.0.0/26
