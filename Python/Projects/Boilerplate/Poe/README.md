@@ -1,10 +1,11 @@
 
 
+- [Poetry](#poetry)
+  - [Poe the Poet](#poe-the-poet)
 - [Development](#development)
   - [Setup](#setup)
   - [Usage](#usage)
-- [Poetry](#poetry)
-  - [Poe the Poet](#poe-the-poet)
+- [Publish](#publish)
 
 
 This boilerplate utilize [Poetry](https://python-poetry.org/) with [Poe the Poet](https://github.com/nat-n/poethepoet) for:
@@ -14,31 +15,6 @@ This boilerplate utilize [Poetry](https://python-poetry.org/) with [Poe the Poet
 - dependency management
 - package publish
 - task runner
-
-
-## Development
-### Setup
-It's highly recommended to use `pipx` for `poetry` installation:
-```sh
-pip install --upgrade pip
-
-pip install pipx
-# poetry can be found in `pipx list`
-pipx install poetry
-```
-
-### Usage
-Under this root directory, run commands below to kick off development:
-```sh
-rm poetry.lock
-poetry env remove --all
-
-# create a new virtual environment dedicated for the project
-poetry env use python3
-
-# install packages needed only (without packaging)
-poetry install --no-root
-```
 
 
 ## Poetry
@@ -64,6 +40,8 @@ rm poetry.lock
 poetry env remove --all
 poetry install
 
+# run the entrypoint
+poetry run demoing
 
 # run code in poetry environment
 poetry run python -q
@@ -87,4 +65,54 @@ sequence = ["auto-format", "auto-lint"]
 Run the task via
 ```sh
 poetry poe check
+```
+
+
+## Development
+
+### Setup
+It's highly recommended to use `pipx` for `poetry` installation:
+```sh
+pip install --upgrade pip
+
+pip install pipx
+
+# clean up legacy poetry related stuff if any
+rm poetry.lock
+pipx uninstall poetry
+
+# poetry can be found in `pipx list`
+pipx install poetry
+```
+
+### Usage
+Utilize "pip-tools" to manage package dependencies:
+```sh
+pip install pip-tools
+pip-compile pyproject.toml --dry-run
+```
+
+Run commands below to kick off development:
+```sh
+rm poetry.lock
+poetry env remove --all
+
+# create a new virtual environment dedicated for the project
+poetry env use python3
+
+# install packages needed only (without packaging)
+poetry install --no-root
+```
+
+
+## Publish
+```sh
+# build the package
+poetry build --output dist
+
+# config the destination
+poetry config repositories.test_pypi 'https://test.pypi.org/simple' --local
+poetry config http-basic.test_pypi '${TEST_PYPI_USER}' '${TEST_PYPI_PASS}' --local
+
+poetry publish --repository test_pypi --dry-run
 ```

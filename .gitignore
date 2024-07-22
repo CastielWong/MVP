@@ -1,4 +1,8 @@
 
+# Customization
+.0_tmp/
+
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,venv,linux,macos,python,windows,virtualenv,jetbrains+all,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,venv,linux,macos,python,windows,virtualenv,jetbrains+all,visualstudiocode
 

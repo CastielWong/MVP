@@ -6,7 +6,7 @@ Files inside "sandbox" are used to provision a CentOS VM with Python3 installed.
 
 Remove a list of files/directories:
 ```sh
-sh prune_dirs.sh <file.txt>
+sh prune_dirs.sh {file.txt}
 ```
 
 

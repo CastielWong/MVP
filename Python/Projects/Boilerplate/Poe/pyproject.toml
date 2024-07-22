@@ -1,21 +1,32 @@
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pip-tools]
+generate-hashes = true
+
+[tool.pip-tools.compile]
+dry-run = true
+
 
 [tool.poetry]
 name = "boilerplate"
 version = "0.1.0"
-description = ""
+description = "A boilerplate utilized Poetry"
 authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
 readme = "README.md"
 packages = [
     {include = "connection", from = "src"},
     {include = "utility", from = "src"},
 ]
+homepage = "https://github.com/CastielWong/MVP"
+license = "GPL-2.0-only"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 poethepoet = "0.24.4"
+
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.7"
@@ -33,6 +44,8 @@ pytest-mock = ">=3.10.0"
 # requests-mock = "^1.10.0"
 # faker = "^23.2.1"
 
+[tool.poetry.scripts]
+demoing = "src.__main__:main"
 
 [tool.poe.tasks]
 test = """
