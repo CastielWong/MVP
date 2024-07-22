@@ -1,20 +1,20 @@
 
-"Dockerfile" is used to create an CentOS image with Python installed.
+- [Instruction](#instruction)
+- [Reference](#reference)
 
-If it's a different Linux flavor using `apt`, below is the steps to install Python:
-```sh
-# https://computingforgeeks.com/how-to-install-python-on-ubuntu-linux-system/
-apt update
-apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev
+## Instruction
+There are 2 flavors of Linux provided:
+- CentOS
+- Debian
 
-VERSION=3.10.14
-wget https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tgz
+Both are barebone so the the way to have them up and running are almost the same:
 
-tar -xf Python-$VERSION.tgz
+| Recipe | Description |
+| --- | --- |
+| make start | have the container up and running |
+| make run | get into the container for exploration |
+| make stop | stop and clean up resources |
 
-cd  Python-$VERSION/
-./configure --enable-optimizations
 
-make -j $(nproc)
-make altinstall
-```
+## Reference
+- How To Install Python 3.10 on Ubuntu: https://computingforgeeks.com/how-to-install-python-on-ubuntu-linux-system/

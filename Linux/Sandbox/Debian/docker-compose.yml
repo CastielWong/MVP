@@ -1,0 +1,24 @@
+---
+services:
+  debian:
+    container_name: sandbox-debian
+    image: sandbox-debian:0.0.1
+    build:
+      context: $PWD
+      dockerfile: Dockerfile
+    tty: true   # keep container running
+    ports:
+    - "8080:8080"
+    volumes:
+    - ./dir_working:/root/volume
+    networks:
+      sanbox:
+        ipv4_address: 20.20.0.12
+
+networks:
+  sanbox:
+    name: sanbox
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 20.20.0.0/26
