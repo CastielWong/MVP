@@ -1,4 +1,5 @@
 
+- [Prompt String](#prompt-string)
 - [Meta](#meta)
 - [Manipulation](#manipulation)
 - [Reference](#reference)
@@ -11,8 +12,16 @@ Bash accommodates piping and redirection by way of special files. Each process g
 - STDOUT: "/dev/stdout" or "/proc/<processID>/fd/1"
 - STDERR: "/dev/stderr" or "/proc/<processID>/fd/2"
 
+## Prompt String
 To customize the shell prompt for bash, set environment variable `$PS1` for the purpose:
-`export PS1="[\t \u@\h \w]\$ "`. Or set `PS1` in "~/.bashrc" directly for persistency.
+`export PS1="[\t \u@\h \w]\$ "`.
+Or set `PS1` in "~/.bashrc" directly for persistency.
+
+Here are the most commonly used PS variables:
+- PS1: the primary prompt string that is displayed when the shell is ready to accept a command
+- PS2: the secondary prompt string, which is displayed when a command is incomplete and the shell is waiting for additional input, for example a multi-line command (like an unclosed quote)
+- PS3: is used for the select command in shell scripts, when the user needs to select an option from a list
+- PS4: is used for debugging, when debugging mode is enabled in a script (using `set -x`), the PS4 variable defines the prompt that appears before each command that is executed
 
 
 ## Meta
@@ -148,3 +157,4 @@ echo "--------------"
 
 ## Reference
 - Bash Tutorial: https://ryanstutorials.net/bash-scripting-tutorial/
+- 控制 PS1、PS2、PS3、PS4 和 PROMPT_COMMAND: https://bbs.huaweicloud.com/blogs/313225

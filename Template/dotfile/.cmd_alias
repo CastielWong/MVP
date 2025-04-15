@@ -4,6 +4,8 @@
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 
 # GIT
+# activate SSH
+alias git_ssh='eval $(ssh-agent); ssh-add ~/.ssh/id_self'
 # update datetime for current commit
 alias gct_update='git commit --amend --no-edit --date "$(date +"%a %b %d %H:%M:%S %Y %z")"'
 # check commit contributions
@@ -30,3 +32,6 @@ alias dkr_sp='echo y | docker system prune'
 # docker-compose customization
 alias dcu='docker-compose up -d'
 alias dcd='docker-compose down'
+
+# # KUBERNETES
+# alias set-k8s-config-custom='export KUBECONFIG="${HOME}/.kube/custom_kube.yaml"'

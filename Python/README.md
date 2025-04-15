@@ -14,10 +14,10 @@ Run `source init.sh` to initialize environment for development.
 
 ## Installation
 Install Python in Linux is a bit trivial, commands below should be more than enough to install Python successfully.
- 
+
 ```sh
-yum install gcc openssl-devel bzip2-devel libffi-devel –y
- 
+yum install gcc openssl-devel bzip2-devel libffi-devel -y
+
 wget https://www.python.org/ftp/python/3.x.x/Python-3.x.x.tgz
 tar -xzf Python-3.x.x.tgz
 

@@ -84,6 +84,7 @@ def merge_pdfs(dir_input: List[str], dir_output: str) -> None:
     """
     files = os.listdir(dir_input)  # type: ignore
 
+    # the merged page order is determined by the order of pdf files
     pdf_files = [a_file for a_file in files if a_file.endswith(".pdf")]
 
     pdf_writer = PdfFileWriter()

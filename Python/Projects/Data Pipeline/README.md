@@ -50,7 +50,7 @@ poetry install --no-root
 The Unit Testing is done via `poetry`, run it via `make unit-test`.
 
 #### Integration
-Integration Testing requires the help of Docker
+Integration Testing requires the help of Docker.
 
 
 ## Poetry
