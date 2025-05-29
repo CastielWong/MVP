@@ -1,68 +1,24 @@
+[project]
+name = "boilerplate"
+version = "0.1.0"
+description = "A boilerplate utilized Poetry"
+authors = [
+    {name = "Castiel HUANG", email = "wangyuh@alumni.cmu.edu"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
+###############################################################################
 [tool.pip-tools]
 generate-hashes = true
 
 [tool.pip-tools.compile]
 dry-run = true
-
-
-[tool.poetry]
-name = "boilerplate"
-version = "0.1.0"
-description = "A boilerplate utilized Poetry"
-authors = ["Castiel HUANG <wangyuh@alumni.cmu.edu>"]
-readme = "README.md"
-packages = [
-    {include = "connection", from = "src"},
-    {include = "utility", from = "src"},
-]
-homepage = "https://github.com/CastielWong/MVP"
-license = "GPL-2.0-only"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-poethepoet = "0.24.4"
-
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.1.7"
-# black = "^24.2.0"
-# flake8 = "^7.0.0"
-# isort = "^5.13.2"
-# mypy = "^1.8.0"
-# pylint = "^3.0.4"
-
-[tool.poetry.group.test.dependencies]
-pyfakefs = { version = ">=5.0.0", optional = false, extras = [] }
-pytest = "^8.0.2"
-pytest-cov = "~=4.0.0"
-pytest-mock = ">=3.10.0"
-# requests-mock = "^1.10.0"
-# faker = "^23.2.1"
-
-[tool.poetry.scripts]
-demoing = "src.__main__:main"
-
-[tool.poe.tasks]
-test = """
-python -m pytest tests
---cov=src
---cov-config=dev/.coveragerc
---cov-report term-missing
---cov-fail-under=80
---junitxml=tests/unit/results.xml
-"""
-# formatting = "black ./ --exclude 'tests/tmp_*'"
-auto-format = "ruff format ./ --config dev/ruff.toml"
-auto-lint = "ruff check ./ --config dev/ruff.toml"
-
-[tool.poe.tasks.check]
-sequence = ["auto-format", "auto-lint"]
-
 
 # [tool.isort]
 # # https://pycqa.github.io/isort/docs/configuration/profiles.html
@@ -75,3 +31,49 @@ sequence = ["auto-format", "auto-lint"]
 #     'two\.pyi$',  # but TOML's single-quoted strings do not
 #     '^three\.',
 # ]
+###############################################################################
+[tool.poetry]
+packages = [
+    {include = "connection", from = "src"},
+    {include = "utility", from = "src"},
+]
+homepage = "https://github.com/CastielWong/MVP"
+license = "GPL-2.0-only"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.requires-plugins]
+poethepoet = { version = "~0.34.0", extras = ["poetry_plugin"] }
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.7"
+# black = "^24.2.0"
+# flake8 = "^7.0.0"
+# isort = "^5.13.2"
+# mypy = "^1.8.0"
+# pylint = "^3.0.4"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pyfakefs = { version = ">=5.0.0", optional = false, extras = [] }
+pytest = "^8.0.2"
+pytest-cov = "~=4.0.0"
+pytest-mock = ">=3.10.0"
+# requests-mock = "^1.10.0"
+# faker = "^23.2.1"
+
+[tool.poetry.scripts]
+demoing = "src.__main__:main"
+###############################################################################
+[tool.poe]
+envfile = ["${POE_GIT_DIR}/local.env"]
+verbosity = -1
+include = "${POE_ROOT}/tasks.toml"
+
+[tool.poe.executor]
+type = "auto"
+
+[tool.poe.env]

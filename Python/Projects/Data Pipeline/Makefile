@@ -12,6 +12,6 @@ integration-test:
 	docker-compose -f dev/docker-compose.yaml --project-directory '${PWD}' up --exit-code-from ci ci
 	docker-compose -f dev/docker-compose.yaml --project-directory '${PWD}' rm -f ci
 
-cleanup:
-	docker-compose -f dev/docker-compose.yaml down
+teardown:
+	docker-compose -f dev/docker-compose.yaml --project-directory '${PWD}' down
 	echo y | docker system prune

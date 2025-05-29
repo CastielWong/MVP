@@ -1,4 +1,12 @@
-# Exclude a variety of commonly ignored directories.
+
+# top level setting
+line-length = 88
+indent-width = 4
+
+# assume Python 3.10
+target-version = "py310"
+
+# exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
     ".direnv",
@@ -28,25 +36,31 @@ exclude = [
     "venv",
 ]
 
-# Same as Black.
-line-length = 88
-indent-width = 4
+# =============================================================================
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = 100
 
-# Assume Python 3.10
-target-version = "py310"
-
+# =============================================================================
 [lint]
 select = [
     # "ALL", # all existing linter plugins
     "F", # Pyflakes
-    "E", # pycodestyle - error
-    "W", # pycodestyle - warning
+    "E", # error - pycodestyle
+    "W", # warning - pycodestyle
+    "B", # flake8-bugbear
     "C90", # mccabe
     "I", # iSort
     "N", # pep8 Naming
-    "D", # pydocstyle
     "S", # flake8-bandit
     "PL", # Pylint
+]
+extend-select = [
+    "D", # pydocstyle
 ]
 # https://docs.astral.sh/ruff/rules/
 ignore = [
@@ -60,13 +74,13 @@ unfixable = []
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 [lint.per-file-ignores]
 "**/tests/**" = [
     "S101", # assert
 ]
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 [lint.flake8-bandit]
 hardcoded-tmp-directory = []
 
@@ -101,20 +115,4 @@ max-branches = 12
 max-locals = 15
 max-nested-blocks = 5
 
-
 # =============================================================================
-[format]
-# Like Black, use double quotes for strings.
-quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
-indent-style = "space"
-
-# Like Black, respect magic trailing commas.
-skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
-line-ending = "auto"
-
-docstring-code-format = true
-docstring-code-line-length = 100
