@@ -3,7 +3,7 @@
 # note that the last line must be a new line
 file_name=$1
 
-coutner=0
+counter=0
 
 while read line; do
     if ! test -e ${line}; then

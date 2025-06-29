@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Logic for Berry data downloading."""
+"""Logic for Berry data ETL."""
 import logging
 
 LOGGER = logging.getLogger(__name__)
@@ -7,36 +7,65 @@ LOGGER = logging.getLogger(__name__)
 _VENDOR_NAME = "berry"
 
 
-def download(source_file: str = "", dir_target: str = "") -> bool:
-    """Perform data downloading.
+def extract(source_file: str = "", target_path: str = "") -> bool:
+    """Perform file extraction.
 
     Args:
-        source_file: name/path of the source file
-        dir_target: name/path of the directory to keep or persist the file
+        source_file: path/name of the file to extract
+        target_path: path where file(s) is(are) extracted
 
     Returns:
-        True if the downloading is successful.
+        True if file is extracted successfully
     """
     return True
 
 
-def archive() -> bool:
-    """Perform file archiving.
+def validate(data_file: str = "") -> bool:
+    """Perform data validation.
+
+    Args:
+        data_file: path to the data file for validation
 
     Returns:
-        True if file is archived successfully
+        True if data is integral
     """
     return True
 
 
-def validate(file_name: str = "") -> bool:
-    """Perform file validation.
+def transform(data_file: str = "", target_path: str = "") -> bool:
+    """Perform data transformation.
 
     Args:
-        file_name: name/path of the file to validate
+        data_file: path to the data file for transformation
+        target_path: path used to store data after transformed
 
     Returns:
-        True if such file is integral
+        True if file is transformed successfully
+    """
+    return True
+
+
+def check_constraint(data_file: str = "") -> bool:
+    """Perform constraint check on the data file after transformed.
+
+    Args:
+        data_file: path to the data file for constraint checking
+
+    Returns:
+        True if data pass all constraints
+    """
+    return True
+
+
+def load(source: str = "", destination: str = "") -> bool:
+    """Perform data load.
+
+    Args:
+        source: path to the data file for loading
+        destination: where the data is loaded into
+
+    Returns:
+        True if file is loaded successfully
     """
     return True
 
@@ -48,9 +77,14 @@ def run(input_name: str, input_date_str: str) -> None:
         input_name: name of the input to kick off downloading
         input_date_str: date of input
     """
-    download()
-
-    archive()
+    extract()
 
     validate()
+
+    transform()
+
+    check_constraint()
+
+    load()
+
     return

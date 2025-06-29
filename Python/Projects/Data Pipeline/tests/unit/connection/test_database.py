@@ -18,7 +18,7 @@ DUMMY_CONFIG_SQL_SERVER = {
     "username": "sa",
     "password": "dummy",
 }
-DUMMY_CONFIG_MySQL = {
+DUMMY_CONFIG_MYSQL = {
     "host": "127.0.0.1",
     "port": 2223,
     "user": "root",
@@ -28,7 +28,7 @@ DUMMY_QUERY = "SELECT * FROM dummy"
 
 
 ###############################################################################
-#   Assert Templates
+#   Assert Templates For Tests
 ###############################################################################
 
 
@@ -89,7 +89,7 @@ def _assert_run_script__side_effect(mocker: MockerFixture, connector: Connector)
     "mod_to_patch, connector, config",
     [
         ("pyodbc.connect", SqlServerConnector, DUMMY_CONFIG_SQL_SERVER),
-        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MySQL),
+        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MYSQL),
     ],
 )
 def test__context_manager(
@@ -110,7 +110,7 @@ def test__context_manager(
     "mod_to_patch, connector, config",
     [
         ("pyodbc.connect", SqlServerConnector, DUMMY_CONFIG_SQL_SERVER),
-        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MySQL),
+        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MYSQL),
     ],
 )
 def test_run_script__exception(
@@ -129,7 +129,7 @@ def test_run_script__exception(
     "mod_to_patch, connector, config",
     [
         ("pyodbc.connect", SqlServerConnector, DUMMY_CONFIG_SQL_SERVER),
-        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MySQL),
+        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MYSQL),
     ],
 )
 def test_run_script__called_with(
@@ -148,7 +148,7 @@ def test_run_script__called_with(
     "mod_to_patch, connector, config",
     [
         ("pyodbc.connect", SqlServerConnector, DUMMY_CONFIG_SQL_SERVER),
-        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MySQL),
+        ("mysql.connector.connect", MySqlConnector, DUMMY_CONFIG_MYSQL),
     ],
 )
 def test_run_script__side_effect(

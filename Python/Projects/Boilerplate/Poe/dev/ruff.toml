@@ -79,6 +79,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "**/tests/**" = [
     "S101", # assert
 ]
+"tests/*" = ["D"]
 
 # -----------------------------------------------------------------------------
 [lint.flake8-bandit]
@@ -92,9 +93,10 @@ from-first = true
 known-local-folder = ["src", "tests"]
 no-lines-before = ["future", "standard-library"]
 no-sections = false
-order-by-type = false
+order-by-type = true
 relative-imports-order = "closest-to-furthest"
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+# default-section = "first-party"
 split-on-trailing-comma = true
 
 [lint.mccabe]

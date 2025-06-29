@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Logic for Apple data downloading."""
+"""Logic for Apple data file acceptance."""
 import logging
 
 LOGGER = logging.getLogger(__name__)
@@ -17,26 +17,35 @@ def download(source_file: str = "", dir_target: str = "") -> bool:
     Returns:
         True if the downloading is successful.
     """
+    # with SecureFTPClient(**_SFTP_CONFIG) as client:
+    #     client.download_file(ftp_path=source_file, dir_local=dir_target)
+
+    # LOGGER.info(f"The source file {source_file} is downloaded in {dir_target}.")
+
     return True
 
 
-def archive() -> bool:
-    """Perform file archiving.
+def check_integrity(file_path: str = "", expected_hash: str = "") -> bool:
+    """Perform sanity check on the downloaded file.
+
+    Args:
+        file_path: path/name of the file to validate
+        expected_hash: the hash value acquired for sanity check
 
     Returns:
-        True if file is archived successfully
+        True if the file is intact
     """
     return True
 
 
-def validate(file_name: str = "") -> bool:
-    """Perform file validation.
+def archive(file_path: str = "") -> bool:
+    """Perform file archiving.
 
     Args:
-        file_name: name/path of the file to validate
+        file_path: path/name of the file to validate
 
     Returns:
-        True if such file is integral
+        True if file is archived successfully
     """
     return True
 
@@ -50,8 +59,8 @@ def run(input_name: str, input_date_str: str) -> None:
     """
     download()
 
-    archive()
+    check_integrity()
 
-    validate()
+    archive()
 
     return

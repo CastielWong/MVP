@@ -181,7 +181,7 @@ def test_sftp__check_connection_open(mocker: MockerFixture):
 
 
 def test_sftp__exists_file(mocker: MockerFixture):
-    """Verify when there is a file exists in SFTP connection."""
+    """Verify when there is a file existed in SFTP connection."""
     DUMMY_SFTP._client = mocker.MagicMock()
     DUMMY_SFTP._client.stat.return_value = "dummy_stat"  # type: ignore
     result = DUMMY_SFTP.exists_file(_CSV_TO_DOWNLOAD)
@@ -192,7 +192,7 @@ def test_sftp__exists_file(mocker: MockerFixture):
 
 
 def test_sftp__exists_file__nonexistent(mocker: MockerFixture):
-    """Verify when there is no file exists in SFTP."""
+    """Verify when there is no file existed in SFTP."""
     DUMMY_SFTP._client = mocker.MagicMock()
     DUMMY_SFTP._client.stat.side_effect = IOError()  # type: ignore
     result = DUMMY_SFTP.exists_file(_CSV_TO_DOWNLOAD)

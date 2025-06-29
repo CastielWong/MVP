@@ -1,0 +1,19 @@
+
+[tool.poe.tasks]
+# formatting = "black ./ --exclude 'tests/tmp_*'"
+auto-format = "ruff format ./ --config dev/ruff.toml"
+auto-lint = "ruff check ./ --config dev/ruff.toml"
+
+[tool.poe.tasks.check]
+sequence = ["auto-format", "auto-lint"]
+
+[tool.poe.tasks.test]
+help = "Run unit tests with coverage"
+cmd = """
+python -m pytest tests
+--cov=src
+--cov-config=dev/.coveragerc
+--cov-report term-missing
+--cov-fail-under=80
+--junitxml=tests/unit/results.xml
+"""

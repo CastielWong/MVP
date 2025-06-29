@@ -20,7 +20,6 @@ This boilerplate utilize [Poetry](https://python-poetry.org/) with [Poe the Poet
 - task runner
 
 
-
 ## Tool
 ### Ruff
 Ruff is an extremely fast Python Linter and code formatter.
@@ -147,6 +146,8 @@ poetry env use python3
 
 # install packages needed only (without packaging)
 poetry install --no-root
+# install packages with specified groups
+poetry install --no-root --with {dev},{test}
 ```
 
 

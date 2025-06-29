@@ -71,7 +71,7 @@ demoing = "src.__main__:main"
 [tool.poe]
 envfile = ["${POE_GIT_DIR}/local.env"]
 verbosity = -1
-include = "${POE_ROOT}/tasks.toml"
+include = "${POE_ROOT}/dev/tasks.toml"
 
 [tool.poe.executor]
 type = "auto"

@@ -49,13 +49,8 @@ def test_download(mocker: MockerFixture, monkeypatch):
     return
 
 
-def test_archive(fs: FakeFilesystem):
-    """Test archive function when a file is archived."""
-    return
-
-
-def test_validate(fs: FakeFilesystem):
-    """Test validate function when a file is valid."""
+def test_check_integrity(fs: FakeFilesystem):
+    """Test check_integrity function when a file is valid."""
     file_name = "dummy_file"
 
     print(file_name)
@@ -66,6 +61,11 @@ def test_validate(fs: FakeFilesystem):
     # fs.create_file(file_path=file_name, contents=f"{_DUMMY_CONTENT}\nLINE COUNT:  10")
     # assert apple.validate(file_name) is True
 
+    return
+
+
+def test_archive(fs: FakeFilesystem):
+    """Test archive function when a file is archived."""
     return
 
 
@@ -101,6 +101,7 @@ def test_run(fs: FakeFilesystem, mocker: MockerFixture, monkeypatch):
     # )
 
     # mocker.patch("sys.exit", return_value=None)
+
     # mocker.patch("pyodbc.connect", return_value=mocker.MagicMock())
     # mocker.patch(
     #     "connection.ftp.SecureFTPClient.__enter__",
