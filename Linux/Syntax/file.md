@@ -94,6 +94,8 @@ find {folder} -type d ! -perm 0777
 find {folder} -user {user} -perm /u=r -print
 # find all empty files
 find {folder} -type f -empty
+# file files with certain content with specified file name
+find {folder} -type f -name "*.{extension}" -exec grep -il "{content}" {} +
 # find then delete file with certain extension
 find {folder} -type f -name '*.{extension}' -delete
 # find last a to b (x < y) days modified files
