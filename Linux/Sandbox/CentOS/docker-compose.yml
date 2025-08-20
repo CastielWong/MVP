@@ -6,7 +6,11 @@ services:
     build:
       context: $PWD
       dockerfile: Dockerfile
-    tty: true   # keep container running
+    # ---------------keep container running----------------
+    tty: true
+    command: /bin/bash
+    # command: tail -f /dev/null
+    # -----------------------------------------------------
     ports:
     - "8080:8080"
     volumes:
