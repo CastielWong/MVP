@@ -31,7 +31,7 @@ copy:
 run:
     docker exec -it $(CONTAINER_NAME) bash
 
-stop:
+end:
     docker stop $(CONTAINER_NAME)
     docker rm $(CONTAINER_NAME)
 

@@ -1,0 +1,21 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: checking-pod
+  # namespace: default
+  # labels:
+  #   app: ck-app
+spec:
+  containers:
+  - name: my-container
+    image: python:3.11.13-slim-bookworm
+    command: ["tail", "-f", "/dev/null"]
+    # env:
+    # - name: HTTP_PROXY
+    #   value: "http://"
+    # - name: HTTPS_PROXY
+    #   value: "http://"
+    # - name: NO_PROXY
+    #   value: "vdi*"
+  restartPolicy: Never

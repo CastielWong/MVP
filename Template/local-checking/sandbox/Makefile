@@ -1,7 +1,7 @@
 
 SHELL := /bin/bash
 
-CONTAINER = sandbox-debian
+CONTAINER = sandbox-checking
 
 start:
 	docker-compose up -d
@@ -9,6 +9,6 @@ start:
 run:
 	docker exec -it $(CONTAINER) bash
 
-stop:
+end:
 	docker-compose stop
 	echo y | docker system prune

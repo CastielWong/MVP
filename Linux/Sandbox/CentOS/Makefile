@@ -1,4 +1,6 @@
 
+SHELL := /bin/bash
+
 CONTAINER = sandbox-centos
 
 start:

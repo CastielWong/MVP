@@ -1,0 +1,29 @@
+---
+services:
+  checking:
+    container_name: sandbox-checking
+    image: apache/spark:3.3.3-python3
+    # build:
+    #   context: $PWD
+    #   dockerfile: Dockerfile
+    user: root
+    # ---------------keep container running----------------
+    tty: true
+    command: /bin/bash
+    # command: tail -f /dev/null
+    # -----------------------------------------------------
+#     ports:
+#     - "8080:8080"
+#     volumes:
+#     - ./dir_working:/root/volume
+#     networks:
+#       sandbox:
+#         ipv4_address: 20.20.0.12
+
+# networks:
+#   sandbox:
+#     name: sandbox
+#     driver: bridge
+#     ipam:
+#       config:
+#       - subnet: 20.20.0.0/26
