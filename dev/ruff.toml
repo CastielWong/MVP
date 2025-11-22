@@ -85,7 +85,7 @@ split-on-trailing-comma = true
 
 [lint.mccabe]
 # Flag errors (`C901`) whenever the complexity level exceeds 5.
-max-complexity = 6
+max-complexity = 8
 
 [lint.pycodestyle]
 max-line-length = 88

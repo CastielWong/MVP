@@ -1,5 +1,6 @@
 
 # alias make='make -f tmp_local/Makefile'
+# DIR_WORKING := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 SHELL := /bin/bash
 

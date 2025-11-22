@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 --index-url https://pypi.org/simple
-PDFNetPython3~=9.1.0
+# PDFNetPython3~=9.1.0
 PyPDF2~=1.26
 reportlab~=3.5

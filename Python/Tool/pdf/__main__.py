@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Entry point to PDF toolkit."""
+
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
@@ -66,7 +67,7 @@ if __name__ == "__main__":  # noqa: C901
     if args.operation == "draft":
         op.draft_blank(pdf_path=f"{args.output}/blank.pdf")
     elif args.operation == "split":
-        op.split_pdf(pdf_path=file_name, dir_output=args.output, prefix="o")
+        op.split_pdf(pdf_path=file_name, dir_output=args.output, pages_per_file=[])
     elif args.operation == "merge":
         op.merge_pdfs(dir_input=args.input, dir_output=args.output)
     elif args.operation == "extract":

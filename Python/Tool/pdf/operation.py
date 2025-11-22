@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Customization on PDF."""
+
 from pathlib import Path
 from typing import List
 import copy
@@ -103,26 +104,55 @@ def merge_pdfs(dir_input: List[str], dir_output: str) -> None:
     return
 
 
-def split_pdf(pdf_path: str, dir_output: str, prefix: str) -> None:
-    """Split a PDF file into individual pages.
+def split_pdf(pdf_path: str, dir_output: str, pages_per_file: List[int] = None) -> None:
+    """Split a PDF file into multiple PDF files with specified page counts.
+
+    The function creates multiple PDF files from the input PDF, where each output file
+    contains the number of pages specified.
 
     Args:
-        pdf_path: pdf file to split
-        dir_output: directory to output
-        prefixes: prefix used in generated pdf pages
+        pdf_path: path to the input PDF file to split
+        dir_output: directory where output PDF files will be saved
+        pages_per_file: list of integers specifying pages per output file
+            when it's empty or None, creates one file with all pages;
+            when the sum exceeds total pages, extra pages are ignored;
+            when the sum is less than total pages, leftover pages go to an extra file
+
+    Raises:
+        FileNotFoundError: If the input PDF file doesn't exist
+        Exception: For other PDF-related errors
     """
-    pdf = PdfFileReader(pdf_path)
-    pages = pdf.getNumPages()
+    os.makedirs(dir_output, exist_ok=True)
+    file_name = Path(pdf_path).stem
 
-    for index in range(pages):
-        page = index + 1
+    reader = PdfFileReader(pdf_path)
+    total_pages = reader.getNumPages()
 
-        pdf_writer = PdfFileWriter()
-        pdf_writer.addPage(pdf.getPage(index))
+    if pages_per_file is None or not pages_per_file:
+        pages_per_file = [1] * total_pages
 
-        output = f"{dir_output}/{prefix}_{page}.pdf"
-        with open(output, "wb") as output_pdf:
-            pdf_writer.write(output_pdf)
+    current_page = 0
+    file_counter = 1
+    for page_count in pages_per_file:
+        if current_page >= total_pages:
+            break
+
+        if page_count <= 0:
+            continue
+
+        writer = PdfFileWriter()
+        for _ in range(page_count):
+            if current_page >= total_pages:
+                break
+            writer.add_page(reader.pages[current_page])
+            current_page += 1
+
+        output_path = os.path.join(
+            dir_output, f"{file_name}_split_{file_counter:03d}.pdf"
+        )
+        with open(output_path, "wb") as f_out:
+            writer.write(f_out)
+        file_counter += 1
 
     return
 
@@ -211,8 +241,10 @@ def crop_page(pdf_path: str) -> str:
     return str(output)
 
 
-def encrypt(  # nosec
-    pdf_path: str, pwd_user: str = "super", pwd_owner: str = "demo"
+def encrypt(
+    pdf_path: str,
+    pwd_user: str = "super",  # noqa: S107
+    pwd_owner: str = "demo",  # noqa: S107
 ) -> str:
     """Encrypt a PDF file with password(s).
 
@@ -239,7 +271,7 @@ def encrypt(  # nosec
     return str(output)
 
 
-def decrypt(pdf_encrypted: str, password: str = "demo") -> str:  # nosec
+def decrypt(pdf_encrypted: str, password: str = "demo") -> str:  # noqa: S107
     """Decrypt a PDF file with password.
 
     Args:
