@@ -12,35 +12,38 @@ DIR_VOLUME := "$(DIR_LOCAL)/mount"
 IMAGE_NAME := "demo-xxx"
 CONTAINER_NAME := "demo-xxx"
 
+# make demo in=testing
+demo:
+	echo "get '$(in)'"
 
 build:
-    set -a; source $(DIR_LOCAL)/.env; set +a; \
-    docker build -t ${IMAGE_NAME} \
-        --build-arg HTTPS_PROXY=$${HTTPS_PROXY} \
-        -f Dockerfile \
-        .
+	set -a; source $(DIR_LOCAL)/.env; set +a; \
+	docker build -t ${IMAGE_NAME} \
+		--build-arg HTTPS_PROXY=$${HTTPS_PROXY} \
+		-f Dockerfile \
+		.
 
 start: build
-    docker run --name $(CONTAINER_NAME) \
-        --volume ./$(DIR_VOLUME):/external/ \
-        -d $(IMAGE_NAME) \
-        tail -f /dev/null
+	docker run --name $(CONTAINER_NAME) \
+		--volume ./$(DIR_VOLUME):/external/ \
+		-d $(IMAGE_NAME) \
+		tail -f /dev/null
 
 copy:
-    docker cp ./data.csv $(CONTAINER_NAME):/external
+	docker cp ./data.csv $(CONTAINER_NAME):/external
 
 run:
-    docker exec -it $(CONTAINER_NAME) bash
+	docker exec -it $(CONTAINER_NAME) bash
 
 end:
-    docker stop $(CONTAINER_NAME)
-    docker rm $(CONTAINER_NAME)
+	docker stop $(CONTAINER_NAME)
+	docker rm $(CONTAINER_NAME)
 
 delete:
-    docker rmi $(IMAGE_NAME)
+	docker rmi $(IMAGE_NAME)
 
 clean:
-    echo y | docker system prune
+	echo y | docker system prune
 
 # =============================================================================
 
@@ -48,16 +51,16 @@ TAG_ANNOTATION:="annotate git tag"
 IMAGE_PUSHED:="major.minor.patch-x.y"
 
 tag-delete:
-    @if git rev-parse "$(IMAGE_PUSHED)" >/dev/null 2>&1; then \
-        git tag -d $(IMAGE_PUSHED); \
-    else \
-        echo "Tag $(IMAGE_PUSHED) doesn't exist, skipping deletion"; \
-    fi
+	@if git rev-parse "$(IMAGE_PUSHED)" >/dev/null 2>&1; then \
+		git tag -d $(IMAGE_PUSHED); \
+	else \
+		echo "Tag $(IMAGE_PUSHED) doesn't exist, skipping deletion"; \
+	fi
 
 tagging: tag-delete
-    git tag $(IMAGE_PUSHED)
-    git push origin $(IMAGE_PUSHED) -uf
+	git tag $(IMAGE_PUSHED)
+	git push origin $(IMAGE_PUSHED) -uf
 
 tag-m: tag-delete
-    git tag $(IMAGE_PUSHED) -m $(TAG_ANNOTATION)
-    git push origin $(IMAGE_PUSHED) -uf
+	git tag $(IMAGE_PUSHED) -m $(TAG_ANNOTATION)
+	git push origin $(IMAGE_PUSHED) -uf

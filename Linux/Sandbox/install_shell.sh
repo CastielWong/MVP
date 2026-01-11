@@ -5,6 +5,9 @@
 # export no_proxy="*.com,vdi*,sso.com*"
 
 # =============================================================================
+# # switch to the complete root shell
+# sudo su
+
 # ensure the proxy is reserved when using `sudo`
 sudo -E apt-get update
 # install zsh
